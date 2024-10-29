@@ -4,11 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seafood_app/domans/repo/cate_repo.dart';
 import 'package:seafood_app/model/category_model.dart';
-
 import '../../model/data_model.dart';
 import '../../ultils/enums/enum_data.dart';
-
-part 'category_state.dart';
+import 'category_state.dart';
 
 class CategoryCubit extends Cubit<CategoryState> {
   CateRepo cateRepo;

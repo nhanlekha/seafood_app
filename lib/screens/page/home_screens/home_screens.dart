@@ -11,6 +11,7 @@ import 'package:seafood_app/domans/repo/product_repo.dart';
 import 'package:seafood_app/model/category_model.dart';
 import 'package:seafood_app/model/product_model.dart';
 
+import '../../../bloc/category/category_state.dart';
 import '../../../bloc/slide/slide_state.dart';
 import '../../../domans/repo/slide_repo.dart';
 import '../../../ultils/enums/enum_data.dart';
@@ -208,7 +209,7 @@ class _HomePageState extends State<HomePage> {
               case DataStatus.initial:
                 return const Center(child: CircularProgressIndicator());
               case DataStatus.success:
-                List<ProductModel> listProduct = state.dataTrendingProductModel?.data;
+                List<ProductModel> listProduct = state.dataTrendingProductModel?.data ?? [];
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -278,7 +279,7 @@ class _HomePageState extends State<HomePage> {
               case DataStatus.initial:
                 return const Center(child: CircularProgressIndicator());
               case DataStatus.success:
-                List<ProductModel> listNewProduct = state.dataNewProductModel?.data;
+                List<ProductModel> listNewProduct = state.dataNewProductModel?.data ?? [];
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
