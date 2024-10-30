@@ -58,10 +58,6 @@ class _SeafoodAppState extends State<SeafoodApp> {
         RepositoryProvider<CateRepo>(create: (context) => _cateRepo),
         RepositoryProvider<ProductRepo>(create: (context) => _productRepo),
       ],
-      // child: BlocProvider(
-      //   create: (context) => AppCubit(authRepo: _authRepo),
-      //   child: SnapLinkRouter(),
-      // ),
       child: const ApplicationRouter(),
     );
   }
@@ -87,15 +83,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'SnapLink Project',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Scaffold(
+    return const Scaffold(
         body: SafeArea(child: MainScreens()),
-      ),
     );
   }
 }

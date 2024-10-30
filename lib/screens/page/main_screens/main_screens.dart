@@ -1,9 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:seafood_app/screens/page/category_screens/category_screens.dart';
-import 'package:seafood_app/screens/page/order_screens/order_screens.dart';
 
+import '../category_screens/category_screens.dart';
 import '../home_screens/home_screens.dart';
+import '../order_screens/order_screens.dart';
 import '../personal_screens/personal_screens.dart';
 
 class MainScreens extends StatefulWidget {
@@ -14,18 +13,16 @@ class MainScreens extends StatefulWidget {
 }
 
 class _MainScreensState extends State<MainScreens> {
-  List<Widget> _pages = [];
+  late final List<Widget> _pages;
   int _currentPage = 0;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _pages = [
       HomeScreens(),
       CategoryScreens(),
       OrderScreens(),
-
       Container(color: Colors.green),
       PersonalPage(),
     ];
@@ -33,66 +30,49 @@ class _MainScreensState extends State<MainScreens> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: _pages.elementAt(_currentPage),
-        bottomNavigationBar: BottomNavigationBar(
+    return Column(
+      children: [
+        Expanded(
+          child: IndexedStack(
+            index: _currentPage,
+            children: _pages,
+          ),
+        ),
+        BottomNavigationBar(
           backgroundColor: const Color(0xFFFefaf9),
           unselectedItemColor: Colors.black,
           selectedItemColor: Colors.red,
           type: BottomNavigationBarType.fixed,
           currentIndex: _currentPage,
           onTap: (index) {
-              setState(() {
-                _currentPage = index;
-              });
+            setState(() {
+              _currentPage = index;
+            });
           },
           items: [
             BottomNavigationBarItem(
-              icon: Container(
-                width: 24,
-                height: 24,
-                child: Image.asset(
-                    'assets/images/home.png'),
-              ),
-              label: "Home".tr(),
+              icon: Image.asset('assets/images/home.png', width: 24, height: 24),
+              label: "Home",
             ),
             BottomNavigationBarItem(
-              icon: Container(
-                width: 24,
-                height: 24,
-                child: Image.asset(
-                    'assets/images/options.png'),
-              ),
+              icon: Image.asset('assets/images/options.png', width: 24, height: 24),
               label: "Danh mục",
             ),
             BottomNavigationBarItem(
-              icon: Container(
-                width: 24,
-                height: 24,
-                child: Image.asset(
-                    'assets/images/cargo.png'),
-              ),
+              icon: Image.asset('assets/images/cargo.png', width: 24, height: 24),
               label: "Đơn hàng",
             ),
             BottomNavigationBarItem(
-              icon: Container(
-                width: 24,
-                height: 24,
-                child: Image.asset(
-                    'assets/images/chat.png'),
-              ),
+              icon: Image.asset('assets/images/chat.png', width: 24, height: 24),
               label: "Yêu Thích",
             ),
             BottomNavigationBarItem(
-              icon: Container(
-                width: 24,
-                height: 24,
-                child: Image.asset(
-                    'assets/images/teamwork.png'),
-              ),
+              icon: Image.asset('assets/images/teamwork.png', width: 24, height: 24),
               label: "Cá Nhân",
             ),
           ],
-        ));
+        ),
+      ],
+    );
   }
 }
