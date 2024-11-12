@@ -1,21 +1,20 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:seafood_app/bloc/category/category_cubit.dart';
-import 'package:seafood_app/bloc/product/product_cubit.dart';
-import 'package:seafood_app/bloc/product/product_state.dart';
-import 'package:seafood_app/bloc/slide/slide_cubit.dart';
-import 'package:seafood_app/domans/repo/cate_repo.dart';
-import 'package:seafood_app/domans/repo/impl/slide_repo_impl.dart';
-import 'package:seafood_app/domans/repo/product_repo.dart';
-import 'package:seafood_app/model/category_model.dart';
-import 'package:seafood_app/model/product_model.dart';
-
-import '../../../bloc/category/category_state.dart';
+import '../../widgets/product_card.dart';
 import '../../../bloc/slide/slide_state.dart';
 import '../../../domans/repo/slide_repo.dart';
 import '../../../ultils/enums/enum_data.dart';
-import '../../widgets/product_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../bloc/category/category_state.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:seafood_app/model/product_model.dart';
+import 'package:seafood_app/model/category_model.dart';
+import 'package:seafood_app/domans/repo/cate_repo.dart';
+import 'package:seafood_app/bloc/slide/slide_cubit.dart';
+import 'package:seafood_app/domans/repo/product_repo.dart';
+import 'package:seafood_app/bloc/product/product_cubit.dart';
+import 'package:seafood_app/bloc/product/product_state.dart';
+import 'package:seafood_app/bloc/category/category_cubit.dart';
+import 'package:seafood_app/domans/repo/impl/slide_repo_impl.dart';
 
 class HomeScreens extends StatelessWidget {
   const HomeScreens({super.key});
@@ -60,14 +59,16 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         buildSearchToolbar(), // Phần tìm kiếm không cuộn
-        Expanded( // Sử dụng Expanded để phần này chiếm không gian còn lại
-          child: SingleChildScrollView( // Cho phép cuộn cho carousel và danh sách danh mục
+        Expanded(
+          // Sử dụng Expanded để phần này chiếm không gian còn lại
+          child: SingleChildScrollView(
+            // Cho phép cuộn cho carousel và danh sách danh mục
             child: Column(
               children: [
-                SimpleCarouselDemo(), // Carousel có thể cuộn
+                const SimpleCarouselDemo(), // Carousel có thể cuộn
                 buildListCardCategory(),
                 buildListNewProduct(),
-                buildListTrendingProduct()// Danh sách danh mục có thể cuộn
+                buildListTrendingProduct() // Danh sách danh mục có thể cuộn
               ],
             ),
           ),
@@ -75,7 +76,6 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-
 
   Widget _buildCardCategory(CategoryModel cate) {
     return Container(
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
               // Thêm padding để tạo khoảng trống
               child: Text(
                 cate.categoryName ?? '',
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 13,
                   height: 1.2,
@@ -145,7 +145,7 @@ class _HomePageState extends State<HomePage> {
               case DataStatus.initial:
                 return const Center(child: CircularProgressIndicator());
               case DataStatus.success:
-                List<CategoryModel> listCate =  state.dataModel.data;
+                List<CategoryModel> listCate = state.dataModel.data;
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -168,7 +168,7 @@ class _HomePageState extends State<HomePage> {
                 );
 
               case DataStatus.error:
-                return Center(
+                return const Center(
                     child: Text("Có lỗi xảy ra!")); // Hiển thị thông báo lỗi
               case DataStatus.loading:
                 return const Center(child: CircularProgressIndicator());
@@ -182,7 +182,6 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-
 
   Widget buildListTrendingProduct() {
     final productCubit = context.read<ProductCubit>();
@@ -209,44 +208,56 @@ class _HomePageState extends State<HomePage> {
               case DataStatus.initial:
                 return const Center(child: CircularProgressIndicator());
               case DataStatus.success:
-                List<ProductModel> listProduct = state.dataTrendingProductModel?.data ?? [];
+                List<ProductModel> listProduct =
+                    state.dataTrendingProductModel?.data ?? [];
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 275, // Đặt chiều cao của container để chứa danh sách
+                  child: SizedBox(
+                    height:
+                        275, // Đặt chiều cao của container để chứa danh sách
                     child: ListView.builder(
-                      scrollDirection: Axis.horizontal, // Đặt chiều cuộn là ngang
-                      itemCount: listProduct.length ?? 0, // Số lượng mục trong danh sách
+                      scrollDirection:
+                          Axis.horizontal, // Đặt chiều cuộn là ngang
+                      itemCount: listProduct.length ??
+                          0, // Số lượng mục trong danh sách
                       itemBuilder: (context, index) {
                         ProductModel product = listProduct[index];
-                        return Container(
+                        return SizedBox(
                             width: 215, // Chiều rộng của mỗi mục
                             child: ProductCard(
-                              productName: product.productName ?? "Tên Sản Phẩm",
-                              categoryName: product.categoryName ?? "Tên Danh Mục",
-                              rating: 5, // Bạn có thể cập nhật trường này nếu cần
-                              reviewCount: 1, // Bạn có thể cập nhật trường này nếu cần
-                              orderStatus :product.statusOrder ?? "1s", // Bạn có thể cập nhật trường này nếu cần
-                              price: "${product.productPrice?.toStringAsFixed(0) ?? '0'}k", // Hiển thị giá
+                              productName:
+                                  product.productName ?? "Tên Sản Phẩm",
+                              categoryName:
+                                  product.categoryName ?? "Tên Danh Mục",
+                              rating:
+                                  5, // Bạn có thể cập nhật trường này nếu cần
+                              reviewCount:
+                                  1, // Bạn có thể cập nhật trường này nếu cần
+                              orderStatus: product.statusOrder ??
+                                  "1s", // Bạn có thể cập nhật trường này nếu cần
+                              price:
+                                  "${product.productPrice?.toStringAsFixed(0) ?? '0'}k", // Hiển thị giá
                               unit: product.productUnit ?? "1 đơn vị", // Đơn vị
-                              imageUrl: product.productImage ?? "http://192.168.1.14/DoAnCNWeb/public/fontend/assets/img/slider/1658375485072.jpg", // Ảnh sản phẩm
-                              iconUrl: "assets/images/hotproduct.png", // Thay bằng URL thực tế nếu cần
-                            )
-                        );
+                              imageUrl: product.productImage ??
+                                  "http://192.168.1.14/DoAnCNWeb/public/fontend/assets/img/slider/1658375485072.jpg", // Ảnh sản phẩm
+                              iconUrl:
+                                  "assets/images/hotproduct.png", // Thay bằng URL thực tế nếu cần
+                            ));
                       },
                     ),
                   ),
                 );
 
               case DataStatus.error:
-                return Center(
+                return const Center(
                     child: Text("Có lỗi xảy ra!")); // Hiển thị thông báo lỗi
               case DataStatus.loading:
                 return const Center(child: CircularProgressIndicator());
               case DataStatus.empty:
                 return const Center(
-                    child: Text("Không có sp nào!")); // Hiển thị thông báo khi không có dữ liệu
+                    child: Text(
+                        "Không có sp nào!")); // Hiển thị thông báo khi không có dữ liệu
             }
           },
         ),
@@ -279,44 +290,56 @@ class _HomePageState extends State<HomePage> {
               case DataStatus.initial:
                 return const Center(child: CircularProgressIndicator());
               case DataStatus.success:
-                List<ProductModel> listNewProduct = state.dataNewProductModel?.data ?? [];
+                List<ProductModel> listNewProduct =
+                    state.dataNewProductModel?.data ?? [];
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 275, // Đặt chiều cao của container để chứa danh sách
+                  child: SizedBox(
+                    height:
+                        275, // Đặt chiều cao của container để chứa danh sách
                     child: ListView.builder(
-                      scrollDirection: Axis.horizontal, // Đặt chiều cuộn là ngang
-                      itemCount: listNewProduct.length ?? 0, // Số lượng mục trong danh sách
+                      scrollDirection:
+                          Axis.horizontal, // Đặt chiều cuộn là ngang
+                      itemCount: listNewProduct.length ??
+                          0, // Số lượng mục trong danh sách
                       itemBuilder: (context, index) {
                         ProductModel product = listNewProduct[index];
-                        return Container(
-                          width: 215, // Chiều rộng của mỗi mục
-                          child: ProductCard(
-                            productName: product.productName ?? "Tên Sản Phẩm",
-                            categoryName: product.categoryName ?? "Tên Danh Mục",
-                            rating: 5, // Bạn có thể cập nhật trường này nếu cần
-                            reviewCount: 1, // Bạn có thể cập nhật trường này nếu cần
-                            orderStatus :product.statusOrder ?? "1s", // Bạn có thể cập nhật trường này nếu cần
-                            price: "${product.productPrice?.toStringAsFixed(0) ?? '0'}k", // Hiển thị giá
-                            unit: product.productUnit ?? "1 đơn vị", // Đơn vị
-                            imageUrl: product.productImage ?? "http://192.168.1.14/DoAnCNWeb/public/fontend/assets/img/slider/1658375485072.jpg", // Ảnh sản phẩm
-                            iconUrl: "assets/images/hotproduct.png", // Thay bằng URL thực tế nếu cần
-                        )
-                        );
+                        return SizedBox(
+                            width: 215, // Chiều rộng của mỗi mục
+                            child: ProductCard(
+                              productName:
+                                  product.productName ?? "Tên Sản Phẩm",
+                              categoryName:
+                                  product.categoryName ?? "Tên Danh Mục",
+                              rating:
+                                  5, // Bạn có thể cập nhật trường này nếu cần
+                              reviewCount:
+                                  1, // Bạn có thể cập nhật trường này nếu cần
+                              orderStatus: product.statusOrder ??
+                                  "1s", // Bạn có thể cập nhật trường này nếu cần
+                              price:
+                                  "${product.productPrice?.toStringAsFixed(0) ?? '0'}k", // Hiển thị giá
+                              unit: product.productUnit ?? "1 đơn vị", // Đơn vị
+                              imageUrl: product.productImage ??
+                                  "http://192.168.1.14/DoAnCNWeb/public/fontend/assets/img/slider/1658375485072.jpg", // Ảnh sản phẩm
+                              iconUrl:
+                                  "assets/images/hotproduct.png", // Thay bằng URL thực tế nếu cần
+                            ));
                       },
                     ),
                   ),
                 );
 
               case DataStatus.error:
-                return Center(
+                return const Center(
                     child: Text("Có lỗi xảy ra!")); // Hiển thị thông báo lỗi
               case DataStatus.loading:
                 return const Center(child: CircularProgressIndicator());
               case DataStatus.empty:
                 return const Center(
-                    child: Text("Không có sp nào!")); // Hiển thị thông báo khi không có dữ liệu
+                    child: Text(
+                        "Không có sp nào!")); // Hiển thị thông báo khi không có dữ liệu
             }
           },
         ),
@@ -326,6 +349,8 @@ class _HomePageState extends State<HomePage> {
 }
 
 class SimpleCarouselDemo extends StatefulWidget {
+  const SimpleCarouselDemo({super.key});
+
   @override
   _SimpleCarouselDemoState createState() => _SimpleCarouselDemoState();
 }
@@ -391,13 +416,13 @@ class _SimpleCarouselDemoState extends State<SimpleCarouselDemo> {
 
                 break;
               case (DataStatus.error):
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
                 break;
               case DataStatus.loading:
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               // TODO: Handle this case.
               case DataStatus.empty:
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               // TODO: Handle this case.
             }
           },
@@ -409,7 +434,8 @@ class _SimpleCarouselDemoState extends State<SimpleCarouselDemo> {
             return Container(
               width: 9.0,
               height: 9.0,
-              margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+              margin:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: (Theme.of(context).brightness == Brightness.dark
@@ -460,7 +486,7 @@ Widget _buildSearchField() {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         color: Colors.transparent,
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black12,
             blurRadius: 10,
@@ -471,17 +497,17 @@ Widget _buildSearchField() {
       child: TextField(
         decoration: InputDecoration(
           hintText: "Bạn tìm gì hôm nay?",
-          hintStyle: TextStyle(color: Colors.grey),
-          prefixIcon: Icon(Icons.search),
+          hintStyle: const TextStyle(color: Colors.grey),
+          prefixIcon: const Icon(Icons.search),
           fillColor: Colors.white,
           filled: true,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide.none,
           ),
-          contentPadding: EdgeInsets.symmetric(vertical: 15),
+          contentPadding: const EdgeInsets.symmetric(vertical: 15),
           suffixIcon: IconButton(
-            icon: Icon(Icons.clear),
+            icon: const Icon(Icons.clear),
             onPressed: () {
               // Logic để xóa nội dung tìm kiếm
             },
