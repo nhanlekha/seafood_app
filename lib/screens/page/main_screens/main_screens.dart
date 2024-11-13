@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:seafood_app/screens/page/category_screens/category_screens.dart';
+// import 'package:seafood_app/screens/page/category_screens/category_screens.dart';
 import 'package:seafood_app/screens/page/order_screens/order_screens.dart';
 
 import '../home_screens/home_screens.dart';
@@ -23,7 +23,7 @@ class _MainScreensState extends State<MainScreens> {
     super.initState();
     _pages = [
       HomeScreens(),
-      CategoryScreens(),
+      // CategoryScreens(),
       OrderScreens(),
 
       Container(color: Colors.green),
