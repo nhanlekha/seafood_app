@@ -40,4 +40,12 @@ class CartRepoImpl {
   Future<bool> isProductInCart(int productId) async {
     return _db.isProductInCart(productId);
   }
+
+  Future<int> updateProductQuantity(int cartId, int newQuantity) {
+    return _db.updateProductQuantity(cartId,newQuantity);
+  }
+
+  Future<double> calculateTotalPrice() async {
+    return _db.calculateTotalPrice();
+  }
 }

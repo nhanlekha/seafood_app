@@ -64,50 +64,52 @@ class ProductDetailsScreen extends StatelessWidget {
 
                   SizedBox(width: 20),
                   // Product Name, Price, and Quantity
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${productModel.productName}",
-                        style: const TextStyle(fontSize: 17, color: Colors.black),
-                        maxLines: 2,         // Limit text to 1 line
-                        overflow: TextOverflow.ellipsis,  // Add ellipsis when the text overflows
-                      ),
-
-
-                      Text(
-                        NumberFormat.currency(
-                          locale: 'vi_VN',   // Set locale to Vietnam
-                          symbol: '₫',       // Vietnamese currency symbol
-                          decimalDigits: 0,   // Set decimal places to 0
-                        ).format(double.tryParse('${productModel.productPrice}') ?? 0),  // Parse price to double and format
-                        style: const TextStyle(fontSize: 15, color: Colors.red),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove),
-                            onPressed: () {
-                              // Decrease quantity action
-                            },
-                          ),
-                          Text(
-                            "0", // Quantity should be dynamic
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${productModel.productName}",
+                          style: const TextStyle(fontSize: 17, color: Colors.black),
+                          maxLines: 2,         // Limit text to 1 line
+                          overflow: TextOverflow.ellipsis,  // Add ellipsis when the text overflows
+                        ),
+                    
+                    
+                        Text(
+                          NumberFormat.currency(
+                            locale: 'vi_VN',   // Set locale to Vietnam
+                            symbol: '₫',       // Vietnamese currency symbol
+                            decimalDigits: 0,   // Set decimal places to 0
+                          ).format(double.tryParse('${productModel.productPrice}') ?? 0),  // Parse price to double and format
+                          style: const TextStyle(fontSize: 15, color: Colors.red),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.remove),
+                              onPressed: () {
+                                // Decrease quantity action
+                              },
                             ),
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.add),
-                            onPressed: () {
-                              // Increase quantity action
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
+                            Text(
+                              "0", // Quantity should be dynamic
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: () {
+                                // Increase quantity action
+                              },
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
