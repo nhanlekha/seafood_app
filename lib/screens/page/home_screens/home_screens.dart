@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../routers/app_route_constants.dart';
 import '../../widgets/product_card.dart';
 import '../../../bloc/slide/slide_state.dart';
 import '../../../domans/repo/slide_repo.dart';
@@ -58,7 +60,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        buildSearchToolbar(), // Phần tìm kiếm không cuộn
+        buildSearchToolbar(context), // Phần tìm kiếm không cuộn
         Expanded(
           // Sử dụng Expanded để phần này chiếm không gian còn lại
           child: SingleChildScrollView(
@@ -420,7 +422,7 @@ class _SimpleCarouselDemoState extends State<SimpleCarouselDemo> {
 }
 
 // Hàm để tạo toolbar tìm kiếm
-Widget buildSearchToolbar() {
+Widget buildSearchToolbar(BuildContext context) {
   return Container(
     padding: const EdgeInsets.all(5),
     child: Row(
@@ -428,7 +430,7 @@ Widget buildSearchToolbar() {
       children: [
         _buildLogo(), // Gọi hàm để tạo logo
         _buildSearchField(), // Gọi hàm để tạo ô tìm kiếm
-        _buildCartIcon(), // Gọi hàm để tạo biểu tượng giỏ hàng
+        _buildCartIcon(context), // Gọi hàm để tạo biểu tượng giỏ hàng
       ],
     ),
   );
@@ -486,17 +488,26 @@ Widget _buildSearchField() {
   );
 }
 
-// Hàm để xây dựng biểu tượng giỏ hàng
-Widget _buildCartIcon() {
+Widget _buildCartIcon(BuildContext context) {
   return Expanded(
     flex: 1, // Tương ứng với android:layout_weight="0.1"
-    child: Container(
-      margin: const EdgeInsets.only(left: 10),
-      alignment: Alignment.center,
-      child: Image.asset(
-        'assets/images/cargo.png', // Đường dẫn tới ảnh giỏ hàng
-        height: 25,
+    child: GestureDetector(
+      onTap: () {
+        // Xử lý sự kiện khi click vào giỏ hàng
+        context.push(
+          '/cart'
+        );
+        print("Giỏ hàng đã được click!");
+      },
+      child: Container(
+        margin: const EdgeInsets.only(left: 10),
+        alignment: Alignment.center,
+        child: Image.asset(
+          'assets/images/cargo.png', // Đường dẫn tới ảnh giỏ hàng
+          height: 25,
+        ),
       ),
     ),
   );
 }
+
