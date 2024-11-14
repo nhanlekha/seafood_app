@@ -10,12 +10,15 @@ import 'package:seafood_app/domans/repo/product_repo.dart';
 import 'package:seafood_app/routers/app_route_config.dart';
 import 'package:seafood_app/screens/page/main_screens/main_screens.dart';
 
+import 'domans/database_local/app_database.dart';
+import 'domans/repo/impl/cart_repo_impl.dart';
 import 'domans/repo/slide_repo.dart';
 
 
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+
   await EasyLocalization.ensureInitialized();
 
   runApp(
@@ -39,11 +42,15 @@ class _SeafoodAppState extends State<SeafoodApp> {
   late final SlideRepo _slideRepo;
   late final CateRepo _cateRepo;
   late final ProductRepo _productRepo;
+  late final AppDatabase _db;
+  late final CartRepoImpl _cartRepo;
 
   @override
   void initState() {
     super.initState();
     // Initializing
+    _db = AppDatabase();
+    _cartRepo = CartRepoImpl(_db);
     _seafoodApi = SeafoodApi();
     _slideRepo = SlideRepoImpl(seafoodApi: _seafoodApi);
     _cateRepo = CateRepoImpl(seafoodApi: _seafoodApi);
@@ -57,6 +64,7 @@ class _SeafoodAppState extends State<SeafoodApp> {
         RepositoryProvider<SlideRepo>(create: (context) => _slideRepo),
         RepositoryProvider<CateRepo>(create: (context) => _cateRepo),
         RepositoryProvider<ProductRepo>(create: (context) => _productRepo),
+        RepositoryProvider<CartRepoImpl>(create: (context) => _cartRepo)
       ],
       child: const ApplicationRouter(),
     );

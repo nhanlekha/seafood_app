@@ -1,7 +1,10 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:seafood_app/domans/repo/impl/cart_repo_impl.dart';
+import '../../../domans/database_local/app_database.dart';
 import '../../../model/product_model.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
@@ -126,7 +129,9 @@ class ProductDetailsScreen extends StatelessWidget {
                           ),
                           elevation: 2, // Độ nổi (shadow)
                         ),
-                        onPressed: () => _showBottomNavigationBar(context),
+                        onPressed: () {
+
+                        },
                         child: const Text('Mua ngay'),
                       ),
                     ),
@@ -143,7 +148,25 @@ class ProductDetailsScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10.0), // Độ bo góc
                           )),
                         ),
-                        onPressed: () => _showBottomNavigationBar(context),
+                        onPressed:  () async {
+                         final cartRepo = context.read<CartRepoImpl>();
+
+                         if(await cartRepo.isProductInCart(productModel.productId!)){
+                            print('product is exit !');
+                         }else{
+
+                           cartRepo.addCart(productId: productModel.productId! , customerId: 1, productName: productModel.productName!,
+                               productPrice: productModel.productPrice!, productImage: productModel.productImage!, productQuantity: 1);
+
+                         }
+
+                         List<Cart> carts = await cartRepo.fetchAllCarts();
+                         for (var cart in carts) {
+                           print("Cart ID: ${cart.cartId}");
+                         }
+                         
+                         
+                        },
                         child: const Text('Thêm vào giỏ'),
                       ),
                     ),
