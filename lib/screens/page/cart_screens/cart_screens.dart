@@ -40,6 +40,12 @@ class _CartPageState extends State<CartPage> {
     _re();
   }
 
+  void _updateChecked(int id, bool status) async {
+    await cartRepo.updateProductChecked(id,status);
+    _re();
+  }
+
+
 
   Future<void> _updateQuantity(int id, int quantity) async {
     print(id);
@@ -119,6 +125,7 @@ class _CartPageState extends State<CartPage> {
                     item: listCart[index],
                     onDeleteItem: _deleteItem,
                     onQuantityChanged: _updateQuantity,
+                    onCheckedChanged: _updateChecked,
                   );
                 },
               ),

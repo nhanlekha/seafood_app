@@ -22,6 +22,11 @@ class AppDatabase extends _$AppDatabase {
         .write(CartModelCompanion(productQuantity: Value(newQuantity)));
   }
 
+  Future<int> updateProductChecked(int cartId, bool status) {
+    return (update(cartModel)..where((tbl) => tbl.cartId.equals(cartId)))
+        .write(CartModelCompanion(checkedProduct: Value(status)));
+  }
+
   // Get all carts where checkedProduct is true
   Future<List<Cart>> getCheckedCarts() {
     return (select(cartModel)..where((tbl) => tbl.checkedProduct.equals(true))).get();
@@ -29,7 +34,7 @@ class AppDatabase extends _$AppDatabase {
 
   // Calculate total price for all products based on productQuantity and productPrice
   Future<double> calculateTotalPrice() async {
-    final carts = await getAllCarts();
+    final carts = await getCheckedCarts();
     double total = 0.0;
     for (var cart in carts) {
       total += cart.productQuantity * cart.productPrice;

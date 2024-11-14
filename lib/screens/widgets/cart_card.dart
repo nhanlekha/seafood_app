@@ -7,6 +7,7 @@ class CartItemWidget extends StatefulWidget {
   final Cart item;
   final Function(int) onDeleteItem;
   final Function(int,int) onQuantityChanged;
+  final Function(int,bool) onCheckedChanged;
 
 
   const CartItemWidget({
@@ -14,6 +15,7 @@ class CartItemWidget extends StatefulWidget {
     required this.item,
     required this.onDeleteItem,
     required this.onQuantityChanged,
+    required this.onCheckedChanged,
   }) : super(key: key);
 
   @override
@@ -44,7 +46,9 @@ class _CartItemWidgetState extends State<CartItemWidget> {
               child: Checkbox(
                 value: widget.item.checkedProduct, // Trạng thái checkbox
                 onChanged: (bool? value) {
-
+                  setState(() {
+                      widget.onCheckedChanged(widget.item.cartId, value!);
+                  });
                 },
               ),
             ),
