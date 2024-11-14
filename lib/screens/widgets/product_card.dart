@@ -1,32 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:seafood_app/model/product_model.dart';
+
+import '../../routers/app_route_constants.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard({
     Key? key,
-    required this.productName,
-    required this.categoryName,
-    required this.rating,
-    required this.reviewCount,
-    required this.orderStatus,
-    required this.price,
-    required this.unit,
-    required this.imageUrl,
-    required this.iconUrl,
+    required this.productModel,
   }) : super(key: key);
 
-  final String productName;
-  final String categoryName;
-  final int rating;
-  final int reviewCount;
-  final String orderStatus;
-  final String price;
-  final String unit;
-  final String imageUrl;
-  final String iconUrl;
+  final ProductModel productModel;
 
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return GestureDetector(
+      onTap: () {
+        context.push(
+          RouteConstants.detailsProductRoute,
+          extra: productModel,
+        );
+      },
+      child: Card(
         elevation: 8.0,
         margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         shape: RoundedRectangleBorder(
@@ -40,11 +35,11 @@ class ProductCard extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(5.0), // Bo góc trên cùng bên trái
-                      topRight: Radius.circular(5.0), // Bo góc trên cùng bên phải
+                      topLeft: Radius.circular(5.0),
+                      topRight: Radius.circular(5.0),
                     ),
                     child: Image.network(
-                      imageUrl,
+                      '${productModel.productImage}',
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 135.0,
@@ -53,7 +48,7 @@ class ProductCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      productName,
+                      '${productModel.productName}',
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 12.0,
@@ -62,7 +57,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    categoryName,
+                    '${productModel.categoryName}',
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 12.0,
@@ -72,7 +67,7 @@ class ProductCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        '$rating',
+                        '${productModel.productViewer}',
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 15.0,
@@ -80,13 +75,13 @@ class ProductCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4.0),
                       Image.asset(
-                        'assets/images/check.png', // Thay đổi đường dẫn đến hình ảnh sao
+                        'assets/images/check.png',
                         width: 15,
                         height: 15,
                       ),
                       const SizedBox(width: 4.0),
                       Text(
-                        '($reviewCount Đánh giá)',
+                        '(5 Đánh giá)',
                         style: const TextStyle(
                           fontSize: 13.0,
                         ),
@@ -96,12 +91,12 @@ class ProductCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      orderStatus,
+                      '${productModel.statusOrder}',
                       style: const TextStyle(
                         color: Colors.black,
                         fontSize: 12.0,
                         fontWeight: FontWeight.bold,
-                        backgroundColor: Colors.greenAccent, // Thay đổi để phù hợp với background gradient
+                        backgroundColor: Colors.greenAccent,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -109,7 +104,7 @@ class ProductCard extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        price,
+                        '${productModel.productPrice}',
                         style: const TextStyle(
                           fontSize: 13.0,
                           fontWeight: FontWeight.bold,
@@ -127,7 +122,7 @@ class ProductCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4.0),
                       Text(
-                        unit,
+                        '${productModel.productUnit}',
                         style: const TextStyle(
                           fontSize: 13.0,
                           fontWeight: FontWeight.bold,
@@ -143,12 +138,13 @@ class ProductCard extends StatelessWidget {
               top: 4.0,
               right: 4.0,
               child: Image.asset(
-                iconUrl,
+                "assets/images/hotproduct.png",
                 width: 30.0,
                 height: 30.0,
               ),
             ),
           ],
+        ),
       ),
     );
   }

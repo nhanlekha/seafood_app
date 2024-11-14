@@ -81,8 +81,8 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 75,
-            height: 55,
+            width: 40,
+            height: 40,
             padding: const EdgeInsets.all(1),
             child: Image.network(
               cate.categoryImage ?? '',
@@ -232,18 +232,7 @@ class _HomePageState extends State<HomePage> {
                               return SizedBox(
                                 width: 215,
                                 child: ProductCard(
-                                  productName:
-                                      product.productName ?? "Tên Sản Phẩm",
-                                  categoryName: categoryName,
-                                  rating: 5,
-                                  reviewCount: 1,
-                                  orderStatus: product.statusOrder ?? "1s",
-                                  price:
-                                      "${product.productPrice?.toStringAsFixed(0) ?? '0'}k",
-                                  unit: product.productUnit ?? "1 đơn vị",
-                                  imageUrl: product.productImage ??
-                                      "http://192.168.1.14/DoAnCNWeb/public/fontend/assets/img/slider/1658375485072.jpg",
-                                  iconUrl: "assets/images/hotproduct.png",
+                                 productModel: product,
                                 ),
                               );
                             },

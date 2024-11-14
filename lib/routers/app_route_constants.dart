@@ -9,4 +9,6 @@ class RouteConstants {
   static const String signUpRoute = "signup";
 
   static const String loginRoute = "login";
+
+  static const String detailsProductRoute = '/details-product';
 }

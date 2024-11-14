@@ -88,8 +88,8 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 75,
-              height: 55,
+              width: 40,
+              height: 40,
               padding: const EdgeInsets.all(1),
               child: Image.network(
                 cate.categoryImage ?? '',
@@ -226,23 +226,7 @@ class _HomePageState extends State<HomePage> {
                         return SizedBox(
                             width: 215, // Chiều rộng của mỗi mục
                             child: ProductCard(
-                              productName:
-                                  product.productName ?? "Tên Sản Phẩm",
-                              categoryName:
-                                  product.categoryName ?? "Tên Danh Mục",
-                              rating:
-                                  5, // Bạn có thể cập nhật trường này nếu cần
-                              reviewCount:
-                                  1, // Bạn có thể cập nhật trường này nếu cần
-                              orderStatus: product.statusOrder ??
-                                  "1s", // Bạn có thể cập nhật trường này nếu cần
-                              price:
-                                  "${product.productPrice?.toStringAsFixed(0) ?? '0'}k", // Hiển thị giá
-                              unit: product.productUnit ?? "1 đơn vị", // Đơn vị
-                              imageUrl: product.productImage ??
-                                  "http://192.168.1.14/DoAnCNWeb/public/fontend/assets/img/slider/1658375485072.jpg", // Ảnh sản phẩm
-                              iconUrl:
-                                  "assets/images/hotproduct.png", // Thay bằng URL thực tế nếu cần
+                               productModel: product,// Thay bằng URL thực tế nếu cần
                             ));
                       },
                     ),
@@ -308,23 +292,7 @@ class _HomePageState extends State<HomePage> {
                         return SizedBox(
                             width: 215, // Chiều rộng của mỗi mục
                             child: ProductCard(
-                              productName:
-                                  product.productName ?? "Tên Sản Phẩm",
-                              categoryName:
-                                  product.categoryName ?? "Tên Danh Mục",
-                              rating:
-                                  5, // Bạn có thể cập nhật trường này nếu cần
-                              reviewCount:
-                                  1, // Bạn có thể cập nhật trường này nếu cần
-                              orderStatus: product.statusOrder ??
-                                  "1s", // Bạn có thể cập nhật trường này nếu cần
-                              price:
-                                  "${product.productPrice?.toStringAsFixed(0) ?? '0'}k", // Hiển thị giá
-                              unit: product.productUnit ?? "1 đơn vị", // Đơn vị
-                              imageUrl: product.productImage ??
-                                  "http://192.168.1.14/DoAnCNWeb/public/fontend/assets/img/slider/1658375485072.jpg", // Ảnh sản phẩm
-                              iconUrl:
-                                  "assets/images/hotproduct.png", // Thay bằng URL thực tế nếu cần
+                            productModel: product,
                             ));
                       },
                     ),
