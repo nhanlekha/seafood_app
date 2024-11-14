@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../address_screens/address_screens.dart';
+
 class PersonalPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -72,6 +74,10 @@ class PersonalPage extends StatelessWidget {
               title: "Địa chỉ nhận hàng",
               onTap: () {
                 // Điều hướng đến trang Địa chỉ nhận hàng
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AddressScreens()),
+                );
               },
             ),
             _buildDivider(),
