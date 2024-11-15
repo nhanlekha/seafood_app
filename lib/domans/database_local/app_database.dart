@@ -1,13 +1,22 @@
 // app_database.dart
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import '../../model/address_personal_model.dart';
 import '../../model/cart_model.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [CartModel])
+@DriftDatabase(tables: [CartModel, AddressPersonalModel])
 class AppDatabase extends _$AppDatabase {
-  AppDatabase() : super(_openConnection());
+
+  // Private constructor for singleton
+  AppDatabase._internal() : super(_openConnection());
+
+  // Single instance of AppDatabase
+  static final AppDatabase _instance = AppDatabase._internal();
+
+  // Public factory constructor for accessing the singleton instance
+  factory AppDatabase() => _instance;
 
   @override
   int get schemaVersion => 1;
@@ -37,7 +46,7 @@ class AppDatabase extends _$AppDatabase {
     return total;
   }
 
-  // Kiểm tra xem sản phẩm đã tồn tại trong giỏ hàng chưa
+  // Check if a product is already in the cart
   Future<bool> isProductInCart(int productId) async {
     final query = select(cartModel)..where((tbl) => tbl.productId.equals(productId));
     final result = await query.get();
@@ -48,4 +57,25 @@ class AppDatabase extends _$AppDatabase {
     return driftDatabase(name: 'my_database');
   }
 
+  Future<int> insertAddressPersonal(AddressPersonalModelCompanion entry) {
+    return into(addressPersonalModel).insert(entry);
+  }
+
+  Future<List<AddressPersonal>> fetchListAddressPersonal(int customerId) {
+    return (select(addressPersonalModel)
+      ..where((tbl) => tbl.customerId.equals(customerId))).get();
+  }
+
+  Future<int> resetAddressPersonalIsChecked(int customerId) {
+    return (update(addressPersonalModel)..where((tbl) => tbl.customerId.equals(customerId)))
+        .write(AddressPersonalModelCompanion(isChecked: Value(false)));
+  }
+
+  void setAddressDefaultForCustomer(int customerId) {
+    return;
+  }
+
+  Future<int> removeAddressPersonal(int id) async {
+    return await (delete(addressPersonalModel)..where((tbl) => tbl.dressPersonalId.equals(id))).go();
+  }
 }

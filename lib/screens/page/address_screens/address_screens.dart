@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:seafood_app/screens/widgets/vip_button.dart';
 import 'package:seafood_app/screens/widgets/address_card.dart';
 
+import '../../../domans/database_local/app_database.dart';
+import '../../../domans/repo/address_personal_repo.dart';
+import '../../../domans/repo/impl/address_personal_repo_impl.dart';
 import 'add_address_screens.dart';
 
 class AddressScreens extends StatefulWidget {
@@ -12,9 +16,20 @@ class AddressScreens extends StatefulWidget {
 }
 
 class _AddressScreensState extends State<AddressScreens> {
-  bool isDefault1 = true;
-  bool isDefault2 = false;
-  bool isDefault3 = false;
+  late Future<List<AddressPersonal>> _listAddressPersonal;
+  final _addressPersonalRepo = AddressPersonalRepoImpl();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchListAddressPersonalData();
+  }
+
+  void _fetchListAddressPersonalData() {
+    setState(() {
+      _listAddressPersonal = _addressPersonalRepo.fetchListAddressPersonal(1);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,60 +71,10 @@ class _AddressScreensState extends State<AddressScreens> {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 80.0),
-            // Chừa không gian cho các nút ở dưới
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  AddressCard(
-                    title: 'Địa chỉ 1',
-                    addressDetails:
-                        'Nhân Đz (987654321)\nok, Xã Cổ Linh, Huyện Pác Nặm, Tỉnh Bắc Kạn',
-                    isDefault: isDefault1,
-                    onDefaultChanged: (bool newValue) {
-                      setState(() {
-                        isDefault1 = newValue;
-                      });
-                    },
-                    onEdit: () {
-                      // Hành động chỉnh sửa địa chỉ
-                    },
-                    onDelete: () {
-                      // Hành động xóa địa chỉ
-                    },
-                  ),
-                  AddressCard(
-                    title: 'Địa chỉ 2',
-                    addressDetails:
-                        'Trần A (123456789)\nP. Xuân Thủy, Q. Cầu Giấy, Hà Nội',
-                    isDefault: isDefault2,
-                    onDefaultChanged: (bool newValue) {
-                      setState(() {
-                        isDefault2 = newValue;
-                      });
-                    },
-                    onEdit: () {
-                      // Hành động chỉnh sửa địa chỉ
-                    },
-                    onDelete: () {
-                      // Hành động xóa địa chỉ
-                    },
-                  ),
-                  AddressCard(
-                    title: 'Địa chỉ 3',
-                    addressDetails: 'Hồ Đăng Nguyện (+84 382 876 922)\n470 Trần Đại Nghĩa, P. Hòa Hải, Q. Ngũ Hành Sơn, TP. Đà Nẵng',
-                    isDefault: isDefault3,
-                    onDefaultChanged: (bool newValue) {
-                      setState(() {
-                        isDefault3 = newValue;
-                      });
-                    },
-                    onEdit: () {
-                      // Hành động chỉnh sửa địa chỉ
-                    },
-                    onDelete: () {
-                      // Hành động xóa địa chỉ
-                    },
-                  ),
+                  _buildAddressList(),
                 ],
               ),
             ),
@@ -128,10 +93,13 @@ class _AddressScreensState extends State<AddressScreens> {
                     text: 'Thêm Địa Chỉ',
                     textColor: Colors.white,
                     backgroundColor: Colors.green,
-                    onPressed: () {
-                      // Hành động thêm địa chỉ
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AddAddressScreens()));
-
+                    onPressed: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const AddAddressScreens()),
+                      );
+                      _fetchListAddressPersonalData();
                     },
                   ),
                   VipButton(
@@ -149,6 +117,89 @@ class _AddressScreensState extends State<AddressScreens> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildAddressList() {
+    return FutureBuilder(
+      future: _listAddressPersonal,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(
+              child: Text(
+                  "Bạn chưa có địa chỉ nào!\nThêm địa chỉ nhận hàng ngay"));
+        } else {
+          List<AddressPersonal> listAddressPersonal =
+              snapshot.data as List<AddressPersonal>;
+
+          // Sort the list to bring the default address to the top
+          listAddressPersonal.sort((a, b) => b.isChecked ? 1 : -1);
+
+          return Column(
+            children: listAddressPersonal.map((addressPersonal) {
+              return Dismissible(
+                key: ValueKey(addressPersonal.dressPersonalId),
+                direction: DismissDirection.endToStart,
+                resizeDuration: const Duration(milliseconds: 500),
+                background: Container(
+                  alignment: Alignment.centerRight,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  color: Colors.redAccent,
+                  child: const Icon(Icons.delete, color: Colors.white),
+                ),
+                onDismissed: (direction) async {
+                  if (direction == DismissDirection.endToStart) {
+                    final bool isConfirmed = await showDialog(
+                      context: context,
+                      builder: (context) => CupertinoAlertDialog(
+                        title: const Text('Xác nhận'),
+                        content: const Text(
+                            'Bạn có chắc chắn muốn xóa địa chỉ này không?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => {
+                              Navigator.pop(context, false),
+                            },
+                            child: const Text('Không'),
+                          ),
+                          TextButton(
+                            onPressed: () => {
+                              Navigator.pop(context, true),
+                              _addressPersonalRepo.removeAddressPersonal(
+                                  addressPersonal.dressPersonalId),
+                            },
+                            child: const Text('Có',
+                                style: TextStyle(color: Colors.red)),
+                          ),
+                        ],
+                      ),
+                    );
+                    _fetchListAddressPersonalData();
+                  }
+                },
+                child: GestureDetector(
+                  onTap: () async {
+                    // TODO: Edit address
+                  },
+                  child: AddressCard(
+                    title: addressPersonal.nameDress,
+                    shippingName: addressPersonal.shippingName,
+                    shippingPhone: addressPersonal.shippingPhone,
+                    addressDetails: '${addressPersonal.homeNumber} \n'
+                        '${addressPersonal.wardName}, ${addressPersonal.provinceName}, ${addressPersonal.cityName}',
+                    isDefault: addressPersonal.isChecked,
+                    onDefaultChanged: (bool newValue) {
+                      // Handle setting default address if needed
+                    },
+                  ),
+                ),
+              );
+            }).toList(),
+          );
+        }
+      },
     );
   }
 }

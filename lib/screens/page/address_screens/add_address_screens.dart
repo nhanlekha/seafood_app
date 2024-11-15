@@ -1,5 +1,8 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:seafood_app/domans/data_source/seafood_api.dart';
+import 'package:seafood_app/domans/database_local/app_database.dart';
+import 'package:seafood_app/domans/repo/impl/address_personal_repo_impl.dart';
 import 'package:seafood_app/model/city_model.dart';
 import 'package:seafood_app/model/province_model.dart';
 import 'package:seafood_app/model/wards_model.dart';
@@ -31,6 +34,7 @@ class _AddAddressScreensState extends State<AddAddressScreens> {
   WardModel? selectedWard;
 
   final addressRepo = AddressRepoImpl(seafoodApi: SeafoodApi());
+  final addressPersonalRepo = AddressPersonalRepoImpl();
 
   @override
   void initState() {
@@ -45,7 +49,9 @@ class _AddAddressScreensState extends State<AddAddressScreens> {
         cities = cityList;
       });
     } catch (e) {
-      print('Error fetching cities: $e');
+      if (kDebugMode) {
+        print('Error fetching cities: $e');
+      }
     }
   }
 
@@ -56,7 +62,9 @@ class _AddAddressScreensState extends State<AddAddressScreens> {
         districts = districtList;
       });
     } catch (e) {
-      print('Error fetching districts: $e');
+      if (kDebugMode) {
+        print('Error fetching districts: $e');
+      }
     }
   }
 
@@ -67,7 +75,9 @@ class _AddAddressScreensState extends State<AddAddressScreens> {
         wards = wardList;
       });
     } catch (e) {
-      print('Error fetching wards: $e');
+      if (kDebugMode) {
+        print('Error fetching wards: $e');
+      }
     }
   }
 
@@ -233,7 +243,7 @@ class _AddAddressScreensState extends State<AddAddressScreens> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Đặt Làm Địa Chỉ Mặt Định'),
+                        const Text('Đặt Làm Địa Chỉ Mặt Định', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
                         Switch(
                           value: isDefaultAddress,
                           onChanged: (value) {
@@ -256,16 +266,30 @@ class _AddAddressScreensState extends State<AddAddressScreens> {
               textColor: Colors.white,
               backgroundColor: Colors.blue,
               onPressed: () {
-                // Hành động lưu địa chỉ
-                print('Address: ${addressNameController.text}');
-                print('Recipient: ${recipientNameController.text}');
-                print('Phone: ${phoneController.text}');
-                print('Email: ${emailController.text}');
-                print('City: ${selectedCity?.nameCity}');
-                print('District: ${selectedDistrict?.nameProvince}');
-                print('Ward: ${selectedWard?.nameWard}');
-                print('House Number: ${houseNumberController.text}');
-                print('Is Default: $isDefaultAddress');
+                addressPersonalRepo.addAddressPersonal(
+                  customerId: 1,
+                  nameDress: addressNameController.text,
+                  shippingName: recipientNameController.text,
+                  shippingEmail: emailController.text,
+                  shippingPhone: phoneController.text,
+                  cityName: selectedCity?.nameCity ?? '',
+                  provinceName: selectedDistrict?.nameProvince ?? '',
+                  wardName: selectedWard?.nameWard ?? '',
+                  homeNumber: houseNumberController.text,
+                  isChecked: isDefaultAddress,
+                );
+                if (kDebugMode) {
+                  print('Address: ${addressNameController.text}');
+                  print('Recipient: ${recipientNameController.text}');
+                  print('Phone: ${phoneController.text}');
+                  print('Email: ${emailController.text}');
+                  print('City: ${selectedCity?.nameCity}');
+                  print('District: ${selectedDistrict?.nameProvince}');
+                  print('Ward: ${selectedWard?.nameWard}');
+                  print('House Number: ${houseNumberController.text}');
+                  print('Is Default: $isDefaultAddress');
+                }
+                Navigator.pop(context);
               },
             ),
           ],
