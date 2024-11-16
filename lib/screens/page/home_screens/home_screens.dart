@@ -58,66 +58,68 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        buildSearchToolbar(context), // Phần tìm kiếm không cuộn
-        Expanded(
-          // Sử dụng Expanded để phần này chiếm không gian còn lại
-          child: SingleChildScrollView(
-            // Cho phép cuộn cho carousel và danh sách danh mục
-            child: Column(
-              children: [
-                const SimpleCarouselDemo(), // Carousel có thể cuộn
-                buildListCardCategory(),
-                buildListNewProduct(),
-                buildListTrendingProduct() // Danh sách danh mục có thể cuộn
-              ],
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color(0xffF5F5F5),
+      ),
+      child: Column(
+        children: [
+          buildSearchToolbar(context), // Phần tìm kiếm không cuộn
+          Expanded(
+            // Sử dụng Expanded để phần này chiếm không gian còn lại
+            child: SingleChildScrollView(
+              // Cho phép cuộn cho carousel và danh sách danh mục
+              child: Column(
+                children: [
+                  const SimpleCarouselDemo(), // Carousel có thể cuộn
+                  buildListCardCategory(),
+                  buildCarouselBanner(),
+                  buildListNewProduct(),
+                  buildListTrendingProduct(),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildCardCategory(CategoryModel cate) {
     return Container(
-      child: Card(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 40,
-              height: 40,
-              padding: const EdgeInsets.all(1),
-              child: Image.network(
-                cate.categoryImage ?? '',
-                fit: BoxFit.fill,
-              ),
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+        color: Colors.white,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            padding: const EdgeInsets.all(1),
+            child: Image.network(
+              cate.categoryImage ?? '',
+              fit: BoxFit.fill,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-              // Thêm padding để tạo khoảng trống
-              child: Text(
-                cate.categoryName ?? '',
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 13,
-                  height: 1.2,
-                ),
-                textAlign: TextAlign.center,
-                maxLines: 2,
-                // Giới hạn số dòng để tránh tràn
-                overflow: TextOverflow.ellipsis,
-                // Thêm dấu '...' nếu quá dài
-                softWrap: true,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
+            child: Text(
+              cate.categoryName ?? '',
+              style: const TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 13,
+                height: 1.2,
               ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -126,62 +128,87 @@ class _HomePageState extends State<HomePage> {
     final categoryCubit = context.read<CategoryCubit>();
     categoryCubit.fetchData();
 
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: 10),
-          alignment: Alignment.centerLeft, // Căn trái
-          child: const Text(
-            "Danh mục",
-            style: TextStyle(
-              fontSize: 24, // Kích thước chữ
-              fontWeight: FontWeight.bold, // Chữ đậm
-              color: Colors.blueAccent, // Màu chữ
+    return Container(
+      decoration: const BoxDecoration(
+        color: Colors.white,
+      ),
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10, bottom: 5),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "DANH MỤC SẢN PHẨM 🦐",
+                  style: TextStyle(
+                    height: 1.0,
+                    fontSize: 20, // Kích thước chữ
+                    fontWeight: FontWeight.bold, // Chữ đậm
+                    color: Color(0xffef5908), // Màu chữ
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    Text("Xem thêm",
+
+                        style: TextStyle(
+                          height: 1.0,
+                          fontSize: 14, // Kích thước chữ
+                          color: Colors.grey, // Màu chữ
+                        )),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: Colors.grey,
+                    ),
+                  ],
+                )
+              ],
             ),
           ),
-        ),
-        // Khoảng cách giữa tiêu đề và GridView
-        BlocBuilder<CategoryCubit, CategoryState>(
-          builder: (context, state) {
-            switch (state.dataStatus) {
-              case DataStatus.initial:
-                return const Center(child: CircularProgressIndicator());
-              case DataStatus.success:
-                List<CategoryModel> listCate = state.dataModel.data;
+          // Khoảng cách giữa tiêu đề và GridView
+          BlocBuilder<CategoryCubit, CategoryState>(
+            builder: (context, state) {
+              switch (state.dataStatus) {
+                case DataStatus.initial:
+                  return const Center(child: CircularProgressIndicator());
+                case DataStatus.success:
+                  List<CategoryModel> listCate = state.dataModel.data;
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    // Cho phép GridView tự động điều chỉnh chiều cao
-                    crossAxisCount: 4,
-                    // 4 cột
-                    mainAxisSpacing: 8,
-                    // Khoảng cách dọc giữa các phần tử
-                    crossAxisSpacing: 8,
-                    // Khoảng cách ngang giữa các phần tử
-                    childAspectRatio: 1,
-                    // Tỷ lệ khung hình 1:1
-                    children: List.generate(
-                      listCate.length,
-                      (index) => _buildCardCategory(listCate[index]),
+                  return Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: GridView.count(
+                      controller: ScrollController(
+                        keepScrollOffset: false,
+                      ),
+                      shrinkWrap: true,
+                      crossAxisCount: 4,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 4,
+                      childAspectRatio: 1,
+                      children: List.generate(
+                        listCate.length,
+                        (index) => _buildCardCategory(listCate[index]),
+                      ),
                     ),
-                  ),
-                );
+                  );
 
-              case DataStatus.error:
-                return const Center(
-                    child: Text("Có lỗi xảy ra!")); // Hiển thị thông báo lỗi
-              case DataStatus.loading:
-                return const Center(child: CircularProgressIndicator());
-              case DataStatus.empty:
-                return const Center(
-                    child: Text(
-                        "Không có danh mục nào!")); // Hiển thị thông báo khi không có dữ liệu
-            }
-          },
-        ),
-      ],
+                case DataStatus.error:
+                  return const Center(
+                      child: Text("Có lỗi xảy ra!")); // Hiển thị thông báo lỗi
+                case DataStatus.loading:
+                  return const Center(child: CircularProgressIndicator());
+                case DataStatus.empty:
+                  return const Center(
+                      child: Text(
+                          "Không có danh mục nào!")); // Hiển thị thông báo khi không có dữ liệu
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -192,14 +219,22 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.only(left: 10),
-          alignment: Alignment.centerLeft, // Căn trái
-          child: const Text(
-            "Sản phẩm thịnh hành",
-            style: TextStyle(
-              fontSize: 24, // Kích thước chữ
-              fontWeight: FontWeight.bold, // Chữ đậm
-              color: Colors.blueAccent, // Màu chữ
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Text(
+                  "SẢN PHẨM HOT 🔥",
+                  style: TextStyle(
+                    fontSize: 20, // Kích thước chữ
+                    fontWeight: FontWeight.bold, // Chữ đậm
+                    color: Color(0xffef5908), // Màu chữ
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -213,24 +248,34 @@ class _HomePageState extends State<HomePage> {
                 List<ProductModel> listProduct =
                     state.dataTrendingProductModel?.data ?? [];
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                return Container(
+                  decoration: const BoxDecoration(
+                    color: Color(0xffF5F5F5),
+                  ),
                   child: SizedBox(
-                    height:
-                        275, // Đặt chiều cao của container để chứa danh sách
-                    child: ListView.builder(
-                      scrollDirection:
-                          Axis.horizontal, // Đặt chiều cuộn là ngang
-                      itemCount: listProduct.length ??
-                          0, // Số lượng mục trong danh sách
-                      itemBuilder: (context, index) {
-                        ProductModel product = listProduct[index];
-                        return SizedBox(
-                            width: 215, // Chiều rộng của mỗi mục
-                            child: ProductCard(
-                               productModel: product,// Thay bằng URL thực tế nếu cần
-                            ));
-                      },
+                    height: 400,
+                    // Đặt chiều cao của container để chứa danh sách
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: GridView.builder(
+                        scrollDirection: Axis.vertical,
+                        // Đặt chiều cuộn là ngang
+                        itemCount: listProduct.length ?? 0,
+                        // Số lượng mục trong danh sách
+                        itemBuilder: (context, index) {
+                          ProductModel product = listProduct[index];
+                          return ProductCard(
+                            productModel:
+                                product, // Thay bằng URL thực tế nếu cần
+                          );
+                        },
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 8,
+                                crossAxisSpacing: 8,
+                                childAspectRatio: 0.7),
+                      ),
                     ),
                   ),
                 );
@@ -258,14 +303,22 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.only(left: 10),
-          alignment: Alignment.centerLeft, // Căn trái
-          child: const Text(
-            "Sản phẩm mới",
-            style: TextStyle(
-              fontSize: 24, // Kích thước chữ
-              fontWeight: FontWeight.bold, // Chữ đậm
-              color: Colors.blueAccent, // Màu chữ
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Text(
+                  "SẢN PHẨM MỚI ✨",
+                  style: TextStyle(
+                    fontSize: 20, // Kích thước chữ
+                    fontWeight: FontWeight.bold, // Chữ đậm
+                    color: Color(0xffef5908), // Màu chữ
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -283,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.all(8.0),
                   child: SizedBox(
                     height:
-                        275, // Đặt chiều cao của container để chứa danh sách
+                        240, // Đặt chiều cao của container để chứa danh sách
                     child: ListView.builder(
                       scrollDirection:
                           Axis.horizontal, // Đặt chiều cuộn là ngang
@@ -291,11 +344,14 @@ class _HomePageState extends State<HomePage> {
                           0, // Số lượng mục trong danh sách
                       itemBuilder: (context, index) {
                         ProductModel product = listNewProduct[index];
-                        return SizedBox(
-                            width: 215, // Chiều rộng của mỗi mục
-                            child: ProductCard(
-                            productModel: product,
-                            ));
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: SizedBox(
+                              width: 170, // Chiều rộng của mỗi mục
+                              child: ProductCard(
+                                productModel: product,
+                              )),
+                        );
                       },
                     ),
                   ),
@@ -314,6 +370,35 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ],
+    );
+  }
+
+  Widget buildCarouselBanner() {
+    return CarouselSlider(
+      items: [
+        const Image(
+          image: AssetImage('assets/images/banner1.jpg'),
+          fit: BoxFit.contain,
+        ),
+        const Image(
+            image: AssetImage('assets/images/banner2.jpg'),
+            fit: BoxFit.contain),
+        const Image(
+          image: AssetImage('assets/images/banner3.jpg'),
+          fit: BoxFit.contain,
+        ),
+      ]
+          .map((item) => Container(
+                child: item,
+              ))
+          .toList(),
+      options: CarouselOptions(
+          autoPlay: true,
+          enlargeCenterPage: true,
+          enableInfiniteScroll: true,
+          viewportFraction: 1,
+          aspectRatio: 30 / 9,
+          autoPlayInterval: const Duration(seconds: 5)),
     );
   }
 }
@@ -494,9 +579,7 @@ Widget _buildCartIcon(BuildContext context) {
     child: GestureDetector(
       onTap: () {
         // Xử lý sự kiện khi click vào giỏ hàng
-        context.push(
-          '/cart'
-        );
+        context.push('/cart');
         print("Giỏ hàng đã được click!");
       },
       child: Container(
@@ -510,4 +593,3 @@ Widget _buildCartIcon(BuildContext context) {
     ),
   );
 }
-
