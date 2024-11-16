@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../widgets/product_card.dart';
 import '../../../bloc/slide/slide_state.dart';
 import '../../../domans/repo/slide_repo.dart';
@@ -58,12 +59,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        buildSearchToolbar(context),
         Expanded(
           // Sử dụng Expanded để phần này chiếm không gian còn lại
           child: SingleChildScrollView(
             // Cho phép cuộn cho carousel và danh sách danh mục
             child: Column(
-              children: [buildListCardCategory(), buildListCardProduct()],
+              children: [buildListCardProduct()],
             ),
           ),
         ),
@@ -71,101 +73,97 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildCardCategory(CategoryModel cate) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+
+// Hàm để tạo toolbar tìm kiếm
+  Widget buildSearchToolbar(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(5),
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            padding: const EdgeInsets.all(1),
-            child: Image.network(
-              cate.categoryImage ?? '',
-              fit: BoxFit.fill,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-            child: Text(
-              cate.categoryName ?? '',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-                height: 1.2,
-              ),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              softWrap: true,
-            ),
-          ),
+          _buildLogo(), // Gọi hàm để tạo logo
+          _buildSearchField(), // Gọi hàm để tạo ô tìm kiếm
+          _buildCartIcon(context), // Gọi hàm để tạo biểu tượng giỏ hàng
         ],
       ),
     );
   }
 
-  Widget buildListCardCategory() {
-    final categoryCubit = context.read<CategoryCubit>();
-    categoryCubit.fetchData();
+// Hàm để xây dựng logo
+  Widget _buildLogo() {
+    return Expanded(
+      flex: 2, // Tương ứng với android:layout_weight="0.2"
+      child: Image.asset(
+        'assets/images/logo.png', // Đường dẫn tới ảnh logo
+        height: 50,
+      ),
+    );
+  }
 
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: 10),
-          alignment: Alignment.centerLeft, // Căn trái
-          child: const Text(
-            "Danh mục",
-            style: TextStyle(
-              fontSize: 24, // Kích thước chữ
-              fontWeight: FontWeight.bold, // Chữ đậm
-              color: Colors.blueAccent, // Màu chữ
+// Hàm để xây dựng ô tìm kiếm
+  Widget _buildSearchField() {
+    return Expanded(
+      flex: 6, // Tương ứng với android:layout_weight="0.6"
+      child: Container(
+        margin: const EdgeInsets.only(left: 5, top: 4, bottom: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.transparent,
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 10,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: TextField(
+          decoration: InputDecoration(
+            hintText: "Bạn tìm gì hôm nay?",
+            hintStyle: const TextStyle(color: Colors.grey),
+            prefixIcon: const Icon(Icons.search),
+            fillColor: Colors.white,
+            filled: true,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide.none,
+            ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 15),
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.clear),
+              onPressed: () {
+                // Logic để xóa nội dung tìm kiếm
+              },
             ),
           ),
         ),
-        // Khoảng cách giữa tiêu đề và GridView
-        BlocBuilder<CategoryCubit, CategoryState>(
-          builder: (context, state) {
-            switch (state.dataStatus) {
-              case DataStatus.initial:
-                return const Center(child: CircularProgressIndicator());
-              case DataStatus.success:
-                List<CategoryModel> listCate = state.dataModel.data;
-
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GridView.count(
-                    shrinkWrap: true,
-                    crossAxisCount: 4,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    childAspectRatio: 1,
-                    children: List.generate(
-                      listCate.length,
-                      (index) => _buildCardCategory(listCate[index]),
-                    ),
-                  ),
-                );
-
-              case DataStatus.error:
-                return const Center(
-                    child: Text("Có lỗi xảy ra!")); // Hiển thị thông báo lỗi
-              case DataStatus.loading:
-                return const Center(child: CircularProgressIndicator());
-              case DataStatus.empty:
-                return const Center(
-                    child: Text(
-                        "Không có danh mục nào!")); // Hiển thị thông báo khi không có dữ liệu
-            }
-          },
-        ),
-      ],
+      ),
     );
   }
+
+  Widget _buildCartIcon(BuildContext context) {
+    return Expanded(
+      flex: 1, // Tương ứng với android:layout_weight="0.1"
+      child: GestureDetector(
+        onTap: () {
+          // Xử lý sự kiện khi click vào giỏ hàng
+          context.push(
+              '/cart'
+          );
+          print("Giỏ hàng đã được click!");
+        },
+        child: Container(
+          margin: const EdgeInsets.only(left: 10),
+          alignment: Alignment.center,
+          child: Image.asset(
+            'assets/images/cargo.png', // Đường dẫn tới ảnh giỏ hàng
+            height: 25,
+          ),
+        ),
+      ),
+    );
+  }
+
 
   Widget buildListCardProduct() {
     final productCubit = context.read<ProductCubit>();
@@ -174,7 +172,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.only(left: 10),
+          margin: const EdgeInsets.only(left: 10, top: 10),
           alignment: Alignment.centerLeft,
           child: const Text(
             "Sản phẩm",
@@ -208,37 +206,58 @@ class _HomePageState extends State<HomePage> {
                     String categoryName = entry.key;
                     List<ProductModel> products = entry.value;
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            categoryName,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 10), // Chỉ cách phần dưới
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Colors.blueAccent,
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.3),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Text(
+                              categoryName,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 275,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: products.length,
-                            itemBuilder: (context, index) {
-                              ProductModel product = products[index];
-                              return SizedBox(
-                                width: 215,
-                                child: ProductCard(
-                                 productModel: product,
-                                ),
-                              );
-                            },
+                          SizedBox(
+                            height: 275,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              itemCount: products.length,
+                              itemBuilder: (context, index) {
+                                ProductModel product = products[index];
+                                return Container(
+                                  margin: const EdgeInsets.only(right: 10),
+                                  width: 215,
+                                  child: ProductCard(
+                                    productModel: product,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     );
                   }).toList(),
                 );
@@ -255,41 +274,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  // Widget _buildCardProduct(ProductModel product) {
-  //   return Card(
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.circular(5),
-  //     ),
-  //     child: Column(
-  //       mainAxisSize: MainAxisSize.min,
-  //       mainAxisAlignment: MainAxisAlignment.center,
-  //       children: [
-  //         Container(
-  //           width: 75,
-  //           height: 55,
-  //           padding: const EdgeInsets.all(1),
-  //           child: Image.network(
-  //             product.productImage ?? '',
-  //             fit: BoxFit.fill,
-  //           ),
-  //         ),
-  //         Padding(
-  //           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 2),
-  //           child: Text(
-  //             product.productName ?? '',
-  //             style: const TextStyle(
-  //               fontWeight: FontWeight.bold,
-  //               fontSize: 13,
-  //               height: 1.2,
-  //             ),
-  //             textAlign: TextAlign.center,
-  //             maxLines: 2,
-  //             overflow: TextOverflow.ellipsis,
-  //             softWrap: true,
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
 }

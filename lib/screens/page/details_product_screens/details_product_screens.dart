@@ -153,7 +153,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
           // Nội dung bên dưới
           DraggableScrollableSheet(
-            initialChildSize: 0.6,
+            initialChildSize: 0.7,
             minChildSize: 0.6,
             maxChildSize: 1.0,
             builder: (context, scrollController) {
@@ -248,7 +248,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       ),
                                       const SizedBox(width: 10),
                                       const Text(
-                                        '₫999.999',
+                                        '₫1.999.999',
                                         style: TextStyle(
                                           fontSize: 16,
                                           color: Colors.grey,
@@ -320,7 +320,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       children: [
                                          Text(
                                           '$rating',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 18,
                                             color: Colors.blueGrey,
                                             fontWeight: FontWeight.bold,
@@ -574,7 +574,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       context: context,
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -587,7 +587,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
-                    icon: Icon(Icons.cancel),
+                    icon: const Icon(Icons.cancel),
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                 ],
@@ -619,7 +619,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   ),
 
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   // Product Name, Price, and Quantity
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -647,7 +647,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       Row(
                         children: [
                           IconButton(
-                            icon: Icon(Icons.remove),
+                            icon: const Icon(Icons.remove),
                             onPressed: () {
                               // Decrease quantity action
                             },
@@ -660,7 +660,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.add),
+                            icon: const Icon(Icons.add),
                             onPressed: () {
                               // Increase quantity action
                             },
@@ -679,7 +679,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFFFFE4B5),
+                          backgroundColor: const Color(0xFFFFE4B5),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                             // Bo góc (10dp)
