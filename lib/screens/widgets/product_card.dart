@@ -109,33 +109,28 @@ class ProductCard extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text(
-                              NumberFormat.currency(
-                                locale: 'vi_VN', // Set locale to Vietnam
-                                customPattern: '₫###,###,###,###', // Custom pattern
-                                symbol: '₫', // Vietnamese currency symbol
-                                decimalDigits: 0, // Set decimal places to 0
-                              ).format(double.tryParse(
-                                      '${productModel.productPrice}') ??
-                                  0),
-                              // Parse price to double and format
-                              style: const TextStyle(
-                                  fontSize: 18, color: Colors.red),
+                            Expanded(
+                              child: Text(
+                                NumberFormat.currency(
+                                  locale: 'vi_VN', // Set locale to Vietnam
+                                  customPattern: '₫###,###,###,###', // Custom pattern
+                                  symbol: '₫', // Vietnamese currency symbol
+                                  decimalDigits: 0, // Set decimal places to 0
+                                ).format(double.tryParse(
+                                        '${productModel.productPrice}') ??
+                                    0),
+                                // Parse price to double and format
+                                style: const TextStyle(
+                                    fontSize: 15, color: Colors.red),
+                              ),
                             ),
-                            const SizedBox(width: 4.0),
-                            // const Icon(
-                            //   Icons.local_shipping_outlined,
-                            //   color: Colors.green,
-                            //   size: 8.0,
-                            // ),
                             const Icon(
                               Icons.verified_user,
                               color: Colors.green,
                               size: 16.0,
                             ),
-                            const Spacer(),
                             Text(
-                              "Đã bán ${productModel.productUnitSold}",
+                              "Đã bán 13",
                               style: const TextStyle(
                                 fontSize: 12.0,
                                 fontWeight: FontWeight.w400,

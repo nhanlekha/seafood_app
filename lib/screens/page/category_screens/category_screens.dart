@@ -171,18 +171,6 @@ class _HomePageState extends State<HomePage> {
 
     return Column(
       children: [
-        Container(
-          margin: const EdgeInsets.only(left: 10, top: 10),
-          alignment: Alignment.centerLeft,
-          child: const Text(
-            "Sản phẩm",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Colors.blueAccent,
-            ),
-          ),
-        ),
         BlocBuilder<ProductCubit, ProductState>(
           builder: (context, state) {
             switch (state.dataStatus) {
@@ -207,10 +195,10 @@ class _HomePageState extends State<HomePage> {
                     List<ProductModel> products = entry.value;
 
                     return Container(
-                      margin: const EdgeInsets.only(bottom: 10), // Chỉ cách phần dưới
+                      margin: const EdgeInsets.only(bottom: 10, left: 6, right: 6), // Chỉ cách phần dưới
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                           color: Colors.blueAccent,
