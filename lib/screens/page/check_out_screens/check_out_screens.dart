@@ -9,7 +9,7 @@ import 'package:seafood_app/domans/database_local/app_database.dart';
 import 'package:seafood_app/domans/repo/impl/checkout_repo_impl.dart';
 import 'package:seafood_app/model/coupon_model.dart';
 import 'package:seafood_app/model/payment_model.dart';
-import 'package:seafood_app/model/shippingmodel.dart';
+import 'package:seafood_app/model/shipping_model.dart';
 import 'package:seafood_app/routers/app_route_config.dart';
 import 'package:seafood_app/screens/widgets/checkout_card.dart';
 

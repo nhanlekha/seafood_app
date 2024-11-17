@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:seafood_app/domans/repo/impl/base_repo_impl.dart';
 import 'package:seafood_app/model/coupon_model.dart';
 import 'package:seafood_app/model/payment_model.dart';
-import 'package:seafood_app/model/shippingmodel.dart';
+import 'package:seafood_app/model/shipping_model.dart';
 
 import '../../data_source/seafood_api.dart';
 import '../../database_local/app_database.dart';

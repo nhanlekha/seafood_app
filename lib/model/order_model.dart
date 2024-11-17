@@ -1,5 +1,5 @@
 import 'package:seafood_app/model/payment_model.dart';
-import 'package:seafood_app/model/shippingmodel.dart';
+import 'package:seafood_app/model/shipping_model.dart';
 
 import 'order_details_model.dart';
 
@@ -13,7 +13,7 @@ class OrderModel {
   int? productFee;
   String? productCoupon;
   int? productPriceCoupon;
-  double? totalPrice;
+  int? totalPrice;
   int? totalQuantity;
   String? orderDate;
   ShippingModel? shipping;

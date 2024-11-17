@@ -1,49 +1,65 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seafood_app/bloc/order/order_cubit.dart';
+import 'package:seafood_app/constants.dart';
+import 'package:seafood_app/domans/repo/impl/order_repo_impl.dart';
+import 'package:seafood_app/domans/repo/order_repo.dart';
+import 'package:seafood_app/model/order_model.dart';
+import 'package:seafood_app/screens/widgets/order_card.dart';
+
+import '../../../bloc/order/order_state.dart';
+import '../../../domans/data_source/seafood_api.dart';
+import '../../../ultils/enums/enum_data.dart';
 
 class OrderScreens extends StatelessWidget {
   const OrderScreens({super.key});
 
+
   @override
   Widget build(BuildContext context) {
-    return const OrderPage();
+    return BlocProvider(
+  create: (context) => OrderCubit(OrderRepoImpl(seafoodApi: SeafoodApi())),
+  child: Container(decoration:
+    BoxDecoration(color: Colors.grey[100])
+        , child: const OrderPage()),
+);
   }
 }
-
+final statuses = [
+  {"text": "Đang xử lý", "status": 1},
+  {"text": "Đang giao", "status": 2},
+  {"text": "Hoàn thành", "status": 3},
+  {"text": "Đã hủy", "status": 4},
+];
 class OrderPage extends StatelessWidget {
   const OrderPage({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
+    return buildOrderPage(context);
+  }
+  Widget buildOrderPage(BuildContext context) {
     return DefaultTabController(
-      length: 4, // Số lượng tab
+      length: statuses.length,
       child: Column(
         children: [
-          buildSearchToolbar(context), // Phần tìm kiếm không cuộn
+          buildSearchToolbar(context),
           TabBar(
-            tabs: [
-              Tab(text: "Đang xử lý"),
-              Tab(text: "Đang giao"), // Tab "Đang đặt"
-              Tab(text: "Hoàn thành"), // Tab "Hoàn thành"
-              Tab(text: "Đã hủy"), // Tab "Đã hủy"
-            ],
-            labelColor: Colors.blueAccent,
-            // Màu sắc cho tab đang được chọn
+            tabs: statuses.map((e) => Tab(text: e['text'].toString())).toList(),
+            labelColor: kOrangeColor,
             unselectedLabelColor: Colors.black,
-            // Màu sắc cho tab không được chọn
-            indicatorColor: Colors.blueAccent, // Màu của chỉ báo dưới tab
+            indicatorColor: kOrangeColor,
           ),
-          Expanded( // Sử dụng Expanded để phần này chiếm không gian còn lại
+          Expanded(
             child: TabBarView(
               children: [
-                buildOrderList("Đang xử lý"),
-                // Xây dựng danh sách cho tab "Đang đặt"
-                buildOrderList("Đang giao"),
-                // Xây dựng danh sách cho tab "Đang đặt"
-                buildOrderList("Hoàn thành"),
-                // Xây dựng danh sách cho tab "Hoàn thành"
-                buildOrderList("Đã hủy"),
-                // Xây dựng danh sách cho tab "Đã hủy"
+                buildOrderList_1(context),
+                buildOrderList_2(context),
+                buildOrderList_3(context),
+                buildOrderList_4(context),
               ],
             ),
           ),
@@ -51,27 +67,124 @@ class OrderPage extends StatelessWidget {
       ),
     );
   }
+  Widget buildOrderList_1(BuildContext context) {
+    int status = 1;
+    int customerId = 1;
 
-  // Phương thức để xây dựng danh sách đơn hàng cho mỗi tab
-  Widget buildOrderList(String status) {
-    return SingleChildScrollView( // Cho phép cuộn cho danh sách
-      child: Column(
-        children: [
-          Text("Danh sách đơn hàng: $status"), // Tiêu đề cho danh sách
-          // Ở đây bạn có thể thêm các widget hiển thị đơn hàng theo trạng thái
-          // Ví dụ:
-          for (int i = 0; i < 10; i++)
-            ListTile(
-              title: Text("Đơn hàng $i - Trạng thái: $status"),
-              subtitle: Text("Thông tin chi tiết..."),
-            ),
-        ],
-      ),
+    context.read<OrderCubit>().fetchStatus1(customerId);
+
+    return BlocBuilder<OrderCubit, OrderState>(
+      builder: (context, state) {
+        if (state.dataStatus == DataStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state.dataStatus == DataStatus.success) {
+
+          if (state.dataStatus_1 == null) {
+            return const Center(child: Text('Bạn chưa có đơn hàng nào cả.'));
+          }
+
+          final orders = state.dataStatus_1?.data as List<OrderModel>;
+
+
+          return ListView.builder(
+            itemCount: orders.length,
+            itemBuilder: (context, index) {
+              final order = orders[index];
+              return OrderCard(order: order);
+            },
+          );
+        } else if (state.dataStatus == DataStatus.error) {
+          return Center(child: Text('Error: ${state.dataStatus_1?.message}'));
+        } else {
+          return const Center(child: Text('No data available.'));
+        }
+      },
     );
   }
+  Widget buildOrderList_2(BuildContext context) {
+    int status = 2;
+    int customerId = 1;
+
+    context.read<OrderCubit>().fetchStatus2(customerId);
+
+    return BlocBuilder<OrderCubit, OrderState>(
+      builder: (context, state) {
+        if (state.dataStatus == DataStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state.dataStatus == DataStatus.success) {
+          final orders = state.dataStatus_2?.data as List<OrderModel>;
+          return ListView.builder(
+            itemCount: orders.length,
+            itemBuilder: (context, index) {
+              final order = orders[index];
+              return OrderCard(order: order);
+            },
+          );
+        } else if (state.dataStatus == DataStatus.error) {
+          return Center(child: Text('Error: ${state.dataStatus_2?.message}'));
+        } else {
+          return const Center(child: Text('No data available.'));
+        }
+      },
+    );
+  }
+  Widget buildOrderList_3(BuildContext context) {
+    int status = 3;
+    int customerId = 1;
+
+    context.read<OrderCubit>().fetchStatus3(customerId);
+
+    return BlocBuilder<OrderCubit, OrderState>(
+      builder: (context, state) {
+        if (state.dataStatus == DataStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state.dataStatus == DataStatus.success) {
+          final orders = state.dataStatus_3?.data as List<OrderModel>;
+
+          return ListView.builder(
+            itemCount: orders.length,
+            itemBuilder: (context, index) {
+              final order = orders[index];
+              return OrderCard(order: order);
+            },
+          );
+        } else if (state.dataStatus == DataStatus.error) {
+          return Center(child: Text('Error: ${state.dataStatus_3?.message}'));
+        } else {
+          return const Center(child: Text('No data available.'));
+        }
+      },
+    );
+  }
+  Widget buildOrderList_4(BuildContext context) {
+    int status = 4;
+    int customerId = 1;
+
+    context.read<OrderCubit>().fetchStatus4(customerId);
+
+    return BlocBuilder<OrderCubit, OrderState>(
+      builder: (context, state) {
+        if (state.dataStatus == DataStatus.loading) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state.dataStatus == DataStatus.success) {
+          final orders = state.dataStatus_4?.data as List<OrderModel>;
+          return ListView.builder(
+            itemCount: orders.length,
+            itemBuilder: (context, index) {
+              final order = orders[index];
+              return OrderCard(order: order);
+            },
+          );
+        } else if (state.dataStatus == DataStatus.error) {
+          return Center(child: Text('Error: ${state.dataStatus_4?.message}'));
+        } else {
+          return const Center(child: Text('No data available.'));
+        }
+      },
+    );
+  }
+
 }
-
-
 
 // Hàm để tạo toolbar tìm kiếm
 Widget buildSearchToolbar(BuildContext context) {
@@ -145,7 +258,9 @@ Widget _buildCartIcon(BuildContext context) {
   return Expanded(
     flex: 1, // Tương ứng với android:layout_weight="0.1"
     child: GestureDetector(
-      onTap: (){context.push('/cart');},
+      onTap: () {
+        context.push('/cart');
+      },
       child: Container(
         margin: const EdgeInsets.only(left: 10),
         alignment: Alignment.center,
