@@ -9,6 +9,7 @@ import 'package:seafood_app/domans/repo/impl/slide_repo_impl.dart';
 import 'package:seafood_app/domans/repo/product_repo.dart';
 import 'package:seafood_app/routers/app_route_config.dart';
 import 'package:seafood_app/screens/page/login_screens/login_screens.dart';
+import 'package:seafood_app/screens/page/main_screens/main_screens.dart';
 
 import 'domans/database_local/app_database.dart';
 import 'domans/repo/impl/cart_repo_impl.dart';
@@ -55,7 +56,7 @@ class _SeafoodAppState extends State<SeafoodApp> {
     _slideRepo = SlideRepoImpl(seafoodApi: _seafoodApi);
     _cateRepo = CateRepoImpl(seafoodApi: _seafoodApi);
     _productRepo = ProductRepoImpl(seafoodApi: _seafoodApi);
-    _checkoutRepo =  CheckoutRepoImpl(seafoodApi: _seafoodApi);
+    _checkoutRepo = CheckoutRepoImpl(seafoodApi: _seafoodApi);
   }
 
   @override
@@ -95,7 +96,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
         body: SafeArea(
-      child: LoginScreens(),
+      child: MainScreens(),
     ));
   }
 }

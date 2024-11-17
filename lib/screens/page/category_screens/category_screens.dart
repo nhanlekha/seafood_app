@@ -1,44 +1,47 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../../widgets/product_card.dart';
-import '../../../bloc/slide/slide_state.dart';
-import '../../../domans/repo/slide_repo.dart';
-import '../../../ultils/enums/enum_data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../bloc/category/category_state.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:seafood_app/model/product_model.dart';
-import 'package:seafood_app/model/category_model.dart';
-import 'package:seafood_app/domans/repo/cate_repo.dart';
-import 'package:seafood_app/bloc/slide/slide_cubit.dart';
-import 'package:seafood_app/domans/repo/product_repo.dart';
+import 'package:go_router/go_router.dart';
+import 'package:seafood_app/bloc/category/category_cubit.dart';
 import 'package:seafood_app/bloc/product/product_cubit.dart';
 import 'package:seafood_app/bloc/product/product_state.dart';
-import 'package:seafood_app/bloc/category/category_cubit.dart';
-import 'package:seafood_app/domans/repo/impl/slide_repo_impl.dart';
+import 'package:seafood_app/bloc/slide/slide_cubit.dart';
+import 'package:seafood_app/constants.dart';
+import 'package:seafood_app/domans/repo/cate_repo.dart';
+import 'package:seafood_app/domans/repo/product_repo.dart';
+import 'package:seafood_app/model/category_model.dart';
+import 'package:seafood_app/model/product_model.dart';
+
+import '../../../bloc/category/category_state.dart';
+import '../../../domans/repo/slide_repo.dart';
+import '../../../ultils/enums/enum_data.dart';
+import '../../widgets/product_card.dart';
 
 class CategoryScreens extends StatelessWidget {
   const CategoryScreens({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(providers: [
-      BlocProvider(
-        create: (context) {
-          final slideRepo = context.read<SlideRepo>();
-          return SlideCubit(slideRepo);
-        },
-      ),
-      BlocProvider(create: (context) {
-        final cateRepo = context.read<CateRepo>();
-        return CategoryCubit(cateRepo);
-      }),
-      BlocProvider(create: (context) {
-        final productRepo = context.read<ProductRepo>();
-        return ProductCubit(productRepo);
-      }),
-    ], child: const HomePage());
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) {
+              final slideRepo = context.read<SlideRepo>();
+              return SlideCubit(slideRepo);
+            },
+          ),
+          BlocProvider(create: (context) {
+            final cateRepo = context.read<CateRepo>();
+            return CategoryCubit(cateRepo);
+          }),
+          BlocProvider(create: (context) {
+            final productRepo = context.read<ProductRepo>();
+            return ProductCubit(productRepo);
+          }),
+        ],
+        child: Container(
+            decoration: BoxDecoration(color: Colors.grey[100]),
+            child: const HomePage()));
   }
 }
 
@@ -172,16 +175,18 @@ class _HomePageState extends State<HomePage> {
             builder: (context, state) {
               if (state.dataStatus == DataStatus.success) {
                 List<CategoryModel> list = state.dataModel.data;
-      
+
                 List<int> listId = [];
-      
+
                 list.forEach((element) {
                   listId.add(element.categoryId ?? 0);
                 });
-      
-                context.read<ProductCubit>().fetchProductDataByCategoryId(listId);
+
+                context
+                    .read<ProductCubit>()
+                    .fetchProductDataByCategoryId(listId);
               }
-      
+
               return BlocBuilder<ProductCubit, ProductState>(
                 builder: (context, state) {
                   switch (state.dataStatus) {
@@ -197,13 +202,13 @@ class _HomePageState extends State<HomePage> {
                         }
                         productsByCategory[category]!.add(product);
                       });
-      
+
                       // Tạo danh sách theo từng danh mục
                       return Column(
                         children: productsByCategory.entries.map((entry) {
                           String categoryName = entry.key;
                           List<ProductModel> products = entry.value;
-      
+
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -211,15 +216,30 @@ class _HomePageState extends State<HomePage> {
                                 decoration: const BoxDecoration(
                                   color: Colors.white,
                                 ),
-                                child:  Padding(
+                                child: Padding(
                                   padding: EdgeInsets.all(10.0),
                                   child: Row(
                                     children: [
+                                      Container(
+                                        width: 5,
+                                        height: 20,
+                                        decoration: const BoxDecoration(
+                                          color: kOrangeColor,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
                                       Text(
                                         categoryName,
                                         style: const TextStyle(
-                                          fontSize: 20, // Kích thước chữ
-                                          fontWeight: FontWeight.bold, // Chữ đậm
+                                          fontSize: 20,
+                                          // Kích thước chữ
+                                          fontWeight: FontWeight.bold,
+                                          // Chữ đậm
                                           color: Color(0xffef5908), // Màu chữ
                                         ),
                                       ),
@@ -234,16 +254,18 @@ class _HomePageState extends State<HomePage> {
                                     height: 240,
                                     // Đặt chiều cao của container để chứa danh sách
                                     child: ListView.builder(
-                                      scrollDirection: Axis
-                                          .horizontal, // Đặt chiều cuộn là ngang
-                                      itemCount: products.length ??
-                                          0, // Số lượng mục trong danh sách
+                                      scrollDirection: Axis.horizontal,
+                                      // Đặt chiều cuộn là ngang
+                                      itemCount: products.length ?? 0,
+                                      // Số lượng mục trong danh sách
                                       itemBuilder: (context, index) {
                                         ProductModel product = products[index];
                                         return Padding(
-                                          padding: const EdgeInsets.only(right: 8),
+                                          padding:
+                                              const EdgeInsets.only(right: 8),
                                           child: SizedBox(
-                                              width: 170, // Chiều rộng của mỗi mục
+                                              width: 170,
+                                              // Chiều rộng của mỗi mục
                                               child: ProductCard(
                                                 productModel: product,
                                               )),
@@ -262,7 +284,8 @@ class _HomePageState extends State<HomePage> {
                     case DataStatus.loading:
                       return const Center(child: CircularProgressIndicator());
                     case DataStatus.empty:
-                      return const Center(child: Text("Không có sản phẩm nào!"));
+                      return const Center(
+                          child: Text("Không có sản phẩm nào!"));
                   }
                 },
               );

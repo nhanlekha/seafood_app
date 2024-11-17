@@ -37,6 +37,7 @@ dependencies:
   drift: ^2.21.0
   drift_flutter: ^0.2.1
   animate_do: ^2.0.0
+  salomon_bottom_bar: ^3.3.2
 
 
 

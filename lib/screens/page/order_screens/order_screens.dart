@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seafood_app/constants.dart';
+import 'package:seafood_app/model/order_model.dart';
+import 'package:seafood_app/screens/widgets/order_card.dart';
 
 class OrderScreens extends StatelessWidget {
   const OrderScreens({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const OrderPage();
+    return Container(decoration:
+        BoxDecoration(color: Colors.grey[100])
+        ,child: const OrderPage());
   }
 }
 
@@ -16,34 +21,28 @@ class OrderPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 4, // Số lượng tab
+      length: 4,
       child: Column(
         children: [
-          buildSearchToolbar(context), // Phần tìm kiếm không cuộn
-          TabBar(
+          buildSearchToolbar(context),
+          const TabBar(
             tabs: [
               Tab(text: "Đang xử lý"),
-              Tab(text: "Đang giao"), // Tab "Đang đặt"
-              Tab(text: "Hoàn thành"), // Tab "Hoàn thành"
-              Tab(text: "Đã hủy"), // Tab "Đã hủy"
+              Tab(text: "Đang giao"),
+              Tab(text: "Hoàn thành"),
+              Tab(text: "Đã hủy"),
             ],
-            labelColor: Colors.blueAccent,
-            // Màu sắc cho tab đang được chọn
+            labelColor: kOrangeColor,
             unselectedLabelColor: Colors.black,
-            // Màu sắc cho tab không được chọn
-            indicatorColor: Colors.blueAccent, // Màu của chỉ báo dưới tab
+            indicatorColor: kOrangeColor,
           ),
-          Expanded( // Sử dụng Expanded để phần này chiếm không gian còn lại
+          Expanded(
             child: TabBarView(
               children: [
-                buildOrderList("Đang xử lý"),
-                // Xây dựng danh sách cho tab "Đang đặt"
-                buildOrderList("Đang giao"),
-                // Xây dựng danh sách cho tab "Đang đặt"
-                buildOrderList("Hoàn thành"),
-                // Xây dựng danh sách cho tab "Hoàn thành"
-                buildOrderList("Đã hủy"),
-                // Xây dựng danh sách cho tab "Đã hủy"
+                buildOrderList(context, "Đang xử lý"),
+                buildOrderList(context, "Đang giao"),
+                buildOrderList(context, "Hoàn thành"),
+                buildOrderList(context, "Đã hủy"),
               ],
             ),
           ),
@@ -52,26 +51,16 @@ class OrderPage extends StatelessWidget {
     );
   }
 
-  // Phương thức để xây dựng danh sách đơn hàng cho mỗi tab
-  Widget buildOrderList(String status) {
-    return SingleChildScrollView( // Cho phép cuộn cho danh sách
+  Widget buildOrderList(BuildContext context, String status) {
+    return SingleChildScrollView(
       child: Column(
         children: [
-          Text("Danh sách đơn hàng: $status"), // Tiêu đề cho danh sách
-          // Ở đây bạn có thể thêm các widget hiển thị đơn hàng theo trạng thái
-          // Ví dụ:
-          for (int i = 0; i < 10; i++)
-            ListTile(
-              title: Text("Đơn hàng $i - Trạng thái: $status"),
-              subtitle: Text("Thông tin chi tiết..."),
-            ),
+          for (int i = 1; i < 6; i++) OrderCard(order: OrderModel(),),
         ],
       ),
     );
   }
 }
-
-
 
 // Hàm để tạo toolbar tìm kiếm
 Widget buildSearchToolbar(BuildContext context) {
@@ -145,7 +134,9 @@ Widget _buildCartIcon(BuildContext context) {
   return Expanded(
     flex: 1, // Tương ứng với android:layout_weight="0.1"
     child: GestureDetector(
-      onTap: (){context.push('/cart');},
+      onTap: () {
+        context.push('/cart');
+      },
       child: Container(
         margin: const EdgeInsets.only(left: 10),
         alignment: Alignment.center,
