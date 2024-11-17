@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -15,136 +16,146 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-      ),
-      child: GestureDetector(
-          onTap: () {
-            context.push(
-              RouteConstants.detailsProductRoute,
-              extra: productModel,
-            );
-          },
-          child: InkWell(
-            borderRadius: BorderRadius.circular(5.0),
+    return FadeInRight(
+      duration: const Duration(milliseconds: 1000),
+      delay: const Duration(milliseconds: 200),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
+        ),
+        child: GestureDetector(
             onTap: () {
               context.push(
                 RouteConstants.detailsProductRoute,
                 extra: productModel,
               );
             },
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Hình ảnh sản phẩm
-                Stack(
-                  children: [
-                    Container(
-                      height: 150.0,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: NetworkImage(productModel.productImage ?? ""),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    // sale
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 6.0, vertical: 2.0),
-                        decoration: const BoxDecoration(
-                          color: Color(0xfffaeded),
-                        ),
-                        child: const Text(
-                          "-21%",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: Color(0Xffee694e),
-                            fontWeight: FontWeight.bold,
+            child: InkWell(
+              borderRadius: BorderRadius.circular(5.0),
+              onTap: () {
+                context.push(
+                  RouteConstants.detailsProductRoute,
+                  extra: productModel,
+                );
+              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Hình ảnh sản phẩm
+                  Stack(
+                    children: [
+                      Container(
+                        height: 150.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(productModel.productImage ?? ""),
+                            fit: BoxFit.cover,
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 6.0, vertical: 2.0),
-                              decoration: BoxDecoration(
-                                color: Colors.orange,
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                              child: const Text(
-                                "Mới",
-                                style: TextStyle(
-                                  fontSize: 10.0,
-                                  color: Colors.white,
+                      // sale
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6.0, vertical: 2.0),
+                          decoration: const BoxDecoration(
+                            color: Color(0xfffaeded),
+                          ),
+                          child: const Text(
+                            "-21%",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: Color(0Xffee694e),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6.0, vertical: 2.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange,
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: const Text(
+                                  "Mới",
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 4.0),
-                            Expanded(
-                              child: Text(
-                                productModel.productName ?? "",
-                                style: const TextStyle(
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500,
+                              const SizedBox(width: 4.0),
+                              Expanded(
+                                child: Text(
+                                  productModel.productName ?? "",
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                NumberFormat.currency(
-                                  locale: 'vi_VN', // Set locale to Vietnam
-                                  customPattern: '₫###,###,###,###', // Custom pattern
-                                  symbol: '₫', // Vietnamese currency symbol
-                                  decimalDigits: 0, // Set decimal places to 0
-                                ).format(double.tryParse(
-                                        '${productModel.productPrice}') ??
-                                    0),
-                                // Parse price to double and format
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  NumberFormat.currency(
+                                    locale: 'vi_VN',
+                                    // Set locale to Vietnam
+                                    customPattern: '₫###,###,###,###',
+                                    // Custom pattern
+                                    symbol: '₫',
+                                    // Vietnamese currency symbol
+                                    decimalDigits: 0, // Set decimal places to 0
+                                  ).format(double.tryParse(
+                                          '${productModel.productPrice}') ??
+                                      0),
+                                  // Parse price to double and format
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.red),
+                                ),
+                              ),
+                              const Icon(
+                                Icons.verified_user,
+                                color: Colors.green,
+                                size: 12.0,
+                              ),
+                              const SizedBox(
+                                width: 2.0,
+                              ),
+                              Text(
+                                "Đã bán ${productModel.productUnitSold}",
                                 style: const TextStyle(
-                                    fontSize: 15, color: Colors.red),
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            const Icon(
-                              Icons.verified_user,
-                              color: Colors.green,
-                              size: 16.0,
-                            ),
-                            Text(
-                              "Đã bán 13",
-                              style: const TextStyle(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          )),
+                ],
+              ),
+            )),
+      ),
     );
   }
 }
