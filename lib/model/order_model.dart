@@ -13,7 +13,7 @@ class OrderModel {
   int? productFee;
   String? productCoupon;
   int? productPriceCoupon;
-  double? totalPrice;
+  int? totalPrice;
   int? totalQuantity;
   String? orderDate;
   ShippingModel? shipping;

@@ -31,7 +31,7 @@ class VipButton extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(borderRadius),
           ),
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
