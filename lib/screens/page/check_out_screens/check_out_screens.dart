@@ -1,12 +1,20 @@
+import 'dart:math';
+
+import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seafood_app/domans/database_local/app_database.dart';
+import 'package:seafood_app/domans/repo/impl/checkout_repo_impl.dart';
+import 'package:seafood_app/model/coupon_model.dart';
+import 'package:seafood_app/model/payment_model.dart';
+import 'package:seafood_app/model/shippingmodel.dart';
 import 'package:seafood_app/routers/app_route_config.dart';
 import 'package:seafood_app/screens/widgets/checkout_card.dart';
 
 import '../../../domans/repo/impl/cart_repo_impl.dart';
+import '../../../ultils/ultils/ultils.dart';
 import '../../widgets/cart_card.dart';
 import '../../widgets/toast_widget.dart';
 import '../../widgets/vip_button.dart';
@@ -26,21 +34,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
   double finalAmount = 0; // Thành tiền
 
   List<Cart> listCart = [];
+  late final CartRepoImpl cartRepo;
 
-   @override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    cartRepo = context.read<CartRepoImpl>();
     loadProduct();
   }
   void loadProduct() async{
-    final cartRepo = context.read<CartRepoImpl>();
+
     listCart = await cartRepo.getCheckedCarts();
 
     if(listCart.isEmpty){
       showToast(message:'Không thấy sản phẩm !');
       context.pushReplacement('/cart');
     }
+    totalAmount = await cartRepo.calculateTotalPrice();
+    finalAmount = await cartRepo.calculateTotalPrice();
 
     setState(() {});
 
@@ -256,7 +268,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Spacer(),
-                    Text('2.000.000 đ', style: TextStyle(fontSize: 16)),
+                    Text(NumberFormat.currency(
+                    locale: 'vi_VN',   // Set locale to Vietnam
+    symbol: '₫',       // Vietnamese currency symbol
+    decimalDigits: 0,   // Set decimal places to 0
+    ).format(double.tryParse('$totalAmount') ?? 0), style: TextStyle(fontSize: 16)),
                   ],
                 ),
                 SizedBox(height: 7),
@@ -267,7 +283,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Spacer(),
-                    Text('+ 30.000 đ', style: TextStyle(fontSize: 16)),
+                    Text(NumberFormat.currency(
+    locale: 'vi_VN',   // Set locale to Vietnam
+    symbol: '₫',       // Vietnamese currency symbol
+    decimalDigits: 0,   // Set decimal places to 0
+    ).format(double.tryParse('$shippingFee') ?? 0), style: TextStyle(fontSize: 16)),
                   ],
                 ),
                 SizedBox(height: 7),
@@ -278,7 +298,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Spacer(),
-                    Text('- 20.000 đ', style: TextStyle(fontSize: 16)),
+                    Text(NumberFormat.currency(
+    locale: 'vi_VN',   // Set locale to Vietnam
+    symbol: '₫',       // Vietnamese currency symbol
+    decimalDigits: 0,   // Set decimal places to 0
+    ).format(double.tryParse('$discountAmount') ?? 0), style: TextStyle(fontSize: 16)),
                   ],
                 ),
                 SizedBox(height: 7),
@@ -289,7 +313,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black),
                     ),
                     Spacer(),
-                    Text('1.320.000 đ', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
+                    Text(NumberFormat.currency(
+    locale: 'vi_VN',   // Set locale to Vietnam
+    symbol: '₫',       // Vietnamese currency symbol
+    decimalDigits: 0,   // Set decimal places to 0
+    ).format(double.tryParse('$finalAmount') ?? 0), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black)),
                   ],
                 ),
               ],
@@ -312,7 +340,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               const SizedBox(width: 8.0),
               Expanded(
                 child: VipButton(
-                  onPressed: () {},
+                  onPressed: _checkOut,
                   text: 'Mua ngay',
                   icon: Icons.shopping_bag_rounded,
                   textColor: Colors.white,
@@ -325,4 +353,43 @@ class _CheckoutPageState extends State<CheckoutPage> {
       ),
     );
   }
+
+  void _checkOut(){
+     PaymentModel paymentModel = PaymentModel();
+     paymentModel.paymentMethod = 4;
+     paymentModel.paymentStatus = 0;
+
+     ShippingModel shippingModel = ShippingModel();
+     shippingModel.shippingName = 'Nhan';
+     shippingModel.shippingEmail = 'nhan@gmail.com';
+     shippingModel.shippingPhone = 123;
+     shippingModel.shippingAddress = 'DN';
+     shippingModel.shippingNotes = 'Note';
+     shippingModel.shippingSpecialRequirements = 1;
+     shippingModel.shippingReceipt = 0;
+
+     CouponModel couponModel = CouponModel();
+
+     String  orderCode = generateOrderCode();
+
+     final checkoutRepo = context.read<CheckoutRepoImpl>();
+     checkoutRepo.directPayment(orderCode: orderCode, totalPrice: finalAmount, deliveringFee: shippingFee, payment: paymentModel, shipping: shippingModel, cartList: listCart);
+
+     listCart.forEach((list) {
+       cartRepo.removeCart(list.cartId);
+     });
+
+     showToast(message: 'Đặt đơn hàng thành công !');
+     context.pushReplacement('/');
+
+  }
+
+  String generateOrderCode() {
+    int min = 1; // Không dùng 0001 vì Dart sẽ tự bỏ các số 0 ở đầu
+    int max = 9999;
+    Random random = Random();
+    int randomNumber = min + random.nextInt(max - min + 1);
+    return 'FLUTTER${randomNumber.toString().padLeft(4, '0')}'; // Đảm bảo có đủ 4 chữ số
+  }
+
 }

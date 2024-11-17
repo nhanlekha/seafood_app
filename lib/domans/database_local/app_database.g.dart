@@ -206,6 +206,20 @@ class Cart extends DataClass implements Insertable<Cart> {
     return map;
   }
 
+  Map<String, dynamic> toJson2({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'cart_id': serializer.toJson<int>(cartId),
+      'product_id': serializer.toJson<int>(productId),
+      'customer_id': serializer.toJson<int>(customerId),
+      'product_name': serializer.toJson<String>(productName),
+      'product_price': serializer.toJson<double>(productPrice),
+      'product_image': serializer.toJson<String>(productImage),
+      'product_quantity': serializer.toJson<int>(productQuantity),
+      'checked_product': serializer.toJson<bool>(checkedProduct),
+    };
+  }
+
   CartModelCompanion toCompanion(bool nullToAbsent) {
     return CartModelCompanion(
       cartId: Value(cartId),

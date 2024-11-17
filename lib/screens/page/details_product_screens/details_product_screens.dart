@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:seafood_app/domans/repo/gallery_product_repo.dart';
 import 'package:seafood_app/domans/repo/impl/gallery_product_repo_impl.dart';
+import 'package:seafood_app/routers/app_route_config.dart';
 import 'package:seafood_app/screens/widgets/review_card.dart';
 import '../../../domans/database_local/app_database.dart';
 import '../../../domans/repo/impl/cart_repo_impl.dart';
@@ -118,7 +120,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                         ),
                         onPressed: () {
-                          Navigator.pop(context);
+                          
+                          context.push('/cart');
                         },
                       ),
                       IconButton(

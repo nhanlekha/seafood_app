@@ -45,4 +45,19 @@ class ShippingModel {
     data['updated_at'] = updatedAt;
     return data;
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'shipping_id': shippingId,
+      'shipping_name': shippingName,
+      'shipping_email': shippingEmail,
+      'shipping_phone': shippingPhone,
+      'shipping_address': shippingAddress,
+      'shipping_notes': shippingNotes,
+      'shipping_special_requirements': shippingSpecialRequirements,
+      'shipping_receipt': shippingReceipt,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+    };
+  }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class OrderScreens extends StatelessWidget {
   const OrderScreens({super.key});
@@ -18,7 +19,7 @@ class OrderPage extends StatelessWidget {
       length: 4, // Số lượng tab
       child: Column(
         children: [
-          buildSearchToolbar(), // Phần tìm kiếm không cuộn
+          buildSearchToolbar(context), // Phần tìm kiếm không cuộn
           TabBar(
             tabs: [
               Tab(text: "Đang xử lý"),
@@ -73,7 +74,7 @@ class OrderPage extends StatelessWidget {
 
 
 // Hàm để tạo toolbar tìm kiếm
-Widget buildSearchToolbar() {
+Widget buildSearchToolbar(BuildContext context) {
   return Container(
     padding: const EdgeInsets.all(5),
     child: Row(
@@ -81,7 +82,7 @@ Widget buildSearchToolbar() {
       children: [
         _buildLogo(), // Gọi hàm để tạo logo
         _buildSearchField(), // Gọi hàm để tạo ô tìm kiếm
-        _buildCartIcon(), // Gọi hàm để tạo biểu tượng giỏ hàng
+        _buildCartIcon(context), // Gọi hàm để tạo biểu tượng giỏ hàng
       ],
     ),
   );
@@ -140,15 +141,18 @@ Widget _buildSearchField() {
 }
 
 // Hàm để xây dựng biểu tượng giỏ hàng
-Widget _buildCartIcon() {
+Widget _buildCartIcon(BuildContext context) {
   return Expanded(
     flex: 1, // Tương ứng với android:layout_weight="0.1"
-    child: Container(
-      margin: const EdgeInsets.only(left: 10),
-      alignment: Alignment.center,
-      child: Image.asset(
-        'assets/images/cargo.png', // Đường dẫn tới ảnh giỏ hàng
-        height: 25,
+    child: GestureDetector(
+      onTap: (){context.push('/cart');},
+      child: Container(
+        margin: const EdgeInsets.only(left: 10),
+        alignment: Alignment.center,
+        child: Image.asset(
+          'assets/images/cargo.png', // Đường dẫn tới ảnh giỏ hàng
+          height: 25,
+        ),
       ),
     ),
   );

@@ -22,4 +22,12 @@ class PaymentModel {
     data['payment_status'] = paymentStatus;
     return data;
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'payment_id': paymentId,
+      'payment_method': paymentMethod,
+      'payment_status': paymentStatus,
+    };
+  }
 }
