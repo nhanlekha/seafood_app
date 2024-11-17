@@ -1,10 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:seafood_app/domans/database_local/app_database.dart';
+import 'package:seafood_app/routers/app_route_config.dart';
 
 import '../../../domans/repo/impl/cart_repo_impl.dart';
 import '../../widgets/cart_card.dart';
+import '../../widgets/toast_widget.dart';
 
 class CartScreens extends StatelessWidget {
   const CartScreens({super.key});
@@ -181,7 +184,6 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                     ),
-
                   ),
                 ],
               ),
@@ -195,15 +197,23 @@ class _CartPageState extends State<CartPage> {
   // Refresh function (for swipe to refresh)
   Future<void> _onRefresh() async {
     // Simulate a network request or any logic here
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     setState(() {
-      _totalPrice = 200.0; // Example of updating total price
+
     });
   }
 
   // Buy Now button action
-  void _onBuyNow() {
+  Future<void> _onBuyNow() async {
     // Implement your Buy Now logic here
     print('Buy Now clicked');
+    listCart = await cartRepo.getCheckedCarts();
+    if(!listCart.isEmpty){
+      context.push('/check-out');
+
+    }else{
+      showToast(message:'Tích chọn sản phẩm cần thanh toán !');
+    }
+
   }
 }

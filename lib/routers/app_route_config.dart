@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../main.dart';
 import '../model/product_model.dart';
 import '../screens/page/cart_screens/cart_screens.dart';
+import '../screens/page/check_out_screens/check_out_screens.dart';
 import '../screens/page/details_product_screens/details_product_screens.dart';
 import '../screens/page/main_screens/main_screens.dart';
 import 'app_route_constants.dart';
@@ -62,6 +63,16 @@ class AppRouter {
             return const MaterialPage(child: CartScreens());
           },
         ),
+
+        GoRoute(
+          name: RouteConstants.checkOut,
+          path: '/check-out',
+          pageBuilder: (context, state) {
+            return const MaterialPage(child: CheckoutPage());
+          },
+        ),
+
+
       ],
       errorPageBuilder: (context, state) {
         // Trang lỗi

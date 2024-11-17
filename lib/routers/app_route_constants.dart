@@ -14,4 +14,7 @@ class RouteConstants {
 
   static const String cartRoute = 'cart';
 
+  static const String checkOut = 'check-out';
+
+
 }

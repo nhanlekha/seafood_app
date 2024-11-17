@@ -37,6 +37,11 @@ class CartRepoImpl {
     return _db.getAllCarts();
   }
 
+  Future<List<Cart>> getCheckedCarts() async {
+    return _db.getCheckedCarts();
+  }
+
+
   Future<bool> isProductInCart(int productId) async {
     return _db.isProductInCart(productId);
   }

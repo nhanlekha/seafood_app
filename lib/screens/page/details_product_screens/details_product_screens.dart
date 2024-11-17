@@ -8,6 +8,7 @@ import 'package:seafood_app/screens/widgets/review_card.dart';
 import '../../../domans/database_local/app_database.dart';
 import '../../../domans/repo/impl/cart_repo_impl.dart';
 import '../../../model/product_model.dart';
+import '../../widgets/toast_widget.dart';
 import '../../widgets/vip_button.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -573,176 +574,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Title and Cancel Button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Thêm Vào Giỏ Hàng",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.cancel),
-                    onPressed: () => Navigator.of(context).pop(),
-                  ),
-                ],
-              ),
-              // Product Info Section
-              Row(
-                children: [
-                  // Product Image
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    elevation: 4, // Optional: adds shadow for depth
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey[400]!,
-                          width: 1.5,
-                        ),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      clipBehavior: Clip.antiAlias,
-                      child: Image.network(
-                        '${widget.productModel.productImage}',
-                        width: 150,
-                        height: 100,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-
-                  const SizedBox(width: 20),
-                  // Product Name, Price, and Quantity
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${widget.productModel.productName}",
-                        style:
-                            const TextStyle(fontSize: 17, color: Colors.black),
-                        maxLines: 2, // Limit text to 1 line
-                        overflow: TextOverflow
-                            .ellipsis, // Add ellipsis when the text overflows
-                      ),
-                      Text(
-                        NumberFormat.currency(
-                          locale: 'vi_VN', // Set locale to Vietnam
-                          symbol: '₫', // Vietnamese currency symbol
-                          decimalDigits: 0, // Set decimal places to 0
-                        ).format(double.tryParse(
-                                '${widget.productModel.productPrice}') ??
-                            0),
-                        // Parse price to double and format
-                        style: const TextStyle(fontSize: 15, color: Colors.red),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(Icons.remove),
-                            onPressed: () {
-                              // Decrease quantity action
-                            },
-                          ),
-                          const Text(
-                            "0", // Quantity should be dynamic
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.add),
-                            onPressed: () {
-                              // Increase quantity action
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              // Action Buttons
-              Padding(
-                padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFFE4B5),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            // Bo góc (10dp)
-                            side: const BorderSide(
-                              color: Color(0xFFb9a3a9), // Màu viền (stroke)
-                              width: 1.0, // Độ dày viền (1dp)
-                            ),
-                          ),
-                          elevation: 2, // Độ nổi (shadow)
-                        ),
-                        onPressed: () {},
-                        child: const Text('Mua ngay'),
-                      ),
-                    ),
-                    const SizedBox(width: 16.0), // Khoảng cách giữa 2 nút
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStateProperty.all(const Color(0xFF80CBC4)),
-                          // Color tương ứng với material_deep_teal_200
-                          side: WidgetStateProperty.all(const BorderSide(
-                            color: Color(0xFFB9A3A9), // Màu border
-                            width: 1.0, // Độ dày của đường viền
-                          )),
-                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(10.0), // Độ bo góc
-                          )),
-                        ),
-                        onPressed: () async {
-                          final cartRepo = context.read<CartRepoImpl>();
-
-                          if (await cartRepo.isProductInCart(
-                              widget.productModel.productId!)) {
-                            print('product is exit !');
-                          } else {
-                            cartRepo.addCart(
-                                productId: widget.productModel.productId!,
-                                customerId: 1,
-                                productName: widget.productModel.productName!,
-                                productPrice: widget.productModel.productPrice!,
-                                productImage: widget.productModel.productImage!,
-                                productQuantity: 1);
-                          }
-
-                          List<Cart> carts = await cartRepo.fetchAllCarts();
-                          for (var cart in carts) {
-                            print("Cart ID: ${cart.cartId}");
-                          }
-                        },
-                        child: const Text('Thêm vào giỏ'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
+        return BottomSheetContent(productModel: widget.productModel);
       },
     );
   }
+
+
+
 
   Widget _buildReviewCard() {
     List<Widget> listReview = widget.productModel.commentList!.map((e) {
@@ -770,6 +608,189 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
     return Column(
       children: [...listReview],
+    );
+  }
+}
+
+
+class BottomSheetContent extends StatefulWidget {
+  final ProductModel productModel; // Truyền dữ liệu sản phẩm vào đây
+
+  const BottomSheetContent({Key? key, required this.productModel})
+      : super(key: key);
+
+  @override
+  State<BottomSheetContent> createState() => _BottomSheetContentState();
+}
+
+class _BottomSheetContentState extends State<BottomSheetContent> {
+  int _quantity = 1;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Title and Cancel Button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Thêm Vào Giỏ Hàng",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              IconButton(
+                icon: const Icon(Icons.cancel),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+          // Product Info Section
+          Row(
+            children: [
+              // Product Image
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 4,
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey[400]!,
+                      width: 1.5,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Image.network(
+                    '${widget.productModel.productImage}',
+                    width: 150,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 20),
+              // Product Name, Price, and Quantity
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${widget.productModel.productName}",
+                    style: const TextStyle(fontSize: 17, color: Colors.black),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    NumberFormat.currency(
+                      locale: 'vi_VN',
+                      symbol: '₫',
+                      decimalDigits: 0,
+                    ).format(double.tryParse(
+                        '${widget.productModel.productPrice}') ??
+                        0),
+                    style: const TextStyle(fontSize: 15, color: Colors.red),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove),
+                        onPressed: () {
+                          if (_quantity > 1) {
+                            setState(() {
+                              _quantity--;
+                            });
+                          }
+                        },
+                      ),
+                      Text(
+                        "$_quantity",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add),
+                        onPressed: () {
+                          setState(() {
+                            _quantity++;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          // Action Buttons
+          Padding(
+            padding: const EdgeInsets.only(top: 5, bottom: 5),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFE4B5),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(
+                          color: Color(0xFFb9a3a9),
+                          width: 1.0,
+                        ),
+                      ),
+                      elevation: 2,
+                    ),
+                    onPressed: () {
+                      // Mua ngay action
+                    },
+                    child: const Text('Mua ngay'),
+                  ),
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF80CBC4),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: const BorderSide(
+                          color: Color(0xFFB9A3A9),
+                          width: 1.0,
+                        ),
+                      ),
+                    ),
+                    onPressed: () async {
+                      final cartRepo = context.read<CartRepoImpl>();
+
+                      if (await cartRepo.isProductInCart(
+                          widget.productModel.productId!)) {
+                        showToast(message:'Sản phẩm đã tồn tại !');
+                      } else {
+                        cartRepo.addCart(
+                            productId: widget.productModel.productId!,
+                            customerId: 1,
+                            productName: widget.productModel.productName!,
+                            productPrice: widget.productModel.productPrice!,
+                            productImage: widget.productModel.productImage!,
+                            productQuantity: _quantity);
+
+                        showToast(message:'Đã thêm ${widget.productModel.productName} vào giỏ hàng thành công!');
+                      }
+                    },
+                    child: const Text('Thêm vào giỏ'),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
