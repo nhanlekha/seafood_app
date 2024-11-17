@@ -5,6 +5,7 @@ import '../personal_screens/personal_screens.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seafood_app/screens/page/order_screens/order_screens.dart';
 import 'package:seafood_app/screens/page/category_screens/category_screens.dart';
+import 'package:seafood_app/screens/page/favourite_screens/favourite_screens.dart';
 
 class MainScreens extends StatefulWidget {
   const MainScreens({super.key});
@@ -24,7 +25,7 @@ class _MainScreensState extends State<MainScreens> {
       const HomeScreens(),
       const CategoryScreens(),
       const OrderScreens(),
-      Container(color: Colors.green),
+      const FavouriteScreens(),
       PersonalPage(),
     ];
   }
