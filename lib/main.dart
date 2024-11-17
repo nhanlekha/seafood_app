@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seafood_app/domans/data_source/seafood_api.dart';
 import 'package:seafood_app/domans/repo/cate_repo.dart';
 import 'package:seafood_app/domans/repo/impl/cate_repo_impl.dart';
+import 'package:seafood_app/domans/repo/impl/order_repo_impl.dart';
 import 'package:seafood_app/domans/repo/impl/product_repo_impl.dart';
 import 'package:seafood_app/domans/repo/impl/slide_repo_impl.dart';
 import 'package:seafood_app/domans/repo/product_repo.dart';
@@ -45,6 +46,7 @@ class _SeafoodAppState extends State<SeafoodApp> {
   late final AppDatabase _db;
   late final CartRepoImpl _cartRepo;
   late final CheckoutRepoImpl _checkoutRepo;
+  late final OrderRepoImpl _orderRepo;
 
   @override
   void initState() {
@@ -57,6 +59,7 @@ class _SeafoodAppState extends State<SeafoodApp> {
     _cateRepo = CateRepoImpl(seafoodApi: _seafoodApi);
     _productRepo = ProductRepoImpl(seafoodApi: _seafoodApi);
     _checkoutRepo = CheckoutRepoImpl(seafoodApi: _seafoodApi);
+    _orderRepo = OrderRepoImpl(seafoodApi: _seafoodApi);
   }
 
   @override
@@ -67,7 +70,9 @@ class _SeafoodAppState extends State<SeafoodApp> {
         RepositoryProvider<CateRepo>(create: (context) => _cateRepo),
         RepositoryProvider<ProductRepo>(create: (context) => _productRepo),
         RepositoryProvider<CartRepoImpl>(create: (context) => _cartRepo),
-        RepositoryProvider<CheckoutRepoImpl>(create: (context) => _checkoutRepo)
+        RepositoryProvider<CheckoutRepoImpl>(create: (context) => _checkoutRepo),
+        RepositoryProvider<OrderRepoImpl>(create: (context) => _orderRepo),
+
       ],
       child: const ApplicationRouter(),
     );
