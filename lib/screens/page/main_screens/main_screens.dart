@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import '../home_screens/home_screens.dart';
 import '../order_screens/order_screens.dart';
 import '../personal_screens/personal_screens.dart';
@@ -39,11 +40,10 @@ class _MainScreensState extends State<MainScreens> {
             children: _pages,
           ),
         ),
-        BottomNavigationBar(
+        SalomonBottomBar(
           backgroundColor: const Color(0xFFFefaf9),
           unselectedItemColor: Colors.black,
           selectedItemColor: Colors.red,
-          type: BottomNavigationBarType.fixed,
           currentIndex: _currentPage,
           onTap: (index) {
             setState(() {
@@ -54,45 +54,45 @@ class _MainScreensState extends State<MainScreens> {
             });
           },
           items: [
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/home.png'),
               ),
-              label: "Home".tr(),
+              title: const Text("Trang chủ"),
             ),
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/options.png'),
               ),
-              label: "Danh mục",
+              title: const Text("Danh mục"),
             ),
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/cargo.png'),
               ),
-              label: "Đơn hàng",
+              title: const Text("Đơn hàng"),
             ),
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/chat.png'),
               ),
-              label: "Yêu Thích",
+              title: const Text("Yêu Thích"),
             ),
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/teamwork.png'),
               ),
-              label: "Cá Nhân",
+              title: const Text("Cá Nhân"),
             ),
           ],
         ),
