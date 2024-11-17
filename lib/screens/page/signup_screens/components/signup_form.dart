@@ -10,8 +10,8 @@ import '../../login_screens/login_screens.dart';
 
 class SignUpForm extends StatelessWidget {
   const SignUpForm({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +20,34 @@ class SignUpForm extends StatelessWidget {
         children: [
           VipTextField(
             controller: TextEditingController(),
-            hintText: "Email",
-            prefixIcon: Icon(
+            hintText: "Họ và tên",
+            prefixIcon: const Icon(
               Icons.person,
               color: kPrimaryColor,
             ),
+            keyboardType: TextInputType.text,
+            obscureText: false,
+            suffixIcon: null,
+          ),
+          VipTextField(
+            controller: TextEditingController(),
+            hintText: "Email",
+            prefixIcon: const Icon(
+              Icons.email,
+              color: kPrimaryColor,
+            ),
             keyboardType: TextInputType.emailAddress,
+            obscureText: false,
+            suffixIcon: null,
+          ),
+          VipTextField(
+            controller: TextEditingController(),
+            hintText: "Điện thoại",
+            prefixIcon: const Icon(
+              Icons.phone,
+              color: kPrimaryColor,
+            ),
+            keyboardType: TextInputType.phone,
             obscureText: false,
             suffixIcon: null,
           ),
@@ -68,7 +90,6 @@ class SignUpForm extends StatelessWidget {
               );
             },
           ),
-          const SocailSignUp()
         ],
       ),
     );

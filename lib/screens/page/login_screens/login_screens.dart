@@ -9,27 +9,30 @@ class LoginScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Background(
-      child: SingleChildScrollView(
-        child: Responsive(
-          mobile: MobileLoginScreen(),
-          desktop: Row(
-            children: [
-              Expanded(
-                child: LoginScreenTopImage(),
-              ),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 450,
-                      child: LoginForm(),
-                    ),
-                  ],
+    return const Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: Background(
+        child: SingleChildScrollView(
+          child: Responsive(
+            mobile: MobileLoginScreen(),
+            desktop: Row(
+              children: [
+                Expanded(
+                  child: LoginScreenTopImage(),
                 ),
-              ),
-            ],
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 450,
+                        child: LoginForm(),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
