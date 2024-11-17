@@ -8,16 +8,14 @@ import 'package:seafood_app/domans/repo/impl/product_repo_impl.dart';
 import 'package:seafood_app/domans/repo/impl/slide_repo_impl.dart';
 import 'package:seafood_app/domans/repo/product_repo.dart';
 import 'package:seafood_app/routers/app_route_config.dart';
-import 'package:seafood_app/screens/page/main_screens/main_screens.dart';
+import 'package:seafood_app/screens/page/login_screens/login_screens.dart';
 
 import 'domans/database_local/app_database.dart';
 import 'domans/repo/impl/cart_repo_impl.dart';
 import 'domans/repo/impl/checkout_repo_impl.dart';
 import 'domans/repo/slide_repo.dart';
 
-
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
 
   await EasyLocalization.ensureInitialized();
@@ -96,7 +94,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        body: SafeArea(child: MainScreens()),
-    );
+        body: SafeArea(
+      child: LoginScreens(),
+    ));
   }
 }
