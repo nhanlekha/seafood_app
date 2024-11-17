@@ -23,8 +23,16 @@ class ProductRepoImpl extends BaseRepoImpl implements ProductRepo {
   }
 
   @override
+  Future<List<ProductModel>> fetchHotSaleProductData() {
+    return fetchDataFormAPI(
+        'android/get-order-product', (data) => ProductModel.fromJson(data));
+  }
+
+  @override
   Future<List<ProductModel>> fetchProductDataByCategoryId(int id) {
     return postDataToAPI('android/get-product-by-categoryId',
         {'category_id': id}, (data) => ProductModel.fromJson(data));
   }
+
+
 }

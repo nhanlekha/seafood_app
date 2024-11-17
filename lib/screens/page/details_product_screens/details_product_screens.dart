@@ -1,17 +1,17 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'package:seafood_app/domans/repo/gallery_product_repo.dart';
-import 'package:seafood_app/domans/repo/impl/gallery_product_repo_impl.dart';
+import 'package:flutter/material.dart';
+import '../../widgets/vip_button.dart';
+import '../../widgets/toast_widget.dart';
+import 'package:go_router/go_router.dart';
+import '../../../model/product_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import '../../../domans/repo/impl/cart_repo_impl.dart';
+import '../../../domans/database_local/app_database.dart';
 import 'package:seafood_app/routers/app_route_config.dart';
 import 'package:seafood_app/screens/widgets/review_card.dart';
-import '../../../domans/database_local/app_database.dart';
-import '../../../domans/repo/impl/cart_repo_impl.dart';
-import '../../../model/product_model.dart';
-import '../../widgets/toast_widget.dart';
-import '../../widgets/vip_button.dart';
+import 'package:seafood_app/domans/repo/gallery_product_repo.dart';
+import 'package:seafood_app/domans/repo/impl/gallery_product_repo_impl.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final ProductModel productModel;
@@ -28,9 +28,9 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   late List<String>? imageUrls = [];
   late List<Widget>? imageSliders = [];
+  bool isFavorite = false;
 
   double? rating = 5.0;
-
 
   final GalleryProductRepo galleryProductRepo = GalleryProductRepoImpl();
 
@@ -120,7 +120,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           ),
                         ),
                         onPressed: () {
-                          
                           context.push('/cart');
                         },
                       ),
@@ -322,7 +321,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                   children: [
                                     Row(
                                       children: [
-                                         Text(
+                                        Text(
                                           '$rating',
                                           style: const TextStyle(
                                             fontSize: 18,
@@ -388,18 +387,24 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ),
                                 const Spacer(),
                                 Container(
-                                  padding:
-                                      const EdgeInsets.all(3),
+                                  padding: const EdgeInsets.all(3),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       GestureDetector(
-                                        onTap: () {},
-                                        child: const Icon(
+                                        onTap: () {
+                                          // Thay đổi trạng thái khi nhấn vào
+                                          setState(() {
+                                            isFavorite = !isFavorite;
+                                          });
+                                        },
+                                        child: Icon(
                                           Icons.favorite,
                                           size: 25,
-                                          color: Colors.red,
+                                          color: isFavorite
+                                              ? Colors.red
+                                              : Colors.grey, // Màu thay đổi
                                         ),
                                       ),
                                     ],
@@ -582,9 +587,6 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-
-
-
   Widget _buildReviewCard() {
     List<Widget> listReview = widget.productModel.commentList!.map((e) {
       return ReviewCard(
@@ -604,8 +606,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       );
     } else {
       rating = listReview
-          .map((e) => (e as ReviewCard).rating)
-          .reduce((value, element) => value + element) /
+              .map((e) => (e as ReviewCard).rating)
+              .reduce((value, element) => value + element) /
           listReview.length;
     }
 
@@ -615,12 +617,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 }
 
-
 class BottomSheetContent extends StatefulWidget {
   final ProductModel productModel; // Truyền dữ liệu sản phẩm vào đây
 
-  const BottomSheetContent({Key? key, required this.productModel})
-      : super(key: key);
+  const BottomSheetContent({super.key, required this.productModel});
 
   @override
   State<BottomSheetContent> createState() => _BottomSheetContentState();
@@ -693,7 +693,7 @@ class _BottomSheetContentState extends State<BottomSheetContent> {
                       symbol: '₫',
                       decimalDigits: 0,
                     ).format(double.tryParse(
-                        '${widget.productModel.productPrice}') ??
+                            '${widget.productModel.productPrice}') ??
                         0),
                     style: const TextStyle(fontSize: 15, color: Colors.red),
                   ),
@@ -771,9 +771,9 @@ class _BottomSheetContentState extends State<BottomSheetContent> {
                     onPressed: () async {
                       final cartRepo = context.read<CartRepoImpl>();
 
-                      if (await cartRepo.isProductInCart(
-                          widget.productModel.productId!)) {
-                        showToast(message:'Sản phẩm đã tồn tại !');
+                      if (await cartRepo
+                          .isProductInCart(widget.productModel.productId!)) {
+                        showToast(message: 'Sản phẩm đã tồn tại !');
                       } else {
                         cartRepo.addCart(
                             productId: widget.productModel.productId!,
@@ -783,7 +783,9 @@ class _BottomSheetContentState extends State<BottomSheetContent> {
                             productImage: widget.productModel.productImage!,
                             productQuantity: _quantity);
 
-                        showToast(message:'Đã thêm ${widget.productModel.productName} vào giỏ hàng thành công!');
+                        showToast(
+                            message:
+                                'Đã thêm ${widget.productModel.productName} vào giỏ hàng thành công!');
                       }
                     },
                     child: const Text('Thêm vào giỏ'),

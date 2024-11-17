@@ -7,23 +7,28 @@ class ProductState extends Equatable {
   final DataModel? dataTrendingProductModel;
   final DataModel? dataNewProductModel;
   final DataModel? dataProductsByCategory;
+  final DataModel? dataHotSaleModel;
 
   const ProductState(
       {required this.dataStatus,
       this.dataTrendingProductModel,
       this.dataNewProductModel,
-      this.dataProductsByCategory});
+      this.dataProductsByCategory,
+      this.dataHotSaleModel
+      });
 
   ProductState copyWith(
       {required final DataStatus dataStatus,
       final DataModel? dataTrendingProductModel,
       final DataModel? dataNewProductModel,
+        final DataModel? dataHotSaleModel,
       final DataModel? dataProductsByCategory}) {
     return ProductState(
         dataStatus: dataStatus ?? this.dataStatus,
         dataTrendingProductModel:
             dataTrendingProductModel ?? this.dataTrendingProductModel,
         dataNewProductModel: dataNewProductModel ?? this.dataNewProductModel,
+        dataHotSaleModel: dataHotSaleModel ?? this.dataHotSaleModel,
         dataProductsByCategory:
             dataProductsByCategory ?? this.dataProductsByCategory);
   }
@@ -33,6 +38,7 @@ class ProductState extends Equatable {
         dataStatus,
         dataTrendingProductModel,
         dataNewProductModel,
-        dataProductsByCategory
+        dataProductsByCategory,
+        dataHotSaleModel
       ];
 }
