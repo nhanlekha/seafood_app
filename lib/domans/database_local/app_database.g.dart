@@ -206,20 +206,6 @@ class Cart extends DataClass implements Insertable<Cart> {
     return map;
   }
 
-  Map<String, dynamic> toJson2({ValueSerializer? serializer}) {
-    serializer ??= driftRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'cart_id': serializer.toJson<int>(cartId),
-      'product_id': serializer.toJson<int>(productId),
-      'customer_id': serializer.toJson<int>(customerId),
-      'product_name': serializer.toJson<String>(productName),
-      'product_price': serializer.toJson<double>(productPrice),
-      'product_image': serializer.toJson<String>(productImage),
-      'product_quantity': serializer.toJson<int>(productQuantity),
-      'checked_product': serializer.toJson<bool>(checkedProduct),
-    };
-  }
-
   CartModelCompanion toCompanion(bool nullToAbsent) {
     return CartModelCompanion(
       cartId: Value(cartId),
@@ -1055,18 +1041,214 @@ class AddressPersonalModelCompanion extends UpdateCompanion<AddressPersonal> {
   }
 }
 
+class $FavouriteModelTable extends FavouriteModel
+    with TableInfo<$FavouriteModelTable, Favourite> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FavouriteModelTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _productIdMeta =
+      const VerificationMeta('productId');
+  @override
+  late final GeneratedColumn<int> productId = GeneratedColumn<int>(
+      'product_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _customerIdMeta =
+      const VerificationMeta('customerId');
+  @override
+  late final GeneratedColumn<int> customerId = GeneratedColumn<int>(
+      'customer_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [productId, customerId];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'favourite_model';
+  @override
+  VerificationContext validateIntegrity(Insertable<Favourite> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('product_id')) {
+      context.handle(_productIdMeta,
+          productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
+    } else if (isInserting) {
+      context.missing(_productIdMeta);
+    }
+    if (data.containsKey('customer_id')) {
+      context.handle(
+          _customerIdMeta,
+          customerId.isAcceptableOrUnknown(
+              data['customer_id']!, _customerIdMeta));
+    } else if (isInserting) {
+      context.missing(_customerIdMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => const {};
+  @override
+  Favourite map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Favourite(
+      productId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
+      customerId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}customer_id'])!,
+    );
+  }
+
+  @override
+  $FavouriteModelTable createAlias(String alias) {
+    return $FavouriteModelTable(attachedDatabase, alias);
+  }
+}
+
+class Favourite extends DataClass implements Insertable<Favourite> {
+  final int productId;
+  final int customerId;
+  const Favourite({required this.productId, required this.customerId});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['product_id'] = Variable<int>(productId);
+    map['customer_id'] = Variable<int>(customerId);
+    return map;
+  }
+
+  FavouriteModelCompanion toCompanion(bool nullToAbsent) {
+    return FavouriteModelCompanion(
+      productId: Value(productId),
+      customerId: Value(customerId),
+    );
+  }
+
+  factory Favourite.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Favourite(
+      productId: serializer.fromJson<int>(json['productId']),
+      customerId: serializer.fromJson<int>(json['customerId']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'productId': serializer.toJson<int>(productId),
+      'customerId': serializer.toJson<int>(customerId),
+    };
+  }
+
+  Favourite copyWith({int? productId, int? customerId}) => Favourite(
+        productId: productId ?? this.productId,
+        customerId: customerId ?? this.customerId,
+      );
+  Favourite copyWithCompanion(FavouriteModelCompanion data) {
+    return Favourite(
+      productId: data.productId.present ? data.productId.value : this.productId,
+      customerId:
+          data.customerId.present ? data.customerId.value : this.customerId,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Favourite(')
+          ..write('productId: $productId, ')
+          ..write('customerId: $customerId')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(productId, customerId);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Favourite &&
+          other.productId == this.productId &&
+          other.customerId == this.customerId);
+}
+
+class FavouriteModelCompanion extends UpdateCompanion<Favourite> {
+  final Value<int> productId;
+  final Value<int> customerId;
+  final Value<int> rowid;
+  const FavouriteModelCompanion({
+    this.productId = const Value.absent(),
+    this.customerId = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FavouriteModelCompanion.insert({
+    required int productId,
+    required int customerId,
+    this.rowid = const Value.absent(),
+  })  : productId = Value(productId),
+        customerId = Value(customerId);
+  static Insertable<Favourite> custom({
+    Expression<int>? productId,
+    Expression<int>? customerId,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (productId != null) 'product_id': productId,
+      if (customerId != null) 'customer_id': customerId,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FavouriteModelCompanion copyWith(
+      {Value<int>? productId, Value<int>? customerId, Value<int>? rowid}) {
+    return FavouriteModelCompanion(
+      productId: productId ?? this.productId,
+      customerId: customerId ?? this.customerId,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (productId.present) {
+      map['product_id'] = Variable<int>(productId.value);
+    }
+    if (customerId.present) {
+      map['customer_id'] = Variable<int>(customerId.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FavouriteModelCompanion(')
+          ..write('productId: $productId, ')
+          ..write('customerId: $customerId, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $CartModelTable cartModel = $CartModelTable(this);
   late final $AddressPersonalModelTable addressPersonalModel =
       $AddressPersonalModelTable(this);
+  late final $FavouriteModelTable favouriteModel = $FavouriteModelTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [cartModel, addressPersonalModel];
+      [cartModel, addressPersonalModel, favouriteModel];
 }
 
 typedef $$CartModelTableCreateCompanionBuilder = CartModelCompanion Function({
@@ -1547,6 +1729,129 @@ typedef $$AddressPersonalModelTableProcessedTableManager
         ),
         AddressPersonal,
         PrefetchHooks Function()>;
+typedef $$FavouriteModelTableCreateCompanionBuilder = FavouriteModelCompanion
+    Function({
+  required int productId,
+  required int customerId,
+  Value<int> rowid,
+});
+typedef $$FavouriteModelTableUpdateCompanionBuilder = FavouriteModelCompanion
+    Function({
+  Value<int> productId,
+  Value<int> customerId,
+  Value<int> rowid,
+});
+
+class $$FavouriteModelTableFilterComposer
+    extends Composer<_$AppDatabase, $FavouriteModelTable> {
+  $$FavouriteModelTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get productId => $composableBuilder(
+      column: $table.productId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get customerId => $composableBuilder(
+      column: $table.customerId, builder: (column) => ColumnFilters(column));
+}
+
+class $$FavouriteModelTableOrderingComposer
+    extends Composer<_$AppDatabase, $FavouriteModelTable> {
+  $$FavouriteModelTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get productId => $composableBuilder(
+      column: $table.productId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get customerId => $composableBuilder(
+      column: $table.customerId, builder: (column) => ColumnOrderings(column));
+}
+
+class $$FavouriteModelTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FavouriteModelTable> {
+  $$FavouriteModelTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get productId =>
+      $composableBuilder(column: $table.productId, builder: (column) => column);
+
+  GeneratedColumn<int> get customerId => $composableBuilder(
+      column: $table.customerId, builder: (column) => column);
+}
+
+class $$FavouriteModelTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $FavouriteModelTable,
+    Favourite,
+    $$FavouriteModelTableFilterComposer,
+    $$FavouriteModelTableOrderingComposer,
+    $$FavouriteModelTableAnnotationComposer,
+    $$FavouriteModelTableCreateCompanionBuilder,
+    $$FavouriteModelTableUpdateCompanionBuilder,
+    (Favourite, BaseReferences<_$AppDatabase, $FavouriteModelTable, Favourite>),
+    Favourite,
+    PrefetchHooks Function()> {
+  $$FavouriteModelTableTableManager(
+      _$AppDatabase db, $FavouriteModelTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FavouriteModelTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FavouriteModelTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FavouriteModelTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> productId = const Value.absent(),
+            Value<int> customerId = const Value.absent(),
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FavouriteModelCompanion(
+            productId: productId,
+            customerId: customerId,
+            rowid: rowid,
+          ),
+          createCompanionCallback: ({
+            required int productId,
+            required int customerId,
+            Value<int> rowid = const Value.absent(),
+          }) =>
+              FavouriteModelCompanion.insert(
+            productId: productId,
+            customerId: customerId,
+            rowid: rowid,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$FavouriteModelTableProcessedTableManager = ProcessedTableManager<
+    _$AppDatabase,
+    $FavouriteModelTable,
+    Favourite,
+    $$FavouriteModelTableFilterComposer,
+    $$FavouriteModelTableOrderingComposer,
+    $$FavouriteModelTableAnnotationComposer,
+    $$FavouriteModelTableCreateCompanionBuilder,
+    $$FavouriteModelTableUpdateCompanionBuilder,
+    (Favourite, BaseReferences<_$AppDatabase, $FavouriteModelTable, Favourite>),
+    Favourite,
+    PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -1555,4 +1860,6 @@ class $AppDatabaseManager {
       $$CartModelTableTableManager(_db, _db.cartModel);
   $$AddressPersonalModelTableTableManager get addressPersonalModel =>
       $$AddressPersonalModelTableTableManager(_db, _db.addressPersonalModel);
+  $$FavouriteModelTableTableManager get favouriteModel =>
+      $$FavouriteModelTableTableManager(_db, _db.favouriteModel);
 }

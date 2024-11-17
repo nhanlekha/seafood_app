@@ -1,14 +1,17 @@
-// app_database.dart
 import 'package:drift/drift.dart';
-import 'package:drift_flutter/drift_flutter.dart';
-import '../../model/address_personal_model.dart';
 import '../../model/cart_model.dart';
+import '../../model/cart_model.dart';
+import '../../model/cart_model.dart';
+import '../../model/favourite_model.dart';
+import '../../model/address_personal_model.dart';
+import '../../model/address_personal_model.dart';
+import '../../model/address_personal_model.dart';
+import 'package:drift_flutter/drift_flutter.dart';
 
 part 'app_database.g.dart';
 
-@DriftDatabase(tables: [CartModel, AddressPersonalModel])
+@DriftDatabase(tables: [CartModel, AddressPersonalModel, FavouriteModel])
 class AppDatabase extends _$AppDatabase {
-
   // Private constructor for singleton
   AppDatabase._internal() : super(_openConnection());
 
@@ -21,8 +24,10 @@ class AppDatabase extends _$AppDatabase {
   @override
   int get schemaVersion => 1;
 
-  Future<int> insertCart(CartModelCompanion entry) => into(cartModel).insert(entry);
-  Future<int> deleteCart(int cartId) => (delete(cartModel)..where((tbl) => tbl.cartId.equals(cartId))).go();
+  Future<int> insertCart(CartModelCompanion entry) =>
+      into(cartModel).insert(entry);
+  Future<int> deleteCart(int cartId) =>
+      (delete(cartModel)..where((tbl) => tbl.cartId.equals(cartId))).go();
   Future<List<Cart>> getAllCarts() => select(cartModel).get();
 
   // Update the product quantity
@@ -38,7 +43,8 @@ class AppDatabase extends _$AppDatabase {
 
   // Get all carts where checkedProduct is true
   Future<List<Cart>> getCheckedCarts() {
-    return (select(cartModel)..where((tbl) => tbl.checkedProduct.equals(true))).get();
+    return (select(cartModel)..where((tbl) => tbl.checkedProduct.equals(true)))
+        .get();
   }
 
   // Calculate total price for all products based on productQuantity and productPrice
@@ -53,7 +59,8 @@ class AppDatabase extends _$AppDatabase {
 
   // Check if a product is already in the cart
   Future<bool> isProductInCart(int productId) async {
-    final query = select(cartModel)..where((tbl) => tbl.productId.equals(productId));
+    final query = select(cartModel)
+      ..where((tbl) => tbl.productId.equals(productId));
     final result = await query.get();
     return result.isNotEmpty;
   }
@@ -68,12 +75,14 @@ class AppDatabase extends _$AppDatabase {
 
   Future<List<AddressPersonal>> fetchListAddressPersonal(int customerId) {
     return (select(addressPersonalModel)
-      ..where((tbl) => tbl.customerId.equals(customerId))).get();
+          ..where((tbl) => tbl.customerId.equals(customerId)))
+        .get();
   }
 
   Future<int> resetAddressPersonalIsChecked(int customerId) {
-    return (update(addressPersonalModel)..where((tbl) => tbl.customerId.equals(customerId)))
-        .write(AddressPersonalModelCompanion(isChecked: Value(false)));
+    return (update(addressPersonalModel)
+          ..where((tbl) => tbl.customerId.equals(customerId)))
+        .write(const AddressPersonalModelCompanion(isChecked: Value(false)));
   }
 
   void setAddressDefaultForCustomer(int customerId) {
@@ -81,6 +90,18 @@ class AppDatabase extends _$AppDatabase {
   }
 
   Future<int> removeAddressPersonal(int id) async {
-    return await (delete(addressPersonalModel)..where((tbl) => tbl.dressPersonalId.equals(id))).go();
+    return await (delete(addressPersonalModel)
+          ..where((tbl) => tbl.dressPersonalId.equals(id)))
+        .go();
+  }
+
+  Future<int> insertFavourite(FavouriteModelCompanion entry) {
+    return into(favouriteModel).insert(entry);
+  }
+
+  Future<int> removeFavourite(int id) async {
+    return await (delete(favouriteModel)
+          ..where((tbl) => tbl.customerId.equals(id)))
+        .go();
   }
 }
