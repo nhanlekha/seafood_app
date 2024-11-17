@@ -140,7 +140,7 @@ class ProductCard extends StatelessWidget {
                                 width: 2.0,
                               ),
                               Text(
-                                "Đã bán ${productModel.productUnitSold}",
+                                "Đã bán ${productModel.productViewer}",
                                 style: const TextStyle(
                                   fontSize: 12.0,
                                   fontWeight: FontWeight.w400,

@@ -75,6 +75,7 @@ class _HomePageState extends State<HomePage> {
                   buildListCardCategory(),
                   buildCarouselBanner(),
                   buildListNewProduct(),
+                  buildListHotSaleProduct(),
                   buildListTrendingProduct(),
                 ],
               ),
@@ -333,6 +334,83 @@ class _HomePageState extends State<HomePage> {
               case DataStatus.success:
                 List<ProductModel> listNewProduct =
                     state.dataNewProductModel?.data ?? [];
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    height:
+                    240, // Đặt chiều cao của container để chứa danh sách
+                    child: ListView.builder(
+                      scrollDirection:
+                      Axis.horizontal, // Đặt chiều cuộn là ngang
+                      itemCount: listNewProduct.length ??
+                          0, // Số lượng mục trong danh sách
+                      itemBuilder: (context, index) {
+                        ProductModel product = listNewProduct[index];
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: SizedBox(
+                              width: 170, // Chiều rộng của mỗi mục
+                              child: ProductCard(
+                                productModel: product,
+                              )),
+                        );
+                      },
+                    ),
+                  ),
+                );
+
+              case DataStatus.error:
+                return const Center(
+                    child: Text("Có lỗi xảy ra!")); // Hiển thị thông báo lỗi
+              case DataStatus.loading:
+                return const Center(child: CircularProgressIndicator());
+              case DataStatus.empty:
+                return const Center(
+                    child: Text(
+                        "Không có sp nào!")); // Hiển thị thông báo khi không có dữ liệu
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget buildListHotSaleProduct() {
+    final productCubit = context.read<ProductCubit>();
+    productCubit.fetchHotSaleProductData();
+
+    return Column(
+      children: [
+        Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+          ),
+          child: const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Text(
+                  "SẢN PHẨM BÁN CHẠY ✨",
+                  style: TextStyle(
+                    fontSize: 20, // Kích thước chữ
+                    fontWeight: FontWeight.bold, // Chữ đậm
+                    color: Color(0xffef5908), // Màu chữ
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        // Khoảng cách giữa tiêu đề và GridView
+        BlocBuilder<ProductCubit, ProductState>(
+          builder: (context, state) {
+            switch (state.dataStatus) {
+              case DataStatus.initial:
+                return const Center(child: CircularProgressIndicator());
+              case DataStatus.success:
+                List<ProductModel> listNewProduct =
+                    state.dataHotSaleModel?.data ?? [];
 
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
