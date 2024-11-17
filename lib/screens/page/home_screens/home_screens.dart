@@ -1,22 +1,22 @@
+import 'package:animate_do/animate_do.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../../../routers/app_route_constants.dart';
-import '../../widgets/product_card.dart';
+import 'package:seafood_app/bloc/category/category_cubit.dart';
+import 'package:seafood_app/bloc/product/product_cubit.dart';
+import 'package:seafood_app/bloc/product/product_state.dart';
+import 'package:seafood_app/bloc/slide/slide_cubit.dart';
+import 'package:seafood_app/domans/repo/cate_repo.dart';
+import 'package:seafood_app/domans/repo/product_repo.dart';
+import 'package:seafood_app/model/category_model.dart';
+import 'package:seafood_app/model/product_model.dart';
+
+import '../../../bloc/category/category_state.dart';
 import '../../../bloc/slide/slide_state.dart';
 import '../../../domans/repo/slide_repo.dart';
 import '../../../ultils/enums/enum_data.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../bloc/category/category_state.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:seafood_app/model/product_model.dart';
-import 'package:seafood_app/model/category_model.dart';
-import 'package:seafood_app/domans/repo/cate_repo.dart';
-import 'package:seafood_app/bloc/slide/slide_cubit.dart';
-import 'package:seafood_app/domans/repo/product_repo.dart';
-import 'package:seafood_app/bloc/product/product_cubit.dart';
-import 'package:seafood_app/bloc/product/product_state.dart';
-import 'package:seafood_app/bloc/category/category_cubit.dart';
-import 'package:seafood_app/domans/repo/impl/slide_repo_impl.dart';
+import '../../widgets/product_card.dart';
 
 class HomeScreens extends StatelessWidget {
   const HomeScreens({super.key});
@@ -152,7 +152,6 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   children: [
                     Text("Xem thêm",
-
                         style: TextStyle(
                           height: 1.0,
                           fontSize: 14, // Kích thước chữ
@@ -177,20 +176,23 @@ class _HomePageState extends State<HomePage> {
                 case DataStatus.success:
                   List<CategoryModel> listCate = state.dataModel.data;
 
-                  return Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: GridView.count(
-                      controller: ScrollController(
-                        keepScrollOffset: false,
-                      ),
-                      shrinkWrap: true,
-                      crossAxisCount: 4,
-                      mainAxisSpacing: 4,
-                      crossAxisSpacing: 4,
-                      childAspectRatio: 1,
-                      children: List.generate(
-                        listCate.length,
-                        (index) => _buildCardCategory(listCate[index]),
+                  return FadeInRight(
+                    duration: const Duration(milliseconds: 1000),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: GridView.count(
+                        controller: ScrollController(
+                          keepScrollOffset: false,
+                        ),
+                        shrinkWrap: true,
+                        crossAxisCount: 4,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                        childAspectRatio: 1,
+                        children: List.generate(
+                          listCate.length,
+                          (index) => _buildCardCategory(listCate[index]),
+                        ),
                       ),
                     ),
                   );
@@ -374,31 +376,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildCarouselBanner() {
-    return CarouselSlider(
-      items: [
-        const Image(
-          image: AssetImage('assets/images/banner1.jpg'),
-          fit: BoxFit.contain,
-        ),
-        const Image(
-            image: AssetImage('assets/images/banner2.jpg'),
-            fit: BoxFit.contain),
-        const Image(
-          image: AssetImage('assets/images/banner3.jpg'),
-          fit: BoxFit.contain,
-        ),
-      ]
-          .map((item) => Container(
-                child: item,
-              ))
-          .toList(),
-      options: CarouselOptions(
-          autoPlay: true,
-          enlargeCenterPage: true,
-          enableInfiniteScroll: true,
-          viewportFraction: 1,
-          aspectRatio: 30 / 9,
-          autoPlayInterval: const Duration(seconds: 5)),
+    return FadeInRight(
+      child: CarouselSlider(
+        items: [
+          const Image(
+            image: AssetImage('assets/images/banner1.jpg'),
+            fit: BoxFit.contain,
+          ),
+          const Image(
+              image: AssetImage('assets/images/banner2.jpg'),
+              fit: BoxFit.contain),
+          const Image(
+            image: AssetImage('assets/images/banner3.jpg'),
+            fit: BoxFit.contain,
+          ),
+        ]
+            .map((item) => Container(
+                  child: item,
+                ))
+            .toList(),
+        options: CarouselOptions(
+            autoPlay: true,
+            enlargeCenterPage: true,
+            enableInfiniteScroll: true,
+            viewportFraction: 1,
+            aspectRatio: 30 / 9,
+            autoPlayInterval: const Duration(seconds: 5)),
+      ),
     );
   }
 }
@@ -585,6 +589,11 @@ Widget _buildCartIcon(BuildContext context) {
       child: Container(
         margin: const EdgeInsets.only(left: 10),
         alignment: Alignment.center,
+        // child: const Icon(
+        //   Icons.shopping_cart_outlined,
+        //   size: 25,
+        //   color: Colors.orange,
+        // ),
         child: Image.asset(
           'assets/images/cargo.png', // Đường dẫn tới ảnh giỏ hàng
           height: 25,
