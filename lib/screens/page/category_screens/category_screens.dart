@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../widgets/product_card.dart';
@@ -53,6 +54,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    context.read<CategoryCubit>().fetchData();
   }
 
   @override
@@ -72,7 +75,6 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-
 
 // Hàm để tạo toolbar tìm kiếm
   Widget buildSearchToolbar(BuildContext context) {
@@ -147,9 +149,7 @@ class _HomePageState extends State<HomePage> {
       child: GestureDetector(
         onTap: () {
           // Xử lý sự kiện khi click vào giỏ hàng
-          context.push(
-              '/cart'
-          );
+          context.push('/cart');
           print("Giỏ hàng đã được click!");
         },
         child: Container(
@@ -164,102 +164,112 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
   Widget buildListCardProduct() {
-    final productCubit = context.read<ProductCubit>();
-    productCubit.fetchProductDataByCategoryId([3, 6, 7, 8, 9, 10]);
-
-    return Column(
-      children: [
-        BlocBuilder<ProductCubit, ProductState>(
-          builder: (context, state) {
-            switch (state.dataStatus) {
-              case DataStatus.initial:
-                return const Center(child: CircularProgressIndicator());
-              case DataStatus.success:
-                Map<String, List<ProductModel>> productsByCategory = {};
-
-                // Phân loại sản phẩm theo danh mục
-                state.dataProductsByCategory?.data?.forEach((product) {
-                  final category = product.categoryName ?? "Khác";
-                  if (!productsByCategory.containsKey(category)) {
-                    productsByCategory[category] = [];
-                  }
-                  productsByCategory[category]!.add(product);
+    return FadeInDown(
+      child: Column(
+        children: [
+          BlocBuilder<CategoryCubit, CategoryState>(
+            builder: (context, state) {
+              if (state.dataStatus == DataStatus.success) {
+                List<CategoryModel> list = state.dataModel.data;
+      
+                List<int> listId = [];
+      
+                list.forEach((element) {
+                  listId.add(element.categoryId ?? 0);
                 });
-
-                // Tạo danh sách theo từng danh mục
-                return Column(
-                  children: productsByCategory.entries.map((entry) {
-                    String categoryName = entry.key;
-                    List<ProductModel> products = entry.value;
-
-                    return Container(
-                      margin: const EdgeInsets.only(bottom: 10, left: 6, right: 6), // Chỉ cách phần dưới
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Colors.blueAccent,
-                          width: 1,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.3),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Text(
-                              categoryName,
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 275,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: products.length,
-                              itemBuilder: (context, index) {
-                                ProductModel product = products[index];
-                                return Container(
-                                  margin: const EdgeInsets.only(right: 10),
-                                  width: 215,
-                                  child: ProductCard(
-                                    productModel: product,
+      
+                context.read<ProductCubit>().fetchProductDataByCategoryId(listId);
+              }
+      
+              return BlocBuilder<ProductCubit, ProductState>(
+                builder: (context, state) {
+                  switch (state.dataStatus) {
+                    case DataStatus.initial:
+                      return const Center(child: CircularProgressIndicator());
+                    case DataStatus.success:
+                      Map<String, List<ProductModel>> productsByCategory = {};
+                      // Phân loại sản phẩm theo danh mục
+                      state.dataProductsByCategory?.data?.forEach((product) {
+                        final category = product.categoryName ?? "Khác";
+                        if (!productsByCategory.containsKey(category)) {
+                          productsByCategory[category] = [];
+                        }
+                        productsByCategory[category]!.add(product);
+                      });
+      
+                      // Tạo danh sách theo từng danh mục
+                      return Column(
+                        children: productsByCategory.entries.map((entry) {
+                          String categoryName = entry.key;
+                          List<ProductModel> products = entry.value;
+      
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                ),
+                                child:  Padding(
+                                  padding: EdgeInsets.all(10.0),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        categoryName,
+                                        style: const TextStyle(
+                                          fontSize: 20, // Kích thước chữ
+                                          fontWeight: FontWeight.bold, // Chữ đậm
+                                          color: Color(0xffef5908), // Màu chữ
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  }).toList(),
-                );
-              case DataStatus.error:
-                return const Center(child: Text("Có lỗi xảy ra!"));
-              case DataStatus.loading:
-                return const Center(child: CircularProgressIndicator());
-              case DataStatus.empty:
-                return const Center(child: Text("Không có sản phẩm nào!"));
-            }
-          },
-        ),
-      ],
+                                ),
+                              ),
+                              FadeInRight(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox(
+                                    height: 240,
+                                    // Đặt chiều cao của container để chứa danh sách
+                                    child: ListView.builder(
+                                      scrollDirection: Axis
+                                          .horizontal, // Đặt chiều cuộn là ngang
+                                      itemCount: products.length ??
+                                          0, // Số lượng mục trong danh sách
+                                      itemBuilder: (context, index) {
+                                        ProductModel product = products[index];
+                                        return Padding(
+                                          padding: const EdgeInsets.only(right: 8),
+                                          child: SizedBox(
+                                              width: 170, // Chiều rộng của mỗi mục
+                                              child: ProductCard(
+                                                productModel: product,
+                                              )),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          );
+                        }).toList(),
+                      );
+                    case DataStatus.error:
+                      return const Center(child: Text("Có lỗi xảy ra!"));
+                    case DataStatus.loading:
+                      return const Center(child: CircularProgressIndicator());
+                    case DataStatus.empty:
+                      return const Center(child: Text("Không có sản phẩm nào!"));
+                  }
+                },
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
-
 }
