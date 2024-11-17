@@ -4,7 +4,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 class SeafoodApi {
   final Dio _dio = Dio();
 
-  SeafoodApi({String baseUrl = "http://192.168.1.14/DoAnCNWeb/api/"}) {
+  SeafoodApi({String baseUrl = "http://192.168.1.6/DoAnCNWeb/api/"}) {
     _dio.options = BaseOptions(
       baseUrl: baseUrl,
       connectTimeout: const Duration(seconds: 10), // Thời gian chờ kết nối
@@ -12,16 +12,17 @@ class SeafoodApi {
       sendTimeout: const Duration(seconds: 10), // Thời gian chờ gửi dữ liệu
     );
 
-    _dio.interceptors.add(
-      PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
-        compact: false,
-      ),
-    );
+
+    // _dio.interceptors.add(
+    //   PrettyDioLogger(
+    //     requestHeader: true,
+    //     requestBody: true,
+    //     responseHeader: true,
+    //     responseBody: true,
+    //     error: true,
+    //     compact: false,
+    //   ),
+    // );
   }
 
   Dio get sendRequest => _dio;

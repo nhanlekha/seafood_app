@@ -67,55 +67,60 @@ class _AddressScreensState extends State<AddressScreens> {
         ),
         elevation: 8,
       ),
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 80.0),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildAddressList(),
-                ],
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 80.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildAddressList(),
+                  ],
+                ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  VipButton(
-                    icon: Icons.add_location,
-                    text: 'Thêm Địa Chỉ',
-                    textColor: Colors.white,
-                    backgroundColor: Colors.green,
-                    onPressed: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AddAddressScreens()),
-                      );
-                      _fetchListAddressPersonalData();
-                    },
-                  ),
-                  VipButton(
-                    icon: Icons.shopping_cart,
-                    text: 'Giỏ Hàng',
-                    textColor: Colors.white,
-                    backgroundColor: Colors.orangeAccent,
-                    onPressed: () {
-                      // Hành động chọn địa chỉ
-                    },
-                  ),
-                ],
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    VipButton(
+                      icon: Icons.add_location,
+                      text: 'Thêm Địa Chỉ',
+                      textColor: Colors.white,
+                      backgroundColor: Colors.green,
+                      onPressed: () async {
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddAddressScreens()),
+                        );
+                        _fetchListAddressPersonalData();
+                      },
+                    ),
+                    VipButton(
+                      icon: Icons.shopping_cart,
+                      text: 'Giỏ Hàng',
+                      textColor: Colors.white,
+                      backgroundColor: Colors.orangeAccent,
+                      onPressed: () {
+                        // Hành động chọn địa chỉ
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -126,15 +131,27 @@ class _AddressScreensState extends State<AddressScreens> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return const Center(
-              child: Text(
-                  "Bạn chưa có địa chỉ nào!\nThêm địa chỉ nhận hàng ngay"));
+        } else if (snapshot.hasError || snapshot.data!.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('assets/images/6423006.webp'),
+                const SizedBox(height: 10),
+                const Text(
+                  'Thêm mới địa chỉ nhận hàng nào 😘',
+                  style: TextStyle(
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          );
         } else {
           List<AddressPersonal> listAddressPersonal =
               snapshot.data as List<AddressPersonal>;
 
-          // Sort the list to bring the default address to the top
+          // Sắp xếp địa chỉ mặc định lên đầu
           listAddressPersonal.sort((a, b) => b.isChecked ? 1 : -1);
 
           return Column(
@@ -153,7 +170,7 @@ class _AddressScreensState extends State<AddressScreens> {
                   if (direction == DismissDirection.endToStart) {
                     final bool isConfirmed = await showDialog(
                       context: context,
-                      builder: (context) => CupertinoAlertDialog(
+                      builder: (context) => AlertDialog(
                         title: const Text('Xác nhận'),
                         content: const Text(
                             'Bạn có chắc chắn muốn xóa địa chỉ này không?'),
@@ -161,28 +178,27 @@ class _AddressScreensState extends State<AddressScreens> {
                           TextButton(
                             onPressed: () => {
                               Navigator.pop(context, false),
+                              _fetchListAddressPersonalData()
                             },
                             child: const Text('Không'),
                           ),
                           TextButton(
-                            onPressed: () => {
-                              Navigator.pop(context, true),
-                              _addressPersonalRepo.removeAddressPersonal(
-                                  addressPersonal.dressPersonalId),
-                            },
+                            onPressed: () => Navigator.pop(context, true),
                             child: const Text('Có',
                                 style: TextStyle(color: Colors.red)),
                           ),
                         ],
                       ),
                     );
-                    _fetchListAddressPersonalData();
+                    if (isConfirmed == true) {
+                      await _addressPersonalRepo.removeAddressPersonal(
+                          addressPersonal.dressPersonalId);
+                      _fetchListAddressPersonalData();
+                    }
                   }
                 },
                 child: GestureDetector(
-                  onTap: () async {
-                    // TODO: Edit address
-                  },
+                  onTap: () async {},
                   child: AddressCard(
                     title: addressPersonal.nameDress,
                     shippingName: addressPersonal.shippingName,
@@ -190,9 +206,7 @@ class _AddressScreensState extends State<AddressScreens> {
                     addressDetails: '${addressPersonal.homeNumber} \n'
                         '${addressPersonal.wardName}, ${addressPersonal.provinceName}, ${addressPersonal.cityName}',
                     isDefault: addressPersonal.isChecked,
-                    onDefaultChanged: (bool newValue) {
-                      // Handle setting default address if needed
-                    },
+                    onDefaultChanged: (bool newValue) {},
                   ),
                 ),
               );

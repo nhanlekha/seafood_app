@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.5.2
+  sdk: ^3.5.0
 
 
 dependencies:
@@ -36,6 +36,7 @@ dependencies:
 
   drift: ^2.21.0
   drift_flutter: ^0.2.1
+  animate_do: ^2.0.0
 
 
 
