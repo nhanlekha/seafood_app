@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:seafood_app/main.dart';
+import 'package:seafood_app/routers/app_route_config.dart';
+import 'package:seafood_app/screens/page/main_screens/main_screens.dart';
 import 'package:seafood_app/screens/page/signup_screens/signup_screen.dart';
+import 'package:seafood_app/screens/widgets/toast_widget.dart';
 import 'package:seafood_app/screens/widgets/vip_textfield.dart';
 
 import '../../../../components/already_have_an_account_acheck.dart';
@@ -45,7 +50,20 @@ class LoginForm extends StatelessWidget {
           const SizedBox(height: defaultPadding),
           VipButton(
             text: "ĐĂNG NHẬP",
-            onPressed: () {},
+            onPressed: () {
+
+
+              showToast(message: 'Đăng nhập thành công !');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return  Test();
+                  },
+                ),
+              );
+
+            },
             backgroundColor: kPrimaryColor,
             icon: Icons.login,
             textColor: Colors.white,

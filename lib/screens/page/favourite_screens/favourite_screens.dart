@@ -102,7 +102,7 @@ class _FavourivePageState extends State<FavourivePage> {
                     color: Color(0xffF5F5F5),
                   ),
                   child: SizedBox(
-                    height: 600,
+                    height: 750,
                     // Đặt chiều cao của container để chứa danh sách
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

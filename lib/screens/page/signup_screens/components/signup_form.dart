@@ -5,6 +5,7 @@ import 'package:seafood_app/screens/widgets/vip_textfield.dart';
 
 import '../../../../components/already_have_an_account_acheck.dart';
 import '../../../../constants.dart';
+import '../../../widgets/toast_widget.dart';
 import '../../../widgets/vip_button.dart';
 import '../../login_screens/login_screens.dart';
 
@@ -68,7 +69,17 @@ class SignUpForm extends StatelessWidget {
           const SizedBox(height: defaultPadding / 2),
           VipButton(
             text: "ĐĂNG KÝ",
-            onPressed: () {},
+            onPressed: () {
+              showToast(message: 'Đăng ký thành công !');
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const LoginScreens();
+                  },
+                ),
+              );
+            },
             backgroundColor: kPrimaryColor,
             icon: Icons.arrow_forward,
             textColor: Colors.white,

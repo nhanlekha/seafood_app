@@ -50,7 +50,7 @@ class PersonalPage extends StatelessWidget {
 
             // Tên người dùng
             Text(
-              "Lê Khả Nhân Đẹp Trai",
+              "Khả Nhân",
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

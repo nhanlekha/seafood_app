@@ -9,6 +9,7 @@ import 'package:seafood_app/domans/repo/impl/product_repo_impl.dart';
 import 'package:seafood_app/domans/repo/impl/slide_repo_impl.dart';
 import 'package:seafood_app/domans/repo/product_repo.dart';
 import 'package:seafood_app/routers/app_route_config.dart';
+import 'package:seafood_app/screens/onbroarding/onboarding_page_view.dart';
 import 'package:seafood_app/screens/page/login_screens/login_screens.dart';
 import 'package:seafood_app/screens/page/main_screens/main_screens.dart';
 
@@ -101,7 +102,18 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
         body: SafeArea(
-      child: MainScreens(),
+      child: OnboardingPageView(),
     ));
+  }
+}
+
+
+class Test extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(body: SafeArea(child: MainScreens())), // Màn hình chính của ứng dụng
+    );
   }
 }

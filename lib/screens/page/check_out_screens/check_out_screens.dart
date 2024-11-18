@@ -14,6 +14,7 @@ import 'package:seafood_app/routers/app_route_config.dart';
 import 'package:seafood_app/screens/widgets/checkout_card.dart';
 
 import '../../../domans/repo/impl/cart_repo_impl.dart';
+import '../../../main.dart';
 import '../../../ultils/ultils/ultils.dart';
 import '../../widgets/cart_card.dart';
 import '../../widgets/toast_widget.dart';
@@ -172,7 +173,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         width: 24, // Điều chỉnh kích thước của ảnh
                       ),
                       SizedBox(width: 5),
-                      Text('Nguyên đẹp trai (0839519415)', style: TextStyle(fontSize: 14)),
+                      Text('Kha Nhan (0987654321)', style: TextStyle(fontSize: 14)),
                     ],
                   ),
                   Row(
@@ -183,7 +184,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         width: 24, // Điều chỉnh kích thước của ảnh
                       ),
                       SizedBox(width: 5),
-                      Expanded(child: Text('131, Trân Dư, Phường An Xuân, TP Tam Kỳ, Tỉnh Quảng Nam', style: TextStyle(fontSize: 14))),
+                      Expanded(child: Text('111, Hòa Hải, Ngũ Hành Sơn, Đã Nẵng', style: TextStyle(fontSize: 14))),
                     ],
                   ),
 
@@ -379,8 +380,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
        cartRepo.removeCart(list.cartId);
      });
 
-     showToast(message: 'Đặt đơn hàng thành công !');
-     context.pushReplacement('/');
+     showToast(message: 'Đặt đơn hàng ${orderCode} thành công !');
+     // context.pushReplacement('/');
+
+     Navigator.push(
+       context,
+       MaterialPageRoute(
+         builder: (context) {
+           return  Test();
+         },
+       ),
+     );
+
 
   }
 

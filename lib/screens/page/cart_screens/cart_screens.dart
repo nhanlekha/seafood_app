@@ -112,6 +112,7 @@ class _CartPageState extends State<CartPage> {
             ), // Biểu tượng undo tương đương với drawable "undo24x24"
             onPressed: () {
               // Thực hiện hành động khi nhấn nút
+              context.pop();
             },
           ),
         ),
