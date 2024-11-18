@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seafood_app/screens/page/order_screens/order_detail_screen.dart';
 
 import '../main.dart';
+import '../model/order_model.dart';
 import '../model/product_model.dart';
 import '../screens/page/cart_screens/cart_screens.dart';
 import '../screens/page/check_out_screens/check_out_screens.dart';
@@ -71,7 +73,15 @@ class AppRouter {
             return const MaterialPage(child: CheckoutPage());
           },
         ),
-
+        GoRoute(
+          path: RouteConstants.detailOrderRoute,
+          pageBuilder: (context, state) {
+            final orderModel = state.extra as OrderModel;
+            return MaterialPage(
+              child: OrderDetailScreen(orderModel: orderModel),
+            );
+          },
+        ),
 
       ],
       errorPageBuilder: (context, state) {
