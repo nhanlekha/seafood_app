@@ -1052,15 +1052,88 @@ class $FavouriteModelTable extends FavouriteModel
   @override
   late final GeneratedColumn<int> productId = GeneratedColumn<int>(
       'product_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
   static const VerificationMeta _customerIdMeta =
       const VerificationMeta('customerId');
   @override
   late final GeneratedColumn<int> customerId = GeneratedColumn<int>(
-      'customer_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+      'customer_id', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _productNameMeta =
+      const VerificationMeta('productName');
   @override
-  List<GeneratedColumn> get $columns => [productId, customerId];
+  late final GeneratedColumn<String> productName = GeneratedColumn<String>(
+      'product_name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _productDeliciousFoodsMeta =
+      const VerificationMeta('productDeliciousFoods');
+  @override
+  late final GeneratedColumn<String> productDeliciousFoods =
+      GeneratedColumn<String>('product_delicious_foods', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _productUnitMeta =
+      const VerificationMeta('productUnit');
+  @override
+  late final GeneratedColumn<String> productUnit = GeneratedColumn<String>(
+      'product_unit', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _productQuantityMeta =
+      const VerificationMeta('productQuantity');
+  @override
+  late final GeneratedColumn<int> productQuantity = GeneratedColumn<int>(
+      'product_quantity', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _productDeliveryWayMeta =
+      const VerificationMeta('productDeliveryWay');
+  @override
+  late final GeneratedColumn<String> productDeliveryWay =
+      GeneratedColumn<String>('product_delivery_way', aliasedName, true,
+          type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _categoryNameMeta =
+      const VerificationMeta('categoryName');
+  @override
+  late final GeneratedColumn<String> categoryName = GeneratedColumn<String>(
+      'category_name', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _productOriginMeta =
+      const VerificationMeta('productOrigin');
+  @override
+  late final GeneratedColumn<String> productOrigin = GeneratedColumn<String>(
+      'product_origin', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _productImageMeta =
+      const VerificationMeta('productImage');
+  @override
+  late final GeneratedColumn<String> productImage = GeneratedColumn<String>(
+      'product_image', aliasedName, true,
+      type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _productPriceMeta =
+      const VerificationMeta('productPrice');
+  @override
+  late final GeneratedColumn<double> productPrice = GeneratedColumn<double>(
+      'product_price', aliasedName, false,
+      type: DriftSqlType.double, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        productId,
+        customerId,
+        productName,
+        productDeliciousFoods,
+        productUnit,
+        productQuantity,
+        productDeliveryWay,
+        categoryName,
+        productOrigin,
+        productImage,
+        productPrice
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -1074,22 +1147,76 @@ class $FavouriteModelTable extends FavouriteModel
     if (data.containsKey('product_id')) {
       context.handle(_productIdMeta,
           productId.isAcceptableOrUnknown(data['product_id']!, _productIdMeta));
-    } else if (isInserting) {
-      context.missing(_productIdMeta);
     }
     if (data.containsKey('customer_id')) {
       context.handle(
           _customerIdMeta,
           customerId.isAcceptableOrUnknown(
               data['customer_id']!, _customerIdMeta));
+    }
+    if (data.containsKey('product_name')) {
+      context.handle(
+          _productNameMeta,
+          productName.isAcceptableOrUnknown(
+              data['product_name']!, _productNameMeta));
     } else if (isInserting) {
-      context.missing(_customerIdMeta);
+      context.missing(_productNameMeta);
+    }
+    if (data.containsKey('product_delicious_foods')) {
+      context.handle(
+          _productDeliciousFoodsMeta,
+          productDeliciousFoods.isAcceptableOrUnknown(
+              data['product_delicious_foods']!, _productDeliciousFoodsMeta));
+    }
+    if (data.containsKey('product_unit')) {
+      context.handle(
+          _productUnitMeta,
+          productUnit.isAcceptableOrUnknown(
+              data['product_unit']!, _productUnitMeta));
+    }
+    if (data.containsKey('product_quantity')) {
+      context.handle(
+          _productQuantityMeta,
+          productQuantity.isAcceptableOrUnknown(
+              data['product_quantity']!, _productQuantityMeta));
+    }
+    if (data.containsKey('product_delivery_way')) {
+      context.handle(
+          _productDeliveryWayMeta,
+          productDeliveryWay.isAcceptableOrUnknown(
+              data['product_delivery_way']!, _productDeliveryWayMeta));
+    }
+    if (data.containsKey('category_name')) {
+      context.handle(
+          _categoryNameMeta,
+          categoryName.isAcceptableOrUnknown(
+              data['category_name']!, _categoryNameMeta));
+    }
+    if (data.containsKey('product_origin')) {
+      context.handle(
+          _productOriginMeta,
+          productOrigin.isAcceptableOrUnknown(
+              data['product_origin']!, _productOriginMeta));
+    }
+    if (data.containsKey('product_image')) {
+      context.handle(
+          _productImageMeta,
+          productImage.isAcceptableOrUnknown(
+              data['product_image']!, _productImageMeta));
+    }
+    if (data.containsKey('product_price')) {
+      context.handle(
+          _productPriceMeta,
+          productPrice.isAcceptableOrUnknown(
+              data['product_price']!, _productPriceMeta));
+    } else if (isInserting) {
+      context.missing(_productPriceMeta);
     }
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => const {};
+  Set<GeneratedColumn> get $primaryKey => {productId};
   @override
   Favourite map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -1097,7 +1224,26 @@ class $FavouriteModelTable extends FavouriteModel
       productId: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}product_id'])!,
       customerId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}customer_id'])!,
+          .read(DriftSqlType.int, data['${effectivePrefix}customer_id']),
+      productName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_name'])!,
+      productDeliciousFoods: attachedDatabase.typeMapping.read(
+          DriftSqlType.string,
+          data['${effectivePrefix}product_delicious_foods']),
+      productUnit: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_unit']),
+      productQuantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}product_quantity']),
+      productDeliveryWay: attachedDatabase.typeMapping.read(
+          DriftSqlType.string, data['${effectivePrefix}product_delivery_way']),
+      categoryName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category_name']),
+      productOrigin: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_origin']),
+      productImage: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_image']),
+      productPrice: attachedDatabase.typeMapping
+          .read(DriftSqlType.double, data['${effectivePrefix}product_price'])!,
     );
   }
 
@@ -1109,20 +1255,90 @@ class $FavouriteModelTable extends FavouriteModel
 
 class Favourite extends DataClass implements Insertable<Favourite> {
   final int productId;
-  final int customerId;
-  const Favourite({required this.productId, required this.customerId});
+  final int? customerId;
+  final String productName;
+  final String? productDeliciousFoods;
+  final String? productUnit;
+  final int? productQuantity;
+  final String? productDeliveryWay;
+  final String? categoryName;
+  final String? productOrigin;
+  final String? productImage;
+  final double productPrice;
+  const Favourite(
+      {required this.productId,
+      this.customerId,
+      required this.productName,
+      this.productDeliciousFoods,
+      this.productUnit,
+      this.productQuantity,
+      this.productDeliveryWay,
+      this.categoryName,
+      this.productOrigin,
+      this.productImage,
+      required this.productPrice});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['product_id'] = Variable<int>(productId);
-    map['customer_id'] = Variable<int>(customerId);
+    if (!nullToAbsent || customerId != null) {
+      map['customer_id'] = Variable<int>(customerId);
+    }
+    map['product_name'] = Variable<String>(productName);
+    if (!nullToAbsent || productDeliciousFoods != null) {
+      map['product_delicious_foods'] = Variable<String>(productDeliciousFoods);
+    }
+    if (!nullToAbsent || productUnit != null) {
+      map['product_unit'] = Variable<String>(productUnit);
+    }
+    if (!nullToAbsent || productQuantity != null) {
+      map['product_quantity'] = Variable<int>(productQuantity);
+    }
+    if (!nullToAbsent || productDeliveryWay != null) {
+      map['product_delivery_way'] = Variable<String>(productDeliveryWay);
+    }
+    if (!nullToAbsent || categoryName != null) {
+      map['category_name'] = Variable<String>(categoryName);
+    }
+    if (!nullToAbsent || productOrigin != null) {
+      map['product_origin'] = Variable<String>(productOrigin);
+    }
+    if (!nullToAbsent || productImage != null) {
+      map['product_image'] = Variable<String>(productImage);
+    }
+    map['product_price'] = Variable<double>(productPrice);
     return map;
   }
 
   FavouriteModelCompanion toCompanion(bool nullToAbsent) {
     return FavouriteModelCompanion(
       productId: Value(productId),
-      customerId: Value(customerId),
+      customerId: customerId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(customerId),
+      productName: Value(productName),
+      productDeliciousFoods: productDeliciousFoods == null && nullToAbsent
+          ? const Value.absent()
+          : Value(productDeliciousFoods),
+      productUnit: productUnit == null && nullToAbsent
+          ? const Value.absent()
+          : Value(productUnit),
+      productQuantity: productQuantity == null && nullToAbsent
+          ? const Value.absent()
+          : Value(productQuantity),
+      productDeliveryWay: productDeliveryWay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(productDeliveryWay),
+      categoryName: categoryName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(categoryName),
+      productOrigin: productOrigin == null && nullToAbsent
+          ? const Value.absent()
+          : Value(productOrigin),
+      productImage: productImage == null && nullToAbsent
+          ? const Value.absent()
+          : Value(productImage),
+      productPrice: Value(productPrice),
     );
   }
 
@@ -1131,7 +1347,18 @@ class Favourite extends DataClass implements Insertable<Favourite> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Favourite(
       productId: serializer.fromJson<int>(json['productId']),
-      customerId: serializer.fromJson<int>(json['customerId']),
+      customerId: serializer.fromJson<int?>(json['customerId']),
+      productName: serializer.fromJson<String>(json['productName']),
+      productDeliciousFoods:
+          serializer.fromJson<String?>(json['productDeliciousFoods']),
+      productUnit: serializer.fromJson<String?>(json['productUnit']),
+      productQuantity: serializer.fromJson<int?>(json['productQuantity']),
+      productDeliveryWay:
+          serializer.fromJson<String?>(json['productDeliveryWay']),
+      categoryName: serializer.fromJson<String?>(json['categoryName']),
+      productOrigin: serializer.fromJson<String?>(json['productOrigin']),
+      productImage: serializer.fromJson<String?>(json['productImage']),
+      productPrice: serializer.fromJson<double>(json['productPrice']),
     );
   }
   @override
@@ -1139,19 +1366,84 @@ class Favourite extends DataClass implements Insertable<Favourite> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'productId': serializer.toJson<int>(productId),
-      'customerId': serializer.toJson<int>(customerId),
+      'customerId': serializer.toJson<int?>(customerId),
+      'productName': serializer.toJson<String>(productName),
+      'productDeliciousFoods':
+          serializer.toJson<String?>(productDeliciousFoods),
+      'productUnit': serializer.toJson<String?>(productUnit),
+      'productQuantity': serializer.toJson<int?>(productQuantity),
+      'productDeliveryWay': serializer.toJson<String?>(productDeliveryWay),
+      'categoryName': serializer.toJson<String?>(categoryName),
+      'productOrigin': serializer.toJson<String?>(productOrigin),
+      'productImage': serializer.toJson<String?>(productImage),
+      'productPrice': serializer.toJson<double>(productPrice),
     };
   }
 
-  Favourite copyWith({int? productId, int? customerId}) => Favourite(
+  Favourite copyWith(
+          {int? productId,
+          Value<int?> customerId = const Value.absent(),
+          String? productName,
+          Value<String?> productDeliciousFoods = const Value.absent(),
+          Value<String?> productUnit = const Value.absent(),
+          Value<int?> productQuantity = const Value.absent(),
+          Value<String?> productDeliveryWay = const Value.absent(),
+          Value<String?> categoryName = const Value.absent(),
+          Value<String?> productOrigin = const Value.absent(),
+          Value<String?> productImage = const Value.absent(),
+          double? productPrice}) =>
+      Favourite(
         productId: productId ?? this.productId,
-        customerId: customerId ?? this.customerId,
+        customerId: customerId.present ? customerId.value : this.customerId,
+        productName: productName ?? this.productName,
+        productDeliciousFoods: productDeliciousFoods.present
+            ? productDeliciousFoods.value
+            : this.productDeliciousFoods,
+        productUnit: productUnit.present ? productUnit.value : this.productUnit,
+        productQuantity: productQuantity.present
+            ? productQuantity.value
+            : this.productQuantity,
+        productDeliveryWay: productDeliveryWay.present
+            ? productDeliveryWay.value
+            : this.productDeliveryWay,
+        categoryName:
+            categoryName.present ? categoryName.value : this.categoryName,
+        productOrigin:
+            productOrigin.present ? productOrigin.value : this.productOrigin,
+        productImage:
+            productImage.present ? productImage.value : this.productImage,
+        productPrice: productPrice ?? this.productPrice,
       );
   Favourite copyWithCompanion(FavouriteModelCompanion data) {
     return Favourite(
       productId: data.productId.present ? data.productId.value : this.productId,
       customerId:
           data.customerId.present ? data.customerId.value : this.customerId,
+      productName:
+          data.productName.present ? data.productName.value : this.productName,
+      productDeliciousFoods: data.productDeliciousFoods.present
+          ? data.productDeliciousFoods.value
+          : this.productDeliciousFoods,
+      productUnit:
+          data.productUnit.present ? data.productUnit.value : this.productUnit,
+      productQuantity: data.productQuantity.present
+          ? data.productQuantity.value
+          : this.productQuantity,
+      productDeliveryWay: data.productDeliveryWay.present
+          ? data.productDeliveryWay.value
+          : this.productDeliveryWay,
+      categoryName: data.categoryName.present
+          ? data.categoryName.value
+          : this.categoryName,
+      productOrigin: data.productOrigin.present
+          ? data.productOrigin.value
+          : this.productOrigin,
+      productImage: data.productImage.present
+          ? data.productImage.value
+          : this.productImage,
+      productPrice: data.productPrice.present
+          ? data.productPrice.value
+          : this.productPrice,
     );
   }
 
@@ -1159,54 +1451,144 @@ class Favourite extends DataClass implements Insertable<Favourite> {
   String toString() {
     return (StringBuffer('Favourite(')
           ..write('productId: $productId, ')
-          ..write('customerId: $customerId')
+          ..write('customerId: $customerId, ')
+          ..write('productName: $productName, ')
+          ..write('productDeliciousFoods: $productDeliciousFoods, ')
+          ..write('productUnit: $productUnit, ')
+          ..write('productQuantity: $productQuantity, ')
+          ..write('productDeliveryWay: $productDeliveryWay, ')
+          ..write('categoryName: $categoryName, ')
+          ..write('productOrigin: $productOrigin, ')
+          ..write('productImage: $productImage, ')
+          ..write('productPrice: $productPrice')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(productId, customerId);
+  int get hashCode => Object.hash(
+      productId,
+      customerId,
+      productName,
+      productDeliciousFoods,
+      productUnit,
+      productQuantity,
+      productDeliveryWay,
+      categoryName,
+      productOrigin,
+      productImage,
+      productPrice);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Favourite &&
           other.productId == this.productId &&
-          other.customerId == this.customerId);
+          other.customerId == this.customerId &&
+          other.productName == this.productName &&
+          other.productDeliciousFoods == this.productDeliciousFoods &&
+          other.productUnit == this.productUnit &&
+          other.productQuantity == this.productQuantity &&
+          other.productDeliveryWay == this.productDeliveryWay &&
+          other.categoryName == this.categoryName &&
+          other.productOrigin == this.productOrigin &&
+          other.productImage == this.productImage &&
+          other.productPrice == this.productPrice);
 }
 
 class FavouriteModelCompanion extends UpdateCompanion<Favourite> {
   final Value<int> productId;
-  final Value<int> customerId;
-  final Value<int> rowid;
+  final Value<int?> customerId;
+  final Value<String> productName;
+  final Value<String?> productDeliciousFoods;
+  final Value<String?> productUnit;
+  final Value<int?> productQuantity;
+  final Value<String?> productDeliveryWay;
+  final Value<String?> categoryName;
+  final Value<String?> productOrigin;
+  final Value<String?> productImage;
+  final Value<double> productPrice;
   const FavouriteModelCompanion({
     this.productId = const Value.absent(),
     this.customerId = const Value.absent(),
-    this.rowid = const Value.absent(),
+    this.productName = const Value.absent(),
+    this.productDeliciousFoods = const Value.absent(),
+    this.productUnit = const Value.absent(),
+    this.productQuantity = const Value.absent(),
+    this.productDeliveryWay = const Value.absent(),
+    this.categoryName = const Value.absent(),
+    this.productOrigin = const Value.absent(),
+    this.productImage = const Value.absent(),
+    this.productPrice = const Value.absent(),
   });
   FavouriteModelCompanion.insert({
-    required int productId,
-    required int customerId,
-    this.rowid = const Value.absent(),
-  })  : productId = Value(productId),
-        customerId = Value(customerId);
+    this.productId = const Value.absent(),
+    this.customerId = const Value.absent(),
+    required String productName,
+    this.productDeliciousFoods = const Value.absent(),
+    this.productUnit = const Value.absent(),
+    this.productQuantity = const Value.absent(),
+    this.productDeliveryWay = const Value.absent(),
+    this.categoryName = const Value.absent(),
+    this.productOrigin = const Value.absent(),
+    this.productImage = const Value.absent(),
+    required double productPrice,
+  })  : productName = Value(productName),
+        productPrice = Value(productPrice);
   static Insertable<Favourite> custom({
     Expression<int>? productId,
     Expression<int>? customerId,
-    Expression<int>? rowid,
+    Expression<String>? productName,
+    Expression<String>? productDeliciousFoods,
+    Expression<String>? productUnit,
+    Expression<int>? productQuantity,
+    Expression<String>? productDeliveryWay,
+    Expression<String>? categoryName,
+    Expression<String>? productOrigin,
+    Expression<String>? productImage,
+    Expression<double>? productPrice,
   }) {
     return RawValuesInsertable({
       if (productId != null) 'product_id': productId,
       if (customerId != null) 'customer_id': customerId,
-      if (rowid != null) 'rowid': rowid,
+      if (productName != null) 'product_name': productName,
+      if (productDeliciousFoods != null)
+        'product_delicious_foods': productDeliciousFoods,
+      if (productUnit != null) 'product_unit': productUnit,
+      if (productQuantity != null) 'product_quantity': productQuantity,
+      if (productDeliveryWay != null)
+        'product_delivery_way': productDeliveryWay,
+      if (categoryName != null) 'category_name': categoryName,
+      if (productOrigin != null) 'product_origin': productOrigin,
+      if (productImage != null) 'product_image': productImage,
+      if (productPrice != null) 'product_price': productPrice,
     });
   }
 
   FavouriteModelCompanion copyWith(
-      {Value<int>? productId, Value<int>? customerId, Value<int>? rowid}) {
+      {Value<int>? productId,
+      Value<int?>? customerId,
+      Value<String>? productName,
+      Value<String?>? productDeliciousFoods,
+      Value<String?>? productUnit,
+      Value<int?>? productQuantity,
+      Value<String?>? productDeliveryWay,
+      Value<String?>? categoryName,
+      Value<String?>? productOrigin,
+      Value<String?>? productImage,
+      Value<double>? productPrice}) {
     return FavouriteModelCompanion(
       productId: productId ?? this.productId,
       customerId: customerId ?? this.customerId,
-      rowid: rowid ?? this.rowid,
+      productName: productName ?? this.productName,
+      productDeliciousFoods:
+          productDeliciousFoods ?? this.productDeliciousFoods,
+      productUnit: productUnit ?? this.productUnit,
+      productQuantity: productQuantity ?? this.productQuantity,
+      productDeliveryWay: productDeliveryWay ?? this.productDeliveryWay,
+      categoryName: categoryName ?? this.categoryName,
+      productOrigin: productOrigin ?? this.productOrigin,
+      productImage: productImage ?? this.productImage,
+      productPrice: productPrice ?? this.productPrice,
     );
   }
 
@@ -1219,8 +1601,33 @@ class FavouriteModelCompanion extends UpdateCompanion<Favourite> {
     if (customerId.present) {
       map['customer_id'] = Variable<int>(customerId.value);
     }
-    if (rowid.present) {
-      map['rowid'] = Variable<int>(rowid.value);
+    if (productName.present) {
+      map['product_name'] = Variable<String>(productName.value);
+    }
+    if (productDeliciousFoods.present) {
+      map['product_delicious_foods'] =
+          Variable<String>(productDeliciousFoods.value);
+    }
+    if (productUnit.present) {
+      map['product_unit'] = Variable<String>(productUnit.value);
+    }
+    if (productQuantity.present) {
+      map['product_quantity'] = Variable<int>(productQuantity.value);
+    }
+    if (productDeliveryWay.present) {
+      map['product_delivery_way'] = Variable<String>(productDeliveryWay.value);
+    }
+    if (categoryName.present) {
+      map['category_name'] = Variable<String>(categoryName.value);
+    }
+    if (productOrigin.present) {
+      map['product_origin'] = Variable<String>(productOrigin.value);
+    }
+    if (productImage.present) {
+      map['product_image'] = Variable<String>(productImage.value);
+    }
+    if (productPrice.present) {
+      map['product_price'] = Variable<double>(productPrice.value);
     }
     return map;
   }
@@ -1230,7 +1637,15 @@ class FavouriteModelCompanion extends UpdateCompanion<Favourite> {
     return (StringBuffer('FavouriteModelCompanion(')
           ..write('productId: $productId, ')
           ..write('customerId: $customerId, ')
-          ..write('rowid: $rowid')
+          ..write('productName: $productName, ')
+          ..write('productDeliciousFoods: $productDeliciousFoods, ')
+          ..write('productUnit: $productUnit, ')
+          ..write('productQuantity: $productQuantity, ')
+          ..write('productDeliveryWay: $productDeliveryWay, ')
+          ..write('categoryName: $categoryName, ')
+          ..write('productOrigin: $productOrigin, ')
+          ..write('productImage: $productImage, ')
+          ..write('productPrice: $productPrice')
           ..write(')'))
         .toString();
   }
@@ -1731,15 +2146,31 @@ typedef $$AddressPersonalModelTableProcessedTableManager
         PrefetchHooks Function()>;
 typedef $$FavouriteModelTableCreateCompanionBuilder = FavouriteModelCompanion
     Function({
-  required int productId,
-  required int customerId,
-  Value<int> rowid,
+  Value<int> productId,
+  Value<int?> customerId,
+  required String productName,
+  Value<String?> productDeliciousFoods,
+  Value<String?> productUnit,
+  Value<int?> productQuantity,
+  Value<String?> productDeliveryWay,
+  Value<String?> categoryName,
+  Value<String?> productOrigin,
+  Value<String?> productImage,
+  required double productPrice,
 });
 typedef $$FavouriteModelTableUpdateCompanionBuilder = FavouriteModelCompanion
     Function({
   Value<int> productId,
-  Value<int> customerId,
-  Value<int> rowid,
+  Value<int?> customerId,
+  Value<String> productName,
+  Value<String?> productDeliciousFoods,
+  Value<String?> productUnit,
+  Value<int?> productQuantity,
+  Value<String?> productDeliveryWay,
+  Value<String?> categoryName,
+  Value<String?> productOrigin,
+  Value<String?> productImage,
+  Value<double> productPrice,
 });
 
 class $$FavouriteModelTableFilterComposer
@@ -1756,6 +2187,36 @@ class $$FavouriteModelTableFilterComposer
 
   ColumnFilters<int> get customerId => $composableBuilder(
       column: $table.customerId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get productName => $composableBuilder(
+      column: $table.productName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get productDeliciousFoods => $composableBuilder(
+      column: $table.productDeliciousFoods,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get productUnit => $composableBuilder(
+      column: $table.productUnit, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get productQuantity => $composableBuilder(
+      column: $table.productQuantity,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get productDeliveryWay => $composableBuilder(
+      column: $table.productDeliveryWay,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get categoryName => $composableBuilder(
+      column: $table.categoryName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get productOrigin => $composableBuilder(
+      column: $table.productOrigin, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get productImage => $composableBuilder(
+      column: $table.productImage, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<double> get productPrice => $composableBuilder(
+      column: $table.productPrice, builder: (column) => ColumnFilters(column));
 }
 
 class $$FavouriteModelTableOrderingComposer
@@ -1772,6 +2233,40 @@ class $$FavouriteModelTableOrderingComposer
 
   ColumnOrderings<int> get customerId => $composableBuilder(
       column: $table.customerId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get productName => $composableBuilder(
+      column: $table.productName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get productDeliciousFoods => $composableBuilder(
+      column: $table.productDeliciousFoods,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get productUnit => $composableBuilder(
+      column: $table.productUnit, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get productQuantity => $composableBuilder(
+      column: $table.productQuantity,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get productDeliveryWay => $composableBuilder(
+      column: $table.productDeliveryWay,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get categoryName => $composableBuilder(
+      column: $table.categoryName,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get productOrigin => $composableBuilder(
+      column: $table.productOrigin,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get productImage => $composableBuilder(
+      column: $table.productImage,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<double> get productPrice => $composableBuilder(
+      column: $table.productPrice,
+      builder: (column) => ColumnOrderings(column));
 }
 
 class $$FavouriteModelTableAnnotationComposer
@@ -1788,6 +2283,33 @@ class $$FavouriteModelTableAnnotationComposer
 
   GeneratedColumn<int> get customerId => $composableBuilder(
       column: $table.customerId, builder: (column) => column);
+
+  GeneratedColumn<String> get productName => $composableBuilder(
+      column: $table.productName, builder: (column) => column);
+
+  GeneratedColumn<String> get productDeliciousFoods => $composableBuilder(
+      column: $table.productDeliciousFoods, builder: (column) => column);
+
+  GeneratedColumn<String> get productUnit => $composableBuilder(
+      column: $table.productUnit, builder: (column) => column);
+
+  GeneratedColumn<int> get productQuantity => $composableBuilder(
+      column: $table.productQuantity, builder: (column) => column);
+
+  GeneratedColumn<String> get productDeliveryWay => $composableBuilder(
+      column: $table.productDeliveryWay, builder: (column) => column);
+
+  GeneratedColumn<String> get categoryName => $composableBuilder(
+      column: $table.categoryName, builder: (column) => column);
+
+  GeneratedColumn<String> get productOrigin => $composableBuilder(
+      column: $table.productOrigin, builder: (column) => column);
+
+  GeneratedColumn<String> get productImage => $composableBuilder(
+      column: $table.productImage, builder: (column) => column);
+
+  GeneratedColumn<double> get productPrice => $composableBuilder(
+      column: $table.productPrice, builder: (column) => column);
 }
 
 class $$FavouriteModelTableTableManager extends RootTableManager<
@@ -1815,23 +2337,55 @@ class $$FavouriteModelTableTableManager extends RootTableManager<
               $$FavouriteModelTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback: ({
             Value<int> productId = const Value.absent(),
-            Value<int> customerId = const Value.absent(),
-            Value<int> rowid = const Value.absent(),
+            Value<int?> customerId = const Value.absent(),
+            Value<String> productName = const Value.absent(),
+            Value<String?> productDeliciousFoods = const Value.absent(),
+            Value<String?> productUnit = const Value.absent(),
+            Value<int?> productQuantity = const Value.absent(),
+            Value<String?> productDeliveryWay = const Value.absent(),
+            Value<String?> categoryName = const Value.absent(),
+            Value<String?> productOrigin = const Value.absent(),
+            Value<String?> productImage = const Value.absent(),
+            Value<double> productPrice = const Value.absent(),
           }) =>
               FavouriteModelCompanion(
             productId: productId,
             customerId: customerId,
-            rowid: rowid,
+            productName: productName,
+            productDeliciousFoods: productDeliciousFoods,
+            productUnit: productUnit,
+            productQuantity: productQuantity,
+            productDeliveryWay: productDeliveryWay,
+            categoryName: categoryName,
+            productOrigin: productOrigin,
+            productImage: productImage,
+            productPrice: productPrice,
           ),
           createCompanionCallback: ({
-            required int productId,
-            required int customerId,
-            Value<int> rowid = const Value.absent(),
+            Value<int> productId = const Value.absent(),
+            Value<int?> customerId = const Value.absent(),
+            required String productName,
+            Value<String?> productDeliciousFoods = const Value.absent(),
+            Value<String?> productUnit = const Value.absent(),
+            Value<int?> productQuantity = const Value.absent(),
+            Value<String?> productDeliveryWay = const Value.absent(),
+            Value<String?> categoryName = const Value.absent(),
+            Value<String?> productOrigin = const Value.absent(),
+            Value<String?> productImage = const Value.absent(),
+            required double productPrice,
           }) =>
               FavouriteModelCompanion.insert(
             productId: productId,
             customerId: customerId,
-            rowid: rowid,
+            productName: productName,
+            productDeliciousFoods: productDeliciousFoods,
+            productUnit: productUnit,
+            productQuantity: productQuantity,
+            productDeliveryWay: productDeliveryWay,
+            categoryName: categoryName,
+            productOrigin: productOrigin,
+            productImage: productImage,
+            productPrice: productPrice,
           ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))

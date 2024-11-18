@@ -101,7 +101,13 @@ class AppDatabase extends _$AppDatabase {
 
   Future<int> removeFavourite(int id) async {
     return await (delete(favouriteModel)
-          ..where((tbl) => tbl.customerId.equals(id)))
+          ..where((tbl) => tbl.productId.equals(id)))
         .go();
+  }
+
+  Future<List<Favourite>> fetchListFavourite(int customerId) {
+    return (select(favouriteModel)
+          ..where((tbl) => tbl.customerId.equals(customerId)))
+        .get();
   }
 }
