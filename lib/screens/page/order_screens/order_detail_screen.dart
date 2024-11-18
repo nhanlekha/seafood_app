@@ -97,49 +97,49 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Icon(
-                                  Icons.location_on_outlined,
-                                  color: Colors.red,
-                                ),
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.location_on_outlined,
+                          color: Colors.red,
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                style: const TextStyle(color: Colors.black),
                                 children: [
-                                  RichText(
-                                    text: TextSpan(
-                                      style:
-                                          const TextStyle(color: Colors.black),
-                                      children: [
-                                        TextSpan(
-                                            text:
-                                                '${widget.orderModel.shipping?.shippingName}',
-                                            style: const TextStyle(
-                                                fontWeight: FontWeight.w600)),
-                                        TextSpan(
-                                          text:
-                                              ' (${widget.orderModel.shipping?.shippingPhone})',
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w300,
-                                              fontSize: 12),
-                                        ),
-                                      ],
+                                  TextSpan(
+                                    text:
+                                        '${widget.orderModel.shipping?.shippingName}',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  TextSpan(
+                                    text:
+                                        ' (${widget.orderModel.shipping?.shippingPhone})',
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 12,
                                     ),
                                   ),
-                                  Text(
-                                      '${widget.orderModel.shipping?.shippingAddress}'),
                                 ],
                               ),
-                            ],
-                          ),
-                        ],
+                            ),
+                            Text(
+                              '${widget.orderModel.shipping?.shippingAddress}',
+                              softWrap: true,
+                              maxLines: 3,
+                              overflow: TextOverflow
+                                  .ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
