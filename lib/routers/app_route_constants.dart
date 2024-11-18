@@ -16,5 +16,7 @@ class RouteConstants {
 
   static const String checkOut = 'check-out';
 
+  static const String detailOrderRoute = '/order-detail';
+
 
 }
