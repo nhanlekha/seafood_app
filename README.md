@@ -1,7 +1,5 @@
 # SeaFood: Full Stack Ecommerce Mobile Application Documentation
 
-**Tham khảo**: [https://github.com/nhanlekha/seafood_app/](https://github.com/nhanlekha/seafood_app/)
-
 SeaFood is a full-stack e-commerce mobile application developed using **Flutter** with Dart for the frontend and **PHP** with MySQL hosted on XAMPP for the backend. The app is designed to provide a seamless online shopping experience for seafood enthusiasts, offering a wide selection of fresh seafood products.
 
 ---
