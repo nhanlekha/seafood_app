@@ -71,34 +71,40 @@ class OrderPage extends StatelessWidget {
     int status = 1;
     int customerId = 1;
 
-    context.read<OrderCubit>().fetchStatus1(customerId);
+     context.read<OrderCubit>().fetchStatus1(customerId);
 
-    return BlocBuilder<OrderCubit, OrderState>(
-      builder: (context, state) {
-        if (state.dataStatus == DataStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.dataStatus == DataStatus.success) {
-
-          if (state.dataStatus_1 == null) {
-            return const Center(child: Text('Bạn chưa có đơn hàng nào cả.'));
-          }
-
-          final orders = state.dataStatus_1?.data as List<OrderModel>;
-
-
-          return ListView.builder(
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
-              return OrderCard(order: order);
-            },
-          );
-        } else if (state.dataStatus == DataStatus.error) {
-          return Center(child: Text('Error: ${state.dataStatus_1?.message}'));
-        } else {
-          return const Center(child: Text('No data available.'));
-        }
+    return RefreshIndicator(
+      onRefresh: () async{
+        await context.read<OrderCubit>().fetchStatus1(customerId);
       },
+      child: BlocBuilder<OrderCubit, OrderState>(
+        builder: (context, state) {
+          if (state.dataStatus == DataStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.dataStatus == DataStatus.success && state.dataStatus_1?.data != null) {
+
+            final orders = state.dataStatus_1?.data as List<OrderModel>;
+
+            return ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                return OrderCard(order: order);
+              },
+            );
+          } else {
+            return ListView(
+              children: const [
+                SizedBox(
+                  height: 400, // Để tránh danh sách quá ngắn
+                  child: Center(child: Text('Hiện tại không có đơn hàng nào.')),
+                ),
+              ],
+            );
+
+          }
+        },
+      ),
     );
   }
   Widget buildOrderList_2(BuildContext context) {
@@ -107,25 +113,37 @@ class OrderPage extends StatelessWidget {
 
     context.read<OrderCubit>().fetchStatus2(customerId);
 
-    return BlocBuilder<OrderCubit, OrderState>(
-      builder: (context, state) {
-        if (state.dataStatus == DataStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.dataStatus == DataStatus.success) {
-          final orders = state.dataStatus_2?.data as List<OrderModel>;
-          return ListView.builder(
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
-              return OrderCard(order: order);
-            },
-          );
-        } else if (state.dataStatus == DataStatus.error) {
-          return Center(child: Text('Error: ${state.dataStatus_2?.message}'));
-        } else {
-          return const Center(child: Text('No data available.'));
-        }
+    return RefreshIndicator(
+      onRefresh: () async {
+        await context.read<OrderCubit>().fetchStatus2(customerId);
       },
+      child: BlocBuilder<OrderCubit, OrderState>(
+        builder: (context, state) {
+          if (state.dataStatus == DataStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.dataStatus == DataStatus.success && state.dataStatus_2?.data != null) {
+
+            final orders = state.dataStatus_2!.data as List<OrderModel>;
+            return ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                return OrderCard(order: order);
+              },
+            );
+          } else {
+
+            return ListView(
+              children: const [
+                SizedBox(
+                  height: 400, // Để tránh danh sách quá ngắn
+                  child: Center(child: Text('Hiện tại không có đơn hàng nào.')),
+                ),
+              ],
+            );
+          }
+        },
+      ),
     );
   }
   Widget buildOrderList_3(BuildContext context) {
@@ -134,26 +152,42 @@ class OrderPage extends StatelessWidget {
 
     context.read<OrderCubit>().fetchStatus3(customerId);
 
-    return BlocBuilder<OrderCubit, OrderState>(
-      builder: (context, state) {
-        if (state.dataStatus == DataStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.dataStatus == DataStatus.success) {
-          final orders = state.dataStatus_3?.data as List<OrderModel>;
-
-          return ListView.builder(
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
-              return OrderCard(order: order);
-            },
-          );
-        } else if (state.dataStatus == DataStatus.error) {
-          return Center(child: Text('Error: ${state.dataStatus_3?.message}'));
-        } else {
-          return const Center(child: Text('No data available.'));
-        }
+    return RefreshIndicator(
+      onRefresh: () async {
+       await context.read<OrderCubit>().fetchStatus3(customerId);
       },
+      child: BlocBuilder<OrderCubit, OrderState>(
+        builder: (context, state) {
+          if (state.dataStatus == DataStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.dataStatus == DataStatus.success && state.dataStatus_3?.data != null) {
+
+            if (state.dataStatus_3 == null) {
+              return const Center(child: Text('Bạn chưa có đơn hàng nào cả.'));
+            }
+
+            final orders = state.dataStatus_3?.data as List<OrderModel>;
+
+            return ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                return OrderCard(order: order);
+              },
+            );
+          }  else {
+            return ListView(
+              children: const [
+                SizedBox(
+                  height: 400, // Để tránh danh sách quá ngắn
+                  child: Center(child: Text('Hiện tại không có đơn hàng nào.')),
+                ),
+              ],
+            );
+
+          }
+        },
+      ),
     );
   }
   Widget buildOrderList_4(BuildContext context) {
@@ -162,25 +196,41 @@ class OrderPage extends StatelessWidget {
 
     context.read<OrderCubit>().fetchStatus4(customerId);
 
-    return BlocBuilder<OrderCubit, OrderState>(
-      builder: (context, state) {
-        if (state.dataStatus == DataStatus.loading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (state.dataStatus == DataStatus.success) {
-          final orders = state.dataStatus_4?.data as List<OrderModel>;
-          return ListView.builder(
-            itemCount: orders.length,
-            itemBuilder: (context, index) {
-              final order = orders[index];
-              return OrderCard(order: order);
-            },
-          );
-        } else if (state.dataStatus == DataStatus.error) {
-          return Center(child: Text('Error: ${state.dataStatus_4?.message}'));
-        } else {
-          return const Center(child: Text('No data available.'));
-        }
+    return RefreshIndicator(
+      onRefresh: () async{
+        await context.read<OrderCubit>().fetchStatus4(customerId);
       },
+      child: BlocBuilder<OrderCubit, OrderState>(
+        builder: (context, state) {
+          if (state.dataStatus == DataStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.dataStatus == DataStatus.success && state.dataStatus_4?.data != null) {
+
+            if (state.dataStatus_4 == null) {
+              return const Center(child: Text('Bạn chưa có đơn hàng nào cả.'));
+            }
+
+            final orders = state.dataStatus_4?.data as List<OrderModel>;
+            return ListView.builder(
+              itemCount: orders.length,
+              itemBuilder: (context, index) {
+                final order = orders[index];
+                return OrderCard(order: order);
+              },
+            );
+          } else {
+            return ListView(
+              children: const [
+                SizedBox(
+                  height: 400, // Để tránh danh sách quá ngắn
+                  child: Center(child: Text('Hiện tại không có đơn hàng nào.')),
+                ),
+              ],
+            );
+
+          }
+        },
+      ),
     );
   }
 

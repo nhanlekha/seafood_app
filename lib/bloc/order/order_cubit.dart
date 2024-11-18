@@ -17,9 +17,12 @@ class OrderCubit extends Cubit<OrderState> {
             dataStatus: DataStatus.initial,
             dataModel: DataModel(message: "initial", code: 404, data: null)));
 
-  void fetchStatus1(int customerId) async{
+  Future fetchStatus1(int customerId) async{
     try {
-      final List<OrderModel> data = await orderRepo.fetchData(customerId, 1);
+
+      emit(state.copyWith(dataStatus_1: DataModel(message: "loading", code: 404, data: null), dataStatus: DataStatus.success));
+
+      final List<OrderModel> data = await orderRepo.fetchData(customerId, 0);
       emit(state.copyWith(
           dataStatus: DataStatus.success,
           dataStatus_1: DataModel(message: "success", code: 200, data: data)));
@@ -31,23 +34,28 @@ class OrderCubit extends Cubit<OrderState> {
     }
 
   }
-  void fetchStatus2(int customerId) async{
+  Future fetchStatus2(int customerId) async{
     try {
-      final List<OrderModel> data = await orderRepo.fetchData(customerId, 2);
+      emit(state.copyWith(dataStatus_2: DataModel(message: "loading", code: 404, data: null), dataStatus: DataStatus.success));
+      final List<OrderModel> data = await orderRepo.fetchData(customerId, 1);
+
       emit(state.copyWith(
           dataStatus: DataStatus.success,
           dataStatus_2: DataModel(message: "success", code: 200, data: data)));
 
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       emit(state.copyWith(
           dataStatus: DataStatus.error,
           dataStatus_2: DataModel(message: e.message, code: 500, data: null)));
     }
 
   }
-  void fetchStatus3(int customerId) async{
+  Future fetchStatus3(int customerId) async{
     try {
-      final List<OrderModel> data = await orderRepo.fetchData(customerId, 3);
+
+      emit(state.copyWith(dataStatus_3: DataModel(message: "loading", code: 404, data: null), dataStatus: DataStatus.success));
+
+      final List<OrderModel> data = await orderRepo.fetchData(customerId, 4);
       emit(state.copyWith(
           dataStatus: DataStatus.success,
           dataStatus_3: DataModel(message: "success", code: 200, data: data)));
@@ -59,9 +67,12 @@ class OrderCubit extends Cubit<OrderState> {
     }
 
   }
-  void fetchStatus4(int customerId) async{
+  Future fetchStatus4(int customerId) async{
     try {
-      final List<OrderModel> data = await orderRepo.fetchData(customerId, 4);
+
+      emit(state.copyWith(dataStatus_4: DataModel(message: "loading", code: 404, data: null), dataStatus: DataStatus.success));
+
+      final List<OrderModel> data = await orderRepo.fetchData(customerId, -1);
       emit(state.copyWith(
           dataStatus: DataStatus.success,
           dataStatus_4: DataModel(message: "success", code: 200, data: data)));
