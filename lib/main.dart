@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seafood_app/domans/data_source/seafood_api.dart';
 import 'package:seafood_app/domans/repo/cate_repo.dart';
@@ -70,9 +71,9 @@ class _SeafoodAppState extends State<SeafoodApp> {
         RepositoryProvider<CateRepo>(create: (context) => _cateRepo),
         RepositoryProvider<ProductRepo>(create: (context) => _productRepo),
         RepositoryProvider<CartRepoImpl>(create: (context) => _cartRepo),
-        RepositoryProvider<CheckoutRepoImpl>(create: (context) => _checkoutRepo),
+        RepositoryProvider<CheckoutRepoImpl>(
+            create: (context) => _checkoutRepo),
         RepositoryProvider<OrderRepoImpl>(create: (context) => _orderRepo),
-
       ],
       child: const ApplicationRouter(),
     );
@@ -99,9 +100,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-        body: SafeArea(
-      child: MainScreens(),
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.grey[100], // Status bar color
     ));
+    return const Scaffold(
+      body: SafeArea(child: MainScreens()),
+    );
   }
 }
