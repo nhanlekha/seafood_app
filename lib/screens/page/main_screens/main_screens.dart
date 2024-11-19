@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import '../home_screens/home_screens.dart';
 import '../order_screens/order_screens.dart';
 import '../personal_screens/personal_screens.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:seafood_app/screens/page/order_screens/order_screens.dart';
 import 'package:seafood_app/screens/page/category_screens/category_screens.dart';
+import 'package:seafood_app/screens/page/favourite_screens/favourite_screens.dart';
 
 class MainScreens extends StatefulWidget {
   const MainScreens({super.key});
@@ -24,7 +26,7 @@ class _MainScreensState extends State<MainScreens> {
       const HomeScreens(),
       const CategoryScreens(),
       const OrderScreens(),
-      Container(color: Colors.green),
+      const FavouriteScreens(),
       PersonalPage(),
     ];
   }
@@ -39,11 +41,10 @@ class _MainScreensState extends State<MainScreens> {
             children: _pages,
           ),
         ),
-        BottomNavigationBar(
+        SalomonBottomBar(
           backgroundColor: const Color(0xFFFefaf9),
           unselectedItemColor: Colors.black,
           selectedItemColor: Colors.red,
-          type: BottomNavigationBarType.fixed,
           currentIndex: _currentPage,
           onTap: (index) {
             setState(() {
@@ -54,45 +55,45 @@ class _MainScreensState extends State<MainScreens> {
             });
           },
           items: [
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/home.png'),
               ),
-              label: "Home".tr(),
+              title: const Text("Trang chủ"),
             ),
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/options.png'),
               ),
-              label: "Danh mục",
+              title: const Text("Danh mục"),
             ),
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/cargo.png'),
               ),
-              label: "Đơn hàng",
+              title: const Text("Đơn hàng"),
             ),
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/chat.png'),
               ),
-              label: "Yêu Thích",
+              title: const Text("Yêu Thích"),
             ),
-            BottomNavigationBarItem(
+            SalomonBottomBarItem(
               icon: SizedBox(
                 width: 24,
                 height: 24,
                 child: Image.asset('assets/images/teamwork.png'),
               ),
-              label: "Cá Nhân",
+              title: const Text("Cá Nhân"),
             ),
           ],
         ),

@@ -206,6 +206,20 @@ class Cart extends DataClass implements Insertable<Cart> {
     return map;
   }
 
+  Map<String, dynamic> toJson2({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'cart_id': serializer.toJson<int>(cartId),
+      'product_id': serializer.toJson<int>(productId),
+      'customer_id': serializer.toJson<int>(customerId),
+      'product_name': serializer.toJson<String>(productName),
+      'product_price': serializer.toJson<double>(productPrice),
+      'product_image': serializer.toJson<String>(productImage),
+      'product_quantity': serializer.toJson<int>(productQuantity),
+      'checked_product': serializer.toJson<bool>(checkedProduct),
+    };
+  }
+
   CartModelCompanion toCompanion(bool nullToAbsent) {
     return CartModelCompanion(
       cartId: Value(cartId),
@@ -445,15 +459,614 @@ class CartModelCompanion extends UpdateCompanion<Cart> {
   }
 }
 
+class $AddressPersonalModelTable extends AddressPersonalModel
+    with TableInfo<$AddressPersonalModelTable, AddressPersonal> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $AddressPersonalModelTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _dressPersonalIdMeta =
+      const VerificationMeta('dressPersonalId');
+  @override
+  late final GeneratedColumn<int> dressPersonalId = GeneratedColumn<int>(
+      'dress_personal_id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _customerIdMeta =
+      const VerificationMeta('customerId');
+  @override
+  late final GeneratedColumn<int> customerId = GeneratedColumn<int>(
+      'customer_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _isCheckedMeta =
+      const VerificationMeta('isChecked');
+  @override
+  late final GeneratedColumn<bool> isChecked = GeneratedColumn<bool>(
+      'is_checked', aliasedName, false,
+      type: DriftSqlType.bool,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('CHECK ("is_checked" IN (0, 1))'),
+      defaultValue: const Constant(false));
+  static const VerificationMeta _nameDressMeta =
+      const VerificationMeta('nameDress');
+  @override
+  late final GeneratedColumn<String> nameDress = GeneratedColumn<String>(
+      'name_dress', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _shippingNameMeta =
+      const VerificationMeta('shippingName');
+  @override
+  late final GeneratedColumn<String> shippingName = GeneratedColumn<String>(
+      'shipping_name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _shippingEmailMeta =
+      const VerificationMeta('shippingEmail');
+  @override
+  late final GeneratedColumn<String> shippingEmail = GeneratedColumn<String>(
+      'shipping_email', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 255),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _shippingPhoneMeta =
+      const VerificationMeta('shippingPhone');
+  @override
+  late final GeneratedColumn<String> shippingPhone = GeneratedColumn<String>(
+      'shipping_phone', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 10, maxTextLength: 20),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _cityNameMeta =
+      const VerificationMeta('cityName');
+  @override
+  late final GeneratedColumn<String> cityName = GeneratedColumn<String>(
+      'city_name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _provinceNameMeta =
+      const VerificationMeta('provinceName');
+  @override
+  late final GeneratedColumn<String> provinceName = GeneratedColumn<String>(
+      'province_name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _wardNameMeta =
+      const VerificationMeta('wardName');
+  @override
+  late final GeneratedColumn<String> wardName = GeneratedColumn<String>(
+      'ward_name', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  static const VerificationMeta _homeNumberMeta =
+      const VerificationMeta('homeNumber');
+  @override
+  late final GeneratedColumn<String> homeNumber = GeneratedColumn<String>(
+      'home_number', aliasedName, false,
+      additionalChecks:
+          GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
+      type: DriftSqlType.string,
+      requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        dressPersonalId,
+        customerId,
+        isChecked,
+        nameDress,
+        shippingName,
+        shippingEmail,
+        shippingPhone,
+        cityName,
+        provinceName,
+        wardName,
+        homeNumber
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'address_personal_model';
+  @override
+  VerificationContext validateIntegrity(Insertable<AddressPersonal> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('dress_personal_id')) {
+      context.handle(
+          _dressPersonalIdMeta,
+          dressPersonalId.isAcceptableOrUnknown(
+              data['dress_personal_id']!, _dressPersonalIdMeta));
+    }
+    if (data.containsKey('customer_id')) {
+      context.handle(
+          _customerIdMeta,
+          customerId.isAcceptableOrUnknown(
+              data['customer_id']!, _customerIdMeta));
+    } else if (isInserting) {
+      context.missing(_customerIdMeta);
+    }
+    if (data.containsKey('is_checked')) {
+      context.handle(_isCheckedMeta,
+          isChecked.isAcceptableOrUnknown(data['is_checked']!, _isCheckedMeta));
+    }
+    if (data.containsKey('name_dress')) {
+      context.handle(_nameDressMeta,
+          nameDress.isAcceptableOrUnknown(data['name_dress']!, _nameDressMeta));
+    } else if (isInserting) {
+      context.missing(_nameDressMeta);
+    }
+    if (data.containsKey('shipping_name')) {
+      context.handle(
+          _shippingNameMeta,
+          shippingName.isAcceptableOrUnknown(
+              data['shipping_name']!, _shippingNameMeta));
+    } else if (isInserting) {
+      context.missing(_shippingNameMeta);
+    }
+    if (data.containsKey('shipping_email')) {
+      context.handle(
+          _shippingEmailMeta,
+          shippingEmail.isAcceptableOrUnknown(
+              data['shipping_email']!, _shippingEmailMeta));
+    } else if (isInserting) {
+      context.missing(_shippingEmailMeta);
+    }
+    if (data.containsKey('shipping_phone')) {
+      context.handle(
+          _shippingPhoneMeta,
+          shippingPhone.isAcceptableOrUnknown(
+              data['shipping_phone']!, _shippingPhoneMeta));
+    } else if (isInserting) {
+      context.missing(_shippingPhoneMeta);
+    }
+    if (data.containsKey('city_name')) {
+      context.handle(_cityNameMeta,
+          cityName.isAcceptableOrUnknown(data['city_name']!, _cityNameMeta));
+    } else if (isInserting) {
+      context.missing(_cityNameMeta);
+    }
+    if (data.containsKey('province_name')) {
+      context.handle(
+          _provinceNameMeta,
+          provinceName.isAcceptableOrUnknown(
+              data['province_name']!, _provinceNameMeta));
+    } else if (isInserting) {
+      context.missing(_provinceNameMeta);
+    }
+    if (data.containsKey('ward_name')) {
+      context.handle(_wardNameMeta,
+          wardName.isAcceptableOrUnknown(data['ward_name']!, _wardNameMeta));
+    } else if (isInserting) {
+      context.missing(_wardNameMeta);
+    }
+    if (data.containsKey('home_number')) {
+      context.handle(
+          _homeNumberMeta,
+          homeNumber.isAcceptableOrUnknown(
+              data['home_number']!, _homeNumberMeta));
+    } else if (isInserting) {
+      context.missing(_homeNumberMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {dressPersonalId};
+  @override
+  AddressPersonal map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return AddressPersonal(
+      dressPersonalId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}dress_personal_id'])!,
+      customerId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}customer_id'])!,
+      isChecked: attachedDatabase.typeMapping
+          .read(DriftSqlType.bool, data['${effectivePrefix}is_checked'])!,
+      nameDress: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name_dress'])!,
+      shippingName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}shipping_name'])!,
+      shippingEmail: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}shipping_email'])!,
+      shippingPhone: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}shipping_phone'])!,
+      cityName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}city_name'])!,
+      provinceName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}province_name'])!,
+      wardName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}ward_name'])!,
+      homeNumber: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}home_number'])!,
+    );
+  }
+
+  @override
+  $AddressPersonalModelTable createAlias(String alias) {
+    return $AddressPersonalModelTable(attachedDatabase, alias);
+  }
+}
+
+class AddressPersonal extends DataClass implements Insertable<AddressPersonal> {
+  final int dressPersonalId;
+  final int customerId;
+  final bool isChecked;
+  final String nameDress;
+  final String shippingName;
+  final String shippingEmail;
+  final String shippingPhone;
+  final String cityName;
+  final String provinceName;
+  final String wardName;
+  final String homeNumber;
+  const AddressPersonal(
+      {required this.dressPersonalId,
+      required this.customerId,
+      required this.isChecked,
+      required this.nameDress,
+      required this.shippingName,
+      required this.shippingEmail,
+      required this.shippingPhone,
+      required this.cityName,
+      required this.provinceName,
+      required this.wardName,
+      required this.homeNumber});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['dress_personal_id'] = Variable<int>(dressPersonalId);
+    map['customer_id'] = Variable<int>(customerId);
+    map['is_checked'] = Variable<bool>(isChecked);
+    map['name_dress'] = Variable<String>(nameDress);
+    map['shipping_name'] = Variable<String>(shippingName);
+    map['shipping_email'] = Variable<String>(shippingEmail);
+    map['shipping_phone'] = Variable<String>(shippingPhone);
+    map['city_name'] = Variable<String>(cityName);
+    map['province_name'] = Variable<String>(provinceName);
+    map['ward_name'] = Variable<String>(wardName);
+    map['home_number'] = Variable<String>(homeNumber);
+    return map;
+  }
+
+  AddressPersonalModelCompanion toCompanion(bool nullToAbsent) {
+    return AddressPersonalModelCompanion(
+      dressPersonalId: Value(dressPersonalId),
+      customerId: Value(customerId),
+      isChecked: Value(isChecked),
+      nameDress: Value(nameDress),
+      shippingName: Value(shippingName),
+      shippingEmail: Value(shippingEmail),
+      shippingPhone: Value(shippingPhone),
+      cityName: Value(cityName),
+      provinceName: Value(provinceName),
+      wardName: Value(wardName),
+      homeNumber: Value(homeNumber),
+    );
+  }
+
+  factory AddressPersonal.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return AddressPersonal(
+      dressPersonalId: serializer.fromJson<int>(json['dressPersonalId']),
+      customerId: serializer.fromJson<int>(json['customerId']),
+      isChecked: serializer.fromJson<bool>(json['isChecked']),
+      nameDress: serializer.fromJson<String>(json['nameDress']),
+      shippingName: serializer.fromJson<String>(json['shippingName']),
+      shippingEmail: serializer.fromJson<String>(json['shippingEmail']),
+      shippingPhone: serializer.fromJson<String>(json['shippingPhone']),
+      cityName: serializer.fromJson<String>(json['cityName']),
+      provinceName: serializer.fromJson<String>(json['provinceName']),
+      wardName: serializer.fromJson<String>(json['wardName']),
+      homeNumber: serializer.fromJson<String>(json['homeNumber']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'dressPersonalId': serializer.toJson<int>(dressPersonalId),
+      'customerId': serializer.toJson<int>(customerId),
+      'isChecked': serializer.toJson<bool>(isChecked),
+      'nameDress': serializer.toJson<String>(nameDress),
+      'shippingName': serializer.toJson<String>(shippingName),
+      'shippingEmail': serializer.toJson<String>(shippingEmail),
+      'shippingPhone': serializer.toJson<String>(shippingPhone),
+      'cityName': serializer.toJson<String>(cityName),
+      'provinceName': serializer.toJson<String>(provinceName),
+      'wardName': serializer.toJson<String>(wardName),
+      'homeNumber': serializer.toJson<String>(homeNumber),
+    };
+  }
+
+  AddressPersonal copyWith(
+          {int? dressPersonalId,
+          int? customerId,
+          bool? isChecked,
+          String? nameDress,
+          String? shippingName,
+          String? shippingEmail,
+          String? shippingPhone,
+          String? cityName,
+          String? provinceName,
+          String? wardName,
+          String? homeNumber}) =>
+      AddressPersonal(
+        dressPersonalId: dressPersonalId ?? this.dressPersonalId,
+        customerId: customerId ?? this.customerId,
+        isChecked: isChecked ?? this.isChecked,
+        nameDress: nameDress ?? this.nameDress,
+        shippingName: shippingName ?? this.shippingName,
+        shippingEmail: shippingEmail ?? this.shippingEmail,
+        shippingPhone: shippingPhone ?? this.shippingPhone,
+        cityName: cityName ?? this.cityName,
+        provinceName: provinceName ?? this.provinceName,
+        wardName: wardName ?? this.wardName,
+        homeNumber: homeNumber ?? this.homeNumber,
+      );
+  AddressPersonal copyWithCompanion(AddressPersonalModelCompanion data) {
+    return AddressPersonal(
+      dressPersonalId: data.dressPersonalId.present
+          ? data.dressPersonalId.value
+          : this.dressPersonalId,
+      customerId:
+          data.customerId.present ? data.customerId.value : this.customerId,
+      isChecked: data.isChecked.present ? data.isChecked.value : this.isChecked,
+      nameDress: data.nameDress.present ? data.nameDress.value : this.nameDress,
+      shippingName: data.shippingName.present
+          ? data.shippingName.value
+          : this.shippingName,
+      shippingEmail: data.shippingEmail.present
+          ? data.shippingEmail.value
+          : this.shippingEmail,
+      shippingPhone: data.shippingPhone.present
+          ? data.shippingPhone.value
+          : this.shippingPhone,
+      cityName: data.cityName.present ? data.cityName.value : this.cityName,
+      provinceName: data.provinceName.present
+          ? data.provinceName.value
+          : this.provinceName,
+      wardName: data.wardName.present ? data.wardName.value : this.wardName,
+      homeNumber:
+          data.homeNumber.present ? data.homeNumber.value : this.homeNumber,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AddressPersonal(')
+          ..write('dressPersonalId: $dressPersonalId, ')
+          ..write('customerId: $customerId, ')
+          ..write('isChecked: $isChecked, ')
+          ..write('nameDress: $nameDress, ')
+          ..write('shippingName: $shippingName, ')
+          ..write('shippingEmail: $shippingEmail, ')
+          ..write('shippingPhone: $shippingPhone, ')
+          ..write('cityName: $cityName, ')
+          ..write('provinceName: $provinceName, ')
+          ..write('wardName: $wardName, ')
+          ..write('homeNumber: $homeNumber')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      dressPersonalId,
+      customerId,
+      isChecked,
+      nameDress,
+      shippingName,
+      shippingEmail,
+      shippingPhone,
+      cityName,
+      provinceName,
+      wardName,
+      homeNumber);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is AddressPersonal &&
+          other.dressPersonalId == this.dressPersonalId &&
+          other.customerId == this.customerId &&
+          other.isChecked == this.isChecked &&
+          other.nameDress == this.nameDress &&
+          other.shippingName == this.shippingName &&
+          other.shippingEmail == this.shippingEmail &&
+          other.shippingPhone == this.shippingPhone &&
+          other.cityName == this.cityName &&
+          other.provinceName == this.provinceName &&
+          other.wardName == this.wardName &&
+          other.homeNumber == this.homeNumber);
+}
+
+class AddressPersonalModelCompanion extends UpdateCompanion<AddressPersonal> {
+  final Value<int> dressPersonalId;
+  final Value<int> customerId;
+  final Value<bool> isChecked;
+  final Value<String> nameDress;
+  final Value<String> shippingName;
+  final Value<String> shippingEmail;
+  final Value<String> shippingPhone;
+  final Value<String> cityName;
+  final Value<String> provinceName;
+  final Value<String> wardName;
+  final Value<String> homeNumber;
+  const AddressPersonalModelCompanion({
+    this.dressPersonalId = const Value.absent(),
+    this.customerId = const Value.absent(),
+    this.isChecked = const Value.absent(),
+    this.nameDress = const Value.absent(),
+    this.shippingName = const Value.absent(),
+    this.shippingEmail = const Value.absent(),
+    this.shippingPhone = const Value.absent(),
+    this.cityName = const Value.absent(),
+    this.provinceName = const Value.absent(),
+    this.wardName = const Value.absent(),
+    this.homeNumber = const Value.absent(),
+  });
+  AddressPersonalModelCompanion.insert({
+    this.dressPersonalId = const Value.absent(),
+    required int customerId,
+    this.isChecked = const Value.absent(),
+    required String nameDress,
+    required String shippingName,
+    required String shippingEmail,
+    required String shippingPhone,
+    required String cityName,
+    required String provinceName,
+    required String wardName,
+    required String homeNumber,
+  })  : customerId = Value(customerId),
+        nameDress = Value(nameDress),
+        shippingName = Value(shippingName),
+        shippingEmail = Value(shippingEmail),
+        shippingPhone = Value(shippingPhone),
+        cityName = Value(cityName),
+        provinceName = Value(provinceName),
+        wardName = Value(wardName),
+        homeNumber = Value(homeNumber);
+  static Insertable<AddressPersonal> custom({
+    Expression<int>? dressPersonalId,
+    Expression<int>? customerId,
+    Expression<bool>? isChecked,
+    Expression<String>? nameDress,
+    Expression<String>? shippingName,
+    Expression<String>? shippingEmail,
+    Expression<String>? shippingPhone,
+    Expression<String>? cityName,
+    Expression<String>? provinceName,
+    Expression<String>? wardName,
+    Expression<String>? homeNumber,
+  }) {
+    return RawValuesInsertable({
+      if (dressPersonalId != null) 'dress_personal_id': dressPersonalId,
+      if (customerId != null) 'customer_id': customerId,
+      if (isChecked != null) 'is_checked': isChecked,
+      if (nameDress != null) 'name_dress': nameDress,
+      if (shippingName != null) 'shipping_name': shippingName,
+      if (shippingEmail != null) 'shipping_email': shippingEmail,
+      if (shippingPhone != null) 'shipping_phone': shippingPhone,
+      if (cityName != null) 'city_name': cityName,
+      if (provinceName != null) 'province_name': provinceName,
+      if (wardName != null) 'ward_name': wardName,
+      if (homeNumber != null) 'home_number': homeNumber,
+    });
+  }
+
+  AddressPersonalModelCompanion copyWith(
+      {Value<int>? dressPersonalId,
+      Value<int>? customerId,
+      Value<bool>? isChecked,
+      Value<String>? nameDress,
+      Value<String>? shippingName,
+      Value<String>? shippingEmail,
+      Value<String>? shippingPhone,
+      Value<String>? cityName,
+      Value<String>? provinceName,
+      Value<String>? wardName,
+      Value<String>? homeNumber}) {
+    return AddressPersonalModelCompanion(
+      dressPersonalId: dressPersonalId ?? this.dressPersonalId,
+      customerId: customerId ?? this.customerId,
+      isChecked: isChecked ?? this.isChecked,
+      nameDress: nameDress ?? this.nameDress,
+      shippingName: shippingName ?? this.shippingName,
+      shippingEmail: shippingEmail ?? this.shippingEmail,
+      shippingPhone: shippingPhone ?? this.shippingPhone,
+      cityName: cityName ?? this.cityName,
+      provinceName: provinceName ?? this.provinceName,
+      wardName: wardName ?? this.wardName,
+      homeNumber: homeNumber ?? this.homeNumber,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (dressPersonalId.present) {
+      map['dress_personal_id'] = Variable<int>(dressPersonalId.value);
+    }
+    if (customerId.present) {
+      map['customer_id'] = Variable<int>(customerId.value);
+    }
+    if (isChecked.present) {
+      map['is_checked'] = Variable<bool>(isChecked.value);
+    }
+    if (nameDress.present) {
+      map['name_dress'] = Variable<String>(nameDress.value);
+    }
+    if (shippingName.present) {
+      map['shipping_name'] = Variable<String>(shippingName.value);
+    }
+    if (shippingEmail.present) {
+      map['shipping_email'] = Variable<String>(shippingEmail.value);
+    }
+    if (shippingPhone.present) {
+      map['shipping_phone'] = Variable<String>(shippingPhone.value);
+    }
+    if (cityName.present) {
+      map['city_name'] = Variable<String>(cityName.value);
+    }
+    if (provinceName.present) {
+      map['province_name'] = Variable<String>(provinceName.value);
+    }
+    if (wardName.present) {
+      map['ward_name'] = Variable<String>(wardName.value);
+    }
+    if (homeNumber.present) {
+      map['home_number'] = Variable<String>(homeNumber.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('AddressPersonalModelCompanion(')
+          ..write('dressPersonalId: $dressPersonalId, ')
+          ..write('customerId: $customerId, ')
+          ..write('isChecked: $isChecked, ')
+          ..write('nameDress: $nameDress, ')
+          ..write('shippingName: $shippingName, ')
+          ..write('shippingEmail: $shippingEmail, ')
+          ..write('shippingPhone: $shippingPhone, ')
+          ..write('cityName: $cityName, ')
+          ..write('provinceName: $provinceName, ')
+          ..write('wardName: $wardName, ')
+          ..write('homeNumber: $homeNumber')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $CartModelTable cartModel = $CartModelTable(this);
+  late final $AddressPersonalModelTable addressPersonalModel =
+      $AddressPersonalModelTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [cartModel];
+  List<DatabaseSchemaEntity> get allSchemaEntities =>
+      [cartModel, addressPersonalModel];
 }
 
 typedef $$CartModelTableCreateCompanionBuilder = CartModelCompanion Function({
@@ -666,10 +1279,280 @@ typedef $$CartModelTableProcessedTableManager = ProcessedTableManager<
     (Cart, BaseReferences<_$AppDatabase, $CartModelTable, Cart>),
     Cart,
     PrefetchHooks Function()>;
+typedef $$AddressPersonalModelTableCreateCompanionBuilder
+    = AddressPersonalModelCompanion Function({
+  Value<int> dressPersonalId,
+  required int customerId,
+  Value<bool> isChecked,
+  required String nameDress,
+  required String shippingName,
+  required String shippingEmail,
+  required String shippingPhone,
+  required String cityName,
+  required String provinceName,
+  required String wardName,
+  required String homeNumber,
+});
+typedef $$AddressPersonalModelTableUpdateCompanionBuilder
+    = AddressPersonalModelCompanion Function({
+  Value<int> dressPersonalId,
+  Value<int> customerId,
+  Value<bool> isChecked,
+  Value<String> nameDress,
+  Value<String> shippingName,
+  Value<String> shippingEmail,
+  Value<String> shippingPhone,
+  Value<String> cityName,
+  Value<String> provinceName,
+  Value<String> wardName,
+  Value<String> homeNumber,
+});
+
+class $$AddressPersonalModelTableFilterComposer
+    extends Composer<_$AppDatabase, $AddressPersonalModelTable> {
+  $$AddressPersonalModelTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get dressPersonalId => $composableBuilder(
+      column: $table.dressPersonalId,
+      builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<int> get customerId => $composableBuilder(
+      column: $table.customerId, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<bool> get isChecked => $composableBuilder(
+      column: $table.isChecked, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get nameDress => $composableBuilder(
+      column: $table.nameDress, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get shippingName => $composableBuilder(
+      column: $table.shippingName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get shippingEmail => $composableBuilder(
+      column: $table.shippingEmail, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get shippingPhone => $composableBuilder(
+      column: $table.shippingPhone, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get cityName => $composableBuilder(
+      column: $table.cityName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get provinceName => $composableBuilder(
+      column: $table.provinceName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get wardName => $composableBuilder(
+      column: $table.wardName, builder: (column) => ColumnFilters(column));
+
+  ColumnFilters<String> get homeNumber => $composableBuilder(
+      column: $table.homeNumber, builder: (column) => ColumnFilters(column));
+}
+
+class $$AddressPersonalModelTableOrderingComposer
+    extends Composer<_$AppDatabase, $AddressPersonalModelTable> {
+  $$AddressPersonalModelTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get dressPersonalId => $composableBuilder(
+      column: $table.dressPersonalId,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<int> get customerId => $composableBuilder(
+      column: $table.customerId, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<bool> get isChecked => $composableBuilder(
+      column: $table.isChecked, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get nameDress => $composableBuilder(
+      column: $table.nameDress, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get shippingName => $composableBuilder(
+      column: $table.shippingName,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get shippingEmail => $composableBuilder(
+      column: $table.shippingEmail,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get shippingPhone => $composableBuilder(
+      column: $table.shippingPhone,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get cityName => $composableBuilder(
+      column: $table.cityName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get provinceName => $composableBuilder(
+      column: $table.provinceName,
+      builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get wardName => $composableBuilder(
+      column: $table.wardName, builder: (column) => ColumnOrderings(column));
+
+  ColumnOrderings<String> get homeNumber => $composableBuilder(
+      column: $table.homeNumber, builder: (column) => ColumnOrderings(column));
+}
+
+class $$AddressPersonalModelTableAnnotationComposer
+    extends Composer<_$AppDatabase, $AddressPersonalModelTable> {
+  $$AddressPersonalModelTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get dressPersonalId => $composableBuilder(
+      column: $table.dressPersonalId, builder: (column) => column);
+
+  GeneratedColumn<int> get customerId => $composableBuilder(
+      column: $table.customerId, builder: (column) => column);
+
+  GeneratedColumn<bool> get isChecked =>
+      $composableBuilder(column: $table.isChecked, builder: (column) => column);
+
+  GeneratedColumn<String> get nameDress =>
+      $composableBuilder(column: $table.nameDress, builder: (column) => column);
+
+  GeneratedColumn<String> get shippingName => $composableBuilder(
+      column: $table.shippingName, builder: (column) => column);
+
+  GeneratedColumn<String> get shippingEmail => $composableBuilder(
+      column: $table.shippingEmail, builder: (column) => column);
+
+  GeneratedColumn<String> get shippingPhone => $composableBuilder(
+      column: $table.shippingPhone, builder: (column) => column);
+
+  GeneratedColumn<String> get cityName =>
+      $composableBuilder(column: $table.cityName, builder: (column) => column);
+
+  GeneratedColumn<String> get provinceName => $composableBuilder(
+      column: $table.provinceName, builder: (column) => column);
+
+  GeneratedColumn<String> get wardName =>
+      $composableBuilder(column: $table.wardName, builder: (column) => column);
+
+  GeneratedColumn<String> get homeNumber => $composableBuilder(
+      column: $table.homeNumber, builder: (column) => column);
+}
+
+class $$AddressPersonalModelTableTableManager extends RootTableManager<
+    _$AppDatabase,
+    $AddressPersonalModelTable,
+    AddressPersonal,
+    $$AddressPersonalModelTableFilterComposer,
+    $$AddressPersonalModelTableOrderingComposer,
+    $$AddressPersonalModelTableAnnotationComposer,
+    $$AddressPersonalModelTableCreateCompanionBuilder,
+    $$AddressPersonalModelTableUpdateCompanionBuilder,
+    (
+      AddressPersonal,
+      BaseReferences<_$AppDatabase, $AddressPersonalModelTable, AddressPersonal>
+    ),
+    AddressPersonal,
+    PrefetchHooks Function()> {
+  $$AddressPersonalModelTableTableManager(
+      _$AppDatabase db, $AddressPersonalModelTable table)
+      : super(TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$AddressPersonalModelTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AddressPersonalModelTableOrderingComposer(
+                  $db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AddressPersonalModelTableAnnotationComposer(
+                  $db: db, $table: table),
+          updateCompanionCallback: ({
+            Value<int> dressPersonalId = const Value.absent(),
+            Value<int> customerId = const Value.absent(),
+            Value<bool> isChecked = const Value.absent(),
+            Value<String> nameDress = const Value.absent(),
+            Value<String> shippingName = const Value.absent(),
+            Value<String> shippingEmail = const Value.absent(),
+            Value<String> shippingPhone = const Value.absent(),
+            Value<String> cityName = const Value.absent(),
+            Value<String> provinceName = const Value.absent(),
+            Value<String> wardName = const Value.absent(),
+            Value<String> homeNumber = const Value.absent(),
+          }) =>
+              AddressPersonalModelCompanion(
+            dressPersonalId: dressPersonalId,
+            customerId: customerId,
+            isChecked: isChecked,
+            nameDress: nameDress,
+            shippingName: shippingName,
+            shippingEmail: shippingEmail,
+            shippingPhone: shippingPhone,
+            cityName: cityName,
+            provinceName: provinceName,
+            wardName: wardName,
+            homeNumber: homeNumber,
+          ),
+          createCompanionCallback: ({
+            Value<int> dressPersonalId = const Value.absent(),
+            required int customerId,
+            Value<bool> isChecked = const Value.absent(),
+            required String nameDress,
+            required String shippingName,
+            required String shippingEmail,
+            required String shippingPhone,
+            required String cityName,
+            required String provinceName,
+            required String wardName,
+            required String homeNumber,
+          }) =>
+              AddressPersonalModelCompanion.insert(
+            dressPersonalId: dressPersonalId,
+            customerId: customerId,
+            isChecked: isChecked,
+            nameDress: nameDress,
+            shippingName: shippingName,
+            shippingEmail: shippingEmail,
+            shippingPhone: shippingPhone,
+            cityName: cityName,
+            provinceName: provinceName,
+            wardName: wardName,
+            homeNumber: homeNumber,
+          ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ));
+}
+
+typedef $$AddressPersonalModelTableProcessedTableManager
+    = ProcessedTableManager<
+        _$AppDatabase,
+        $AddressPersonalModelTable,
+        AddressPersonal,
+        $$AddressPersonalModelTableFilterComposer,
+        $$AddressPersonalModelTableOrderingComposer,
+        $$AddressPersonalModelTableAnnotationComposer,
+        $$AddressPersonalModelTableCreateCompanionBuilder,
+        $$AddressPersonalModelTableUpdateCompanionBuilder,
+        (
+          AddressPersonal,
+          BaseReferences<_$AppDatabase, $AddressPersonalModelTable,
+              AddressPersonal>
+        ),
+        AddressPersonal,
+        PrefetchHooks Function()>;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
   $AppDatabaseManager(this._db);
   $$CartModelTableTableManager get cartModel =>
       $$CartModelTableTableManager(_db, _db.cartModel);
+  $$AddressPersonalModelTableTableManager get addressPersonalModel =>
+      $$AddressPersonalModelTableTableManager(_db, _db.addressPersonalModel);
 }

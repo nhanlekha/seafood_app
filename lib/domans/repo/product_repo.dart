@@ -5,5 +5,8 @@ abstract class ProductRepo {
 
   Future<List<ProductModel>> fetchTrendingProductData();
 
+  Future<List<ProductModel>> fetchHotSaleProductData();
+
   Future<List<ProductModel>> fetchProductDataByCategoryId(int id);
+
 }

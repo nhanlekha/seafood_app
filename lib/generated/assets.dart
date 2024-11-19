@@ -2,6 +2,16 @@
 class Assets {
   Assets._();
 
+  static const String iconsChat = 'assets/icons/chat.svg';
+  static const String iconsFacebook = 'assets/icons/facebook.svg';
+  static const String iconsGooglePlus = 'assets/icons/google-plus.svg';
+  static const String iconsLogin = 'assets/icons/login.svg';
+  static const String iconsSignup = 'assets/icons/signup.svg';
+  static const String iconsTwitter = 'assets/icons/twitter.svg';
+  static const String images6423006 = 'assets/images/6423006.webp';
+  static const String imagesBanner1 = 'assets/images/banner1.jpg';
+  static const String imagesBanner2 = 'assets/images/banner2.jpg';
+  static const String imagesBanner3 = 'assets/images/banner3.jpg';
   static const String imagesBox = 'assets/images/box.png';
   static const String imagesBoxes = 'assets/images/boxes.png';
   static const String imagesCall = 'assets/images/call.png';
@@ -31,8 +41,11 @@ class Assets {
   static const String imagesImg = 'assets/images/img.png';
   static const String imagesLock = 'assets/images/lock.png';
   static const String imagesLogOut = 'assets/images/log_out.png';
+  static const String imagesLoginBottom = 'assets/images/login_bottom.png';
   static const String imagesLoginimg = 'assets/images/loginimg.png';
   static const String imagesLogo = 'assets/images/logo.png';
+  static const String imagesMainBottom = 'assets/images/main_bottom.png';
+  static const String imagesMainTop = 'assets/images/main_top.png';
   static const String imagesMainbkg = 'assets/images/mainbkg.png';
   static const String imagesMan = 'assets/images/man.png';
   static const String imagesMan1 = 'assets/images/man1.png';
@@ -57,6 +70,7 @@ class Assets {
   static const String imagesRules = 'assets/images/rules.png';
   static const String imagesSearch = 'assets/images/search.png';
   static const String imagesSignimg = 'assets/images/signimg.png';
+  static const String imagesSignupTop = 'assets/images/signup_top.png';
   static const String imagesSuport = 'assets/images/suport.png';
   static const String imagesTeamwork = 'assets/images/teamwork.png';
   static const String imagesTrans = 'assets/images/trans.png';

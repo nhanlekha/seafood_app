@@ -1,3 +1,5 @@
+import 'package:animate_do/animate_do.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seafood_app/model/product_model.dart';
@@ -14,137 +16,145 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        context.push(
-          RouteConstants.detailsProductRoute,
-          extra: productModel,
-        );
-      },
-      child: Card(
-        elevation: 8.0,
-        margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.0),
+    return FadeInRight(
+      duration: const Duration(milliseconds: 1000),
+      delay: const Duration(milliseconds: 200),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: Colors.white,
         ),
-        child: Stack(
-          children: [
-            Container(
+        child: GestureDetector(
+            onTap: () {
+              context.push(
+                RouteConstants.detailsProductRoute,
+                extra: productModel,
+              );
+            },
+            child: InkWell(
+              borderRadius: BorderRadius.circular(5.0),
+              onTap: () {
+                context.push(
+                  RouteConstants.detailsProductRoute,
+                  extra: productModel,
+                );
+              },
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(5.0),
-                      topRight: Radius.circular(5.0),
-                    ),
-                    child: Image.network(
-                      '${productModel.productImage}',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: 135.0,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      '${productModel.productName}',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    '${productModel.categoryName}',
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Row(
+                  // Hình ảnh sản phẩm
+                  Stack(
                     children: [
-                      Text(
-                        '${productModel.productViewer}',
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 15.0,
+                      Container(
+                        height: 150.0,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: NetworkImage(productModel.productImage ?? ""),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      const SizedBox(width: 4.0),
-                      Image.asset(
-                        'assets/images/check.png',
-                        width: 15,
-                        height: 15,
-                      ),
-                      const SizedBox(width: 4.0),
-                      Text(
-                        '(5 Đánh giá)',
-                        style: const TextStyle(
-                          fontSize: 13.0,
+                      // sale
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6.0, vertical: 2.0),
+                          decoration: const BoxDecoration(
+                            color: Color(0xfffaeded),
+                          ),
+                          child: const Text(
+                            "-21%",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: Color(0Xffee694e),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
-                    child: Text(
-                      '${productModel.statusOrder}',
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 12.0,
-                        fontWeight: FontWeight.bold,
-                        backgroundColor: Colors.greenAccent,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 6.0, vertical: 2.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.orange,
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: const Text(
+                                  "Mới",
+                                  style: TextStyle(
+                                    fontSize: 10.0,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 4.0),
+                              Expanded(
+                                child: Text(
+                                  productModel.productName ?? "",
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  NumberFormat.currency(
+                                    locale: 'vi_VN',
+                                    // Set locale to Vietnam
+                                    customPattern: '₫###,###,###,###',
+                                    // Custom pattern
+                                    symbol: '₫',
+                                    // Vietnamese currency symbol
+                                    decimalDigits: 0, // Set decimal places to 0
+                                  ).format(double.tryParse(
+                                          '${productModel.productPrice}') ??
+                                      0),
+                                  // Parse price to double and format
+                                  style: const TextStyle(
+                                      fontSize: 15, color: Colors.red),
+                                ),
+                              ),
+                              const Icon(
+                                Icons.verified_user,
+                                color: Colors.green,
+                                size: 12.0,
+                              ),
+                              const SizedBox(
+                                width: 2.0,
+                              ),
+                              Text(
+                                "Đã bán ${productModel.productViewer}",
+                                style: const TextStyle(
+                                  fontSize: 12.0,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        '${productModel.productPrice}',
-                        style: const TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(width: 4.0),
-                      Text(
-                        '/',
-                        style: const TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                      const SizedBox(width: 4.0),
-                      Text(
-                        '${productModel.productUnit}',
-                        style: const TextStyle(
-                          fontSize: 13.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
-            ),
-            Positioned(
-              top: 4.0,
-              right: 4.0,
-              child: Image.asset(
-                "assets/images/hotproduct.png",
-                width: 30.0,
-                height: 30.0,
-              ),
-            ),
-          ],
-        ),
+            )),
       ),
     );
   }

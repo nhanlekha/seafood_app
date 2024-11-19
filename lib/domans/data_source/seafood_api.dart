@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 
 class SeafoodApi {
   final Dio _dio = Dio();
@@ -12,16 +11,16 @@ class SeafoodApi {
       sendTimeout: const Duration(seconds: 10), // Thời gian chờ gửi dữ liệu
     );
 
-    _dio.interceptors.add(
-      PrettyDioLogger(
-        requestHeader: true,
-        requestBody: true,
-        responseHeader: true,
-        responseBody: true,
-        error: true,
-        compact: false,
-      ),
-    );
+    // _dio.interceptors.add(
+    //   PrettyDioLogger(
+    //     requestHeader: true,
+    //     requestBody: true,
+    //     responseHeader: true,
+    //     responseBody: true,
+    //     error: true,
+    //     compact: false,
+    //   ),
+    // );
   }
 
   Dio get sendRequest => _dio;

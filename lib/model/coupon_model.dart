@@ -56,4 +56,20 @@ class CouponModel {
     data['updated_at'] = updatedAt;
     return data;
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'coupon_id': couponId,
+      'coupon_name': couponName,
+      'coupon_name_code': couponNameCode,
+      'coupon_desc': couponDesc,
+      'coupon_qty_code': couponQtyCode,
+      'coupon_condition': couponCondition,
+      'coupon_price_sale': couponPriceSale,
+      'coupon_start_date': couponStartDate,
+      'coupon_end_date': couponEndDate,
+      'created_at': createdAt,
+      'updated_at': updatedAt,
+    };
+  }
 }

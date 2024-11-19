@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:seafood_app/main.dart';
-import 'package:seafood_app/model/product_model.dart';
-import 'package:seafood_app/screens/page/main_screens/main_screens.dart';
+import 'package:seafood_app/screens/page/order_screens/order_detail_screen.dart';
 
+import '../main.dart';
+import '../model/order_model.dart';
+import '../model/product_model.dart';
+import '../screens/page/cart_screens/cart_screens.dart';
+import '../screens/page/check_out_screens/check_out_screens.dart';
 import '../screens/page/details_product_screens/details_product_screens.dart';
+import '../screens/page/main_screens/main_screens.dart';
 import 'app_route_constants.dart';
 
 class AppRouter {
+  // Static biến giữ instance của GoRouter
+  static GoRouter? _router;
 
+  // Hàm để trả về router đã khởi tạo, nếu chưa thì khởi tạo
   static GoRouter returnRouter() {
-    GoRouter router = GoRouter(
+    // Nếu router chưa được khởi tạo, thì khởi tạo mới
+    _router ??= GoRouter(
       initialLocation: '/',
       routes: [
         GoRoute(
@@ -50,33 +58,38 @@ class AppRouter {
             return const MaterialPage(child: MainScreens());
           },
         ),
-        // GoRoute(
-        //   name: RouteConstants.profileRouteName,
-        //   path: '/profile/:username/:userid',
-        //   pageBuilder: (context, state) {
-        //     return MaterialPage(
-        //         child: Profile(
-        //       userid: state.pathParameters['userid']!,
-        //       username: state.pathParameters['username']!,
-        //     ));
-        //   },
-        // ),
+        GoRoute(
+          name: RouteConstants.cartRoute,
+          path: '/cart',
+          pageBuilder: (context, state) {
+            return const MaterialPage(child: CartScreens());
+          },
+        ),
+
+        GoRoute(
+          name: RouteConstants.checkOut,
+          path: '/check-out',
+          pageBuilder: (context, state) {
+            return const MaterialPage(child: CheckoutPage());
+          },
+        ),
+        GoRoute(
+          path: RouteConstants.detailOrderRoute,
+          pageBuilder: (context, state) {
+            final orderModel = state.extra as OrderModel;
+            return MaterialPage(
+              child: OrderDetailScreen(orderModel: orderModel),
+            );
+          },
+        ),
+
       ],
       errorPageBuilder: (context, state) {
-        //page error
+        // Trang lỗi
         return MaterialPage(child: Container(color: Colors.blueGrey));
       },
-      // redirect: (context, state) {
-      //   bool isAuth = true;
-      //   if (!isAuth &&
-      //       state.uri.toString()
-      //           .startsWith('/${RouteConstants.profileRouteName}')) {
-      //     return context.namedLocation(RouteConstants.contactUsRouteName);
-      //   } else {
-      //     return null;
-      //   }
-      // },
     );
-    return router;
+
+    return _router!;
   }
 }

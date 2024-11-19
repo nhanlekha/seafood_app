@@ -3,7 +3,7 @@ class OrderDetailsModel {
   String? orderCode;
   int? productId;
   String? productName;
-  double? productPrice;
+  String? productPrice;
   String? productImage;
   int? categoryId;
   String? categoryName;

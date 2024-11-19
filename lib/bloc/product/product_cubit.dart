@@ -42,6 +42,36 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
+  // void fetchProductData() async {
+  //   try {
+  //     List<ProductModel> data = await productRepo.fetchProductData();
+  //     emit(state.copyWith(
+  //         dataStatus: DataStatus.success,
+  //         dataTrendingProductModel:
+  //         DataModel(message: "success", code: 200, data: data)));
+  //   } on DioException catch (ex) {
+  //     emit(state.copyWith(
+  //         dataStatus: DataStatus.error,
+  //         dataTrendingProductModel:
+  //         DataModel(message: "error", code: 404, data: null)));
+  //   }
+  // }
+
+  void fetchHotSaleProductData() async {
+    try {
+      List<ProductModel> data = await productRepo.fetchHotSaleProductData();
+      emit(state.copyWith(
+          dataStatus: DataStatus.success,
+          dataHotSaleModel:
+          DataModel(message: "success", code: 200, data: data)));
+    } on DioException catch (ex) {
+      emit(state.copyWith(
+          dataStatus: DataStatus.error,
+          dataHotSaleModel:
+          DataModel(message: "error", code: 404, data: null)));
+    }
+  }
+
   void fetchProductDataByCategoryId(List<int> categoryIds) async {
     try {
       List<ProductModel> allProducts = [];
