@@ -1,14 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:seafood_app/constants.dart';
 import 'package:seafood_app/domans/database_local/app_database.dart';
-
 
 class CartItemWidget extends StatefulWidget {
   final Cart item;
   final Function(int) onDeleteItem;
-  final Function(int,int) onQuantityChanged;
-  final Function(int,bool) onCheckedChanged;
-
+  final Function(int, int) onQuantityChanged;
+  final Function(int, bool) onCheckedChanged;
 
   const CartItemWidget({
     Key? key,
@@ -23,112 +22,171 @@ class CartItemWidget extends StatefulWidget {
 }
 
 class _CartItemWidgetState extends State<CartItemWidget> {
-
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Padding(
-      padding: const EdgeInsets.all(3.0),
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.shade300),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          children: [
-            // Checkbox
-            Container(
-              width: screenWidth * 0.1,
-              height: screenHeight * 0.1,
-              child: Checkbox(
-                value: widget.item.checkedProduct, // Trạng thái checkbox
-                onChanged: (bool? value) {
-                  setState(() {
-                      widget.onCheckedChanged(widget.item.cartId, value!);
-                  });
-                },
+    return Container(
+      height: 120,
+      margin: const EdgeInsets.only(left: 10, right: 10),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.white,
+      ),
+      child: Row(
+        children: [
+          Checkbox(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(5),
+            ),
+            activeColor: kOrangeColor,
+            value: widget.item.checkedProduct,
+            onChanged: (bool? value) {
+              setState(() {
+                widget.onCheckedChanged(widget.item.cartId, value!);
+              });
+            },
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                widget.item.productImage,
+                width: screenWidth * 0.25,
+                fit: BoxFit.cover,
               ),
             ),
-            // Hình ảnh sản phẩm
-            Image.network(
-              widget.item.productImage,
-              width: screenWidth * 0.35,
-              height: screenHeight * 0.15,
-              fit: BoxFit.cover,
-            ),
-            // Thông tin sản phẩm
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  widget.item.productName,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.item.productName,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
                       NumberFormat.currency(
-                        locale: 'vi_VN',   // Set locale to Vietnam
-                        symbol: '₫',       // Vietnamese currency symbol
-                        decimalDigits: 0,   // Set decimal places to 0
-                      ).format(double.tryParse('${ widget.item.productPrice}') ?? 0),  // Parse price to double and format
+                        locale: 'vi_VN',
+                        symbol: '₫',
+                        decimalDigits: 0,
+                      ).format(
+                          double.tryParse('${widget.item.productPrice}') ?? 0),
                       style: const TextStyle(fontSize: 15, color: Colors.red),
                     ),
-                    // Số lượng và các nút cộng trừ
                     Row(
                       children: [
-                        // Nút trừ
-                        IconButton(
-                          icon: Icon(Icons.remove),
-                          onPressed: () {
+                        // Nút giảm số lượng
+                        GestureDetector(
+                          onTap: () {
                             setState(() {
                               if (widget.item.productQuantity > 1) {
-                                widget.onQuantityChanged(widget.item.cartId, widget.item.productQuantity - 1); // Giảm số lượng
+                                widget.onQuantityChanged(widget.item.cartId,
+                                    widget.item.productQuantity - 1);
                               }
                             });
                           },
-                        ),
-                        // Số lượng
-                        Text(
-                          widget.item.productQuantity.toString(),
-                          style: TextStyle(
-                            fontSize: 18,
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[100],
+                              border: const Border(
+                                top: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0.1,
+                                ),
+                                bottom: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0.1,
+                                ),
+                                left: BorderSide(
+                                  color: Colors.grey,
+                                  width: 0.1,
+                                ),
+                              ),
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomLeft: Radius.circular(8),
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.remove,
+                              size: 20,
+                              color: Colors.black54,
+                            ),
                           ),
                         ),
-                        // Nút cộng
-                        IconButton(
-                          icon: Icon(Icons.add),
-                          onPressed: () {
+                        Container(
+                          width: 30,
+                          height: 30,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.grey.shade400, width: 0.1),
+                            color: Colors.white,
+                          ),
+                          child: Text(
+                            widget.item.productQuantity.toString(),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        // Nút tăng số lượng
+                        GestureDetector(
+                          onTap: () {
                             setState(() {
-                              widget.onQuantityChanged(widget.item.cartId, widget.item.productQuantity + 1); // Tăng số lượng
+                              widget.onQuantityChanged(widget.item.cartId,
+                                  widget.item.productQuantity + 1);
                             });
                           },
+                          child: Container(
+                            width: 30,
+                            height: 30,
+                            decoration: const BoxDecoration(
+                              color: kToastColor,
+                              borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(8),
+                                bottomRight: Radius.circular(8),
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.add,
+                              size: 20,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
-            // Nút xóa
-            Transform.translate(
-              offset: const Offset(0, -35),
-              child: IconButton(
-                icon: const Icon(Icons.cancel),
-                onPressed: () {
-                  widget.onDeleteItem(widget.item.cartId); // Gọi hàm xóa sản phẩm
-                },
-              ),
-            ),
-          ],
-        ),
+          ),
+          const SizedBox(width: 10),
+          // Transform.translate(
+          //   offset: const Offset(0, -35),
+          //   child: IconButton(
+          //     icon: const Icon(Icons.cancel),
+          //     onPressed: () {
+          //       widget.onDeleteItem(widget.item.cartId);
+          //     },
+          //   ),
+          // ),
+        ],
       ),
     );
   }

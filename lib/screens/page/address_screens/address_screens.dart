@@ -161,41 +161,40 @@ class _AddressScreensState extends State<AddressScreens> {
                 direction: DismissDirection.endToStart,
                 resizeDuration: const Duration(milliseconds: 500),
                 background: Container(
+                  width: 50,
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   color: Colors.redAccent,
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
-                onDismissed: (direction) async {
+                confirmDismiss: (direction) async {
                   if (direction == DismissDirection.endToStart) {
+                    // Hiển thị hộp thoại xác nhận
                     final bool isConfirmed = await showDialog(
                       context: context,
                       builder: (context) => AlertDialog(
                         title: const Text('Xác nhận'),
-                        content: const Text(
-                            'Bạn có chắc chắn muốn xóa địa chỉ này không?'),
+                        content: const Text('Bạn có chắc chắn muốn xóa địa chỉ này không?'),
                         actions: [
                           TextButton(
-                            onPressed: () => {
-                              Navigator.pop(context, false),
-                              _fetchListAddressPersonalData()
-                            },
+                            onPressed: () => Navigator.pop(context, false),
                             child: const Text('Không'),
                           ),
                           TextButton(
                             onPressed: () => Navigator.pop(context, true),
-                            child: const Text('Có',
-                                style: TextStyle(color: Colors.red)),
+                            child: const Text('Có', style: TextStyle(color: Colors.red)),
                           ),
                         ],
                       ),
                     );
-                    if (isConfirmed == true) {
-                      await _addressPersonalRepo.removeAddressPersonal(
-                          addressPersonal.dressPersonalId);
-                      _fetchListAddressPersonalData();
-                    }
+                    return isConfirmed; // Trả về true để xóa, false để hủy
                   }
+                  return false;
+                },
+                onDismissed: (direction) async {
+                  await _addressPersonalRepo.removeAddressPersonal(
+                      addressPersonal.dressPersonalId);
+                  _fetchListAddressPersonalData();
                 },
                 child: GestureDetector(
                   onTap: () async {},

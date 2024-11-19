@@ -6,66 +6,23 @@ class PersonalPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[100],
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Tiêu đề của trang hồ sơ cá nhân
-            Container(
-              height: 50,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.blue, Colors.green], // Màu gradient
-                ),
-              ),
-              child: const Center(
-                child: Text(
-                  "Hồ sơ cá nhân",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white, // Màu chữ
-                  ),
-                ),
-              ),
+            SizedBox(height: 20),
+            Image.asset(
+              'assets/images/logo.png',
+              width: 130,
+              height: 100,
+              fit: BoxFit.cover,
             ),
-            SizedBox(height: 20), // Khoảng cách phía dưới tiêu đề
-
-            // Ảnh đại diện
-            Card(
-              elevation: 10,
-              shape: RoundedRectangleBorder(
-                borderRadius:
-                    BorderRadius.circular(50), // Bo tròn viền của Card
-              ),
-              child: ClipOval(
-                child: Image.asset(
-                  'assets/images/man1.png', // Đường dẫn tới ảnh
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover, // Đảm bảo ảnh vừa với khung hình
-                ),
-              ),
-            ),
-            SizedBox(height: 10), // Khoảng cách phía dưới ảnh
-
-            // Tên người dùng
-            Text(
-              "Khả Nhân",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 20), // Khoảng cách phía dưới tên
-
-            // Danh sách tùy chọn
+            SizedBox(height: 10),
             _buildOption(
               image: "man",
               context,
               title: "Thông tin cá nhân",
-              onTap: () {
-                // Điều hướng đến trang Thông tin cá nhân
-              },
+              onTap: () {},
             ),
             _buildDivider(),
             _buildOption(
@@ -73,10 +30,10 @@ class PersonalPage extends StatelessWidget {
               context,
               title: "Địa chỉ nhận hàng",
               onTap: () {
-                // Điều hướng đến trang Địa chỉ nhận hàng
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const AddressScreens()),
+                  MaterialPageRoute(
+                      builder: (context) => const AddressScreens()),
                 );
               },
             ),
@@ -85,63 +42,49 @@ class PersonalPage extends StatelessWidget {
               image: "history_time",
               context,
               title: "Lịch sử đã xem",
-              onTap: () {
-                // Điều hướng đến trang Lịch sử đã xem
-              },
+              onTap: () {},
             ),
             _buildDivider(),
             _buildOption(
               image: "feedback",
               context,
               title: "Đánh giá ứng dụng",
-              onTap: () {
-                // Điều hướng đến trang Đánh giá ứng dụng
-              },
+              onTap: () {},
             ),
             _buildDivider(),
             _buildOption(
               image: "customer_satisfaction",
               context,
               title: "Đánh giá sản phẩm",
-              onTap: () {
-                // Điều hướng đến trang Đánh giá sản phẩm
-              },
+              onTap: () {},
             ),
             _buildDivider(),
             _buildOption(
               image: "rules",
               context,
               title: "Điều khoản sử dụng",
-              onTap: () {
-                // Điều hướng đến trang Điều khoản sử dụng
-              },
+              onTap: () {},
             ),
             _buildDivider(),
             _buildOption(
               image: "compliant",
               context,
               title: "Chính sách bảo mật",
-              onTap: () {
-                // Điều hướng đến trang Chính sách bảo mật
-              },
+              onTap: () {},
             ),
             _buildDivider(),
             _buildOption(
               image: "suport",
               context,
               title: "Trung tâm hỗ trợ",
-              onTap: () {
-                // Điều hướng đến trang Trung tâm hỗ trợ
-              },
+              onTap: () {},
             ),
             _buildDivider(),
             _buildOption(
               image: "log_out",
               context,
               title: "Đăng xuất",
-              onTap: () {
-                // Xử lý đăng xuất
-              },
+              onTap: () {},
             ),
             _buildDivider(),
           ],
@@ -150,9 +93,10 @@ class PersonalPage extends StatelessWidget {
     );
   }
 
-  // Widget để tạo tùy chọn
   Widget _buildOption(BuildContext context,
-      {required String title,required String image, required VoidCallback onTap}) {
+      {required String title,
+      required String image,
+      required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -166,7 +110,7 @@ class PersonalPage extends StatelessWidget {
                   width: 24,
                   height: 24,
                   child: Image.asset('assets/images/$image.png'),
-                ), // Biểu tượng cho tùy chọn
+                ),
                 SizedBox(width: 10),
                 Text(
                   title,
@@ -174,18 +118,17 @@ class PersonalPage extends StatelessWidget {
                 ),
               ],
             ),
-            Icon(Icons.arrow_right, size: 20), // Biểu tượng mũi tên
+            Icon(Icons.arrow_right, size: 20),
           ],
         ),
       ),
     );
   }
 
-  // Widget để tạo đường phân cách giữa các tùy chọn
   Widget _buildDivider() {
     return Container(
       height: 1,
-      color: Colors.grey[300], // Màu cho đường phân cách
+      color: Colors.grey[300],
       margin: const EdgeInsets.symmetric(vertical: 10),
     );
   }

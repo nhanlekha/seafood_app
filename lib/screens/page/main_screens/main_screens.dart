@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import '../home_screens/home_screens.dart';
 import '../order_screens/order_screens.dart';
@@ -33,6 +34,9 @@ class _MainScreensState extends State<MainScreens> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.grey[100], // Status bar color
+    ));
     return Column(
       children: [
         Expanded(

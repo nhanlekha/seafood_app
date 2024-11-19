@@ -1,10 +1,10 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:seafood_app/bloc/order/order_cubit.dart';
 import 'package:seafood_app/constants.dart';
 import 'package:seafood_app/domans/repo/impl/order_repo_impl.dart';
-import 'package:seafood_app/domans/repo/order_repo.dart';
 import 'package:seafood_app/model/order_model.dart';
 import 'package:seafood_app/screens/widgets/order_card.dart';
 
@@ -15,32 +15,32 @@ import '../../../ultils/enums/enum_data.dart';
 class OrderScreens extends StatelessWidget {
   const OrderScreens({super.key});
 
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-  create: (context) => OrderCubit(OrderRepoImpl(seafoodApi: SeafoodApi())),
-  child: Container(decoration:
-    BoxDecoration(color: Colors.grey[100])
-        , child: const OrderPage()),
-);
+      create: (context) => OrderCubit(OrderRepoImpl(seafoodApi: SeafoodApi())),
+      child: Container(
+          decoration: BoxDecoration(color: Colors.grey[100]),
+          child: const OrderPage()),
+    );
   }
 }
+
 final statuses = [
   {"text": "Đang xử lý", "status": 1},
   {"text": "Đang giao", "status": 2},
   {"text": "Hoàn thành", "status": 3},
   {"text": "Đã hủy", "status": 4},
 ];
+
 class OrderPage extends StatelessWidget {
   const OrderPage({super.key});
-
-
 
   @override
   Widget build(BuildContext context) {
     return buildOrderPage(context);
   }
+
   Widget buildOrderPage(BuildContext context) {
     return DefaultTabController(
       length: statuses.length,
@@ -67,30 +67,33 @@ class OrderPage extends StatelessWidget {
       ),
     );
   }
+
   Widget buildOrderList_1(BuildContext context) {
     int status = 1;
     int customerId = 1;
 
-     context.read<OrderCubit>().fetchStatus1(customerId);
+    context.read<OrderCubit>().fetchStatus1(customerId);
 
     return RefreshIndicator(
-      onRefresh: () async{
+      onRefresh: () async {
         await context.read<OrderCubit>().fetchStatus1(customerId);
       },
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
           if (state.dataStatus == DataStatus.loading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state.dataStatus == DataStatus.success && state.dataStatus_1?.data != null) {
-
+          } else if (state.dataStatus == DataStatus.success &&
+              state.dataStatus_1?.data != null) {
             final orders = state.dataStatus_1?.data as List<OrderModel>;
 
-            return ListView.builder(
-              itemCount: orders.length,
-              itemBuilder: (context, index) {
-                final order = orders[index];
-                return OrderCard(order: order);
-              },
+            return FadeInDown(
+              child: ListView.builder(
+                itemCount: orders.length,
+                itemBuilder: (context, index) {
+                  final order = orders[index];
+                  return OrderCard(order: order);
+                },
+              ),
             );
           } else {
             return ListView(
@@ -101,12 +104,12 @@ class OrderPage extends StatelessWidget {
                 ),
               ],
             );
-
           }
         },
       ),
     );
   }
+
   Widget buildOrderList_2(BuildContext context) {
     int status = 2;
     int customerId = 1;
@@ -121,18 +124,19 @@ class OrderPage extends StatelessWidget {
         builder: (context, state) {
           if (state.dataStatus == DataStatus.loading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state.dataStatus == DataStatus.success && state.dataStatus_2?.data != null) {
-
+          } else if (state.dataStatus == DataStatus.success &&
+              state.dataStatus_2?.data != null) {
             final orders = state.dataStatus_2!.data as List<OrderModel>;
-            return ListView.builder(
-              itemCount: orders.length,
-              itemBuilder: (context, index) {
-                final order = orders[index];
-                return OrderCard(order: order);
-              },
+            return FadeInDown(
+              child: ListView.builder(
+                itemCount: orders.length,
+                itemBuilder: (context, index) {
+                  final order = orders[index];
+                  return OrderCard(order: order);
+                },
+              ),
             );
           } else {
-
             return ListView(
               children: const [
                 SizedBox(
@@ -146,6 +150,7 @@ class OrderPage extends StatelessWidget {
       ),
     );
   }
+
   Widget buildOrderList_3(BuildContext context) {
     int status = 3;
     int customerId = 1;
@@ -154,69 +159,28 @@ class OrderPage extends StatelessWidget {
 
     return RefreshIndicator(
       onRefresh: () async {
-       await context.read<OrderCubit>().fetchStatus3(customerId);
+        await context.read<OrderCubit>().fetchStatus3(customerId);
       },
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
           if (state.dataStatus == DataStatus.loading) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state.dataStatus == DataStatus.success && state.dataStatus_3?.data != null) {
-
+          } else if (state.dataStatus == DataStatus.success &&
+              state.dataStatus_3?.data != null) {
             if (state.dataStatus_3 == null) {
               return const Center(child: Text('Bạn chưa có đơn hàng nào cả.'));
             }
 
             final orders = state.dataStatus_3?.data as List<OrderModel>;
 
-            return ListView.builder(
-              itemCount: orders.length,
-              itemBuilder: (context, index) {
-                final order = orders[index];
-                return OrderCard(order: order);
-              },
-            );
-          }  else {
-            return ListView(
-              children: const [
-                SizedBox(
-                  height: 400, // Để tránh danh sách quá ngắn
-                  child: Center(child: Text('Hiện tại không có đơn hàng nào.')),
-                ),
-              ],
-            );
-
-          }
-        },
-      ),
-    );
-  }
-  Widget buildOrderList_4(BuildContext context) {
-    int status = 4;
-    int customerId = 1;
-
-    context.read<OrderCubit>().fetchStatus4(customerId);
-
-    return RefreshIndicator(
-      onRefresh: () async{
-        await context.read<OrderCubit>().fetchStatus4(customerId);
-      },
-      child: BlocBuilder<OrderCubit, OrderState>(
-        builder: (context, state) {
-          if (state.dataStatus == DataStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state.dataStatus == DataStatus.success && state.dataStatus_4?.data != null) {
-
-            if (state.dataStatus_4 == null) {
-              return const Center(child: Text('Bạn chưa có đơn hàng nào cả.'));
-            }
-
-            final orders = state.dataStatus_4?.data as List<OrderModel>;
-            return ListView.builder(
-              itemCount: orders.length,
-              itemBuilder: (context, index) {
-                final order = orders[index];
-                return OrderCard(order: order);
-              },
+            return FadeInDown(
+              child: ListView.builder(
+                itemCount: orders.length,
+                itemBuilder: (context, index) {
+                  final order = orders[index];
+                  return OrderCard(order: order);
+                },
+              ),
             );
           } else {
             return ListView(
@@ -227,13 +191,56 @@ class OrderPage extends StatelessWidget {
                 ),
               ],
             );
-
           }
         },
       ),
     );
   }
 
+  Widget buildOrderList_4(BuildContext context) {
+    int status = 4;
+    int customerId = 1;
+
+    context.read<OrderCubit>().fetchStatus4(customerId);
+
+    return RefreshIndicator(
+      onRefresh: () async {
+        await context.read<OrderCubit>().fetchStatus4(customerId);
+      },
+      child: BlocBuilder<OrderCubit, OrderState>(
+        builder: (context, state) {
+          if (state.dataStatus == DataStatus.loading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state.dataStatus == DataStatus.success &&
+              state.dataStatus_4?.data != null) {
+            if (state.dataStatus_4 == null) {
+              return const Center(child: Text('Bạn chưa có đơn hàng nào cả.'));
+            }
+
+            final orders = state.dataStatus_4?.data as List<OrderModel>;
+            return FadeInDown(
+              child: ListView.builder(
+                itemCount: orders.length,
+                itemBuilder: (context, index) {
+                  final order = orders[index];
+                  return OrderCard(order: order);
+                },
+              ),
+            );
+          } else {
+            return ListView(
+              children: const [
+                SizedBox(
+                  height: 400, // Để tránh danh sách quá ngắn
+                  child: Center(child: Text('Hiện tại không có đơn hàng nào.')),
+                ),
+              ],
+            );
+          }
+        },
+      ),
+    );
+  }
 }
 
 // Hàm để tạo toolbar tìm kiếm

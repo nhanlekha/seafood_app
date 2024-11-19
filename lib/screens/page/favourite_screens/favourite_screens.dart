@@ -13,6 +13,7 @@ class FavouriteScreens extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MultiBlocProvider(providers: [
       BlocProvider(create: (context) {
         final productRepo = context.read<ProductRepo>();
@@ -36,8 +37,13 @@ class _FavourivePageState extends State<FavourivePage> {
     super.initState();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Container(
       decoration: const BoxDecoration(
         color: Color(0xffF5F5F5),
@@ -102,7 +108,7 @@ class _FavourivePageState extends State<FavourivePage> {
                     color: Color(0xffF5F5F5),
                   ),
                   child: SizedBox(
-                    height: 750,
+                    height: MediaQuery.of(context).size.height,
                     // Đặt chiều cao của container để chứa danh sách
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

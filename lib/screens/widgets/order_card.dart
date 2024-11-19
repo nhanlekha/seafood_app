@@ -78,7 +78,8 @@ class OrderCard extends StatelessWidget {
               ),
               for (var item = 0; item < order.orderDetails!.length; item++)
                 ListTile(
-                  leading: ClipOval(
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
                     child: Image(
                       image: Image.network(
                         order.orderDetails?[item].productImage ?? '',
@@ -88,7 +89,8 @@ class OrderCard extends StatelessWidget {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  title: Text(order.orderDetails?[item].productName ?? 'Hải sản'),
+                  title:
+                      Text(order.orderDetails?[item].productName ?? 'Hải sản'),
                   subtitle: Text(
                       'x ${order.orderDetails?[item].productSalesQuantity ?? 0}'),
                   trailing: Text(NumberFormat.currency(
@@ -101,7 +103,10 @@ class OrderCard extends StatelessWidget {
                     decimalDigits: 0, // Set decimal places to 0
                   ).format(double.tryParse(
                           '${order.orderDetails?[item].productPrice}') ??
-                      0)),
+                      0), style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 14)
+
+                      ,
+                  ),
                 ),
               Padding(
                 padding: const EdgeInsets.only(right: 22, top: 5, bottom: 10),
