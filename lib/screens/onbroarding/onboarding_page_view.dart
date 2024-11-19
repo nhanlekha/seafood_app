@@ -52,7 +52,6 @@ class _OnboardingPageViewState extends State<OnboardingPageView> {
               _pageController.jumpToPage(1);
             },
             skipOnPressed: () {
-              // Add skip button logic here if needed
             },
           ),
         ],

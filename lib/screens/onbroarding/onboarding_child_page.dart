@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:seafood_app/constants.dart';
 
 import '../../ultils/ultils/onbroarding_page_pos.dart';
 import '../page/login_screens/login_screens.dart';
@@ -9,41 +10,48 @@ class OnboardingChildPage extends StatelessWidget {
   final VoidCallback backOnPressed;
   final VoidCallback skipOnPressed;
 
-  const OnboardingChildPage({super.key, required this.onBoardingPos, required this.nextOnPressed, required this.backOnPressed, required this.skipOnPressed});
-
-
+  const OnboardingChildPage(
+      {super.key,
+      required this.onBoardingPos,
+      required this.nextOnPressed,
+      required this.backOnPressed,
+      required this.skipOnPressed});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white70,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildSkipButton(),
-            _buildOnboardingImage(),
-            _buildOnboardingPageControl(),
-            _buildOnboardingTitleContent(),
-            _buildOnboardingNextAndPrevButton(context),
-          ],
+        backgroundColor: Colors.white70,
+        body: SafeArea(
+          child: SizedBox(
+            height: double.infinity,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // _buildSkipButton(),
+                _buildOnboardingImage(),
+                _buildOnboardingPageControl(),
+                _buildOnboardingTitleContent(),
+                _buildOnboardingNextAndPrevButton(context),
+              ],
+            ),
           ),
-        ),)
-    );
+        ));
   }
 
-  Widget _buildSkipButton(){
+  Widget _buildSkipButton() {
     return Container(
       alignment: AlignmentDirectional.centerStart,
       margin: const EdgeInsets.only(top: 14),
-      child: TextButton(onPressed: (){
-
-      },
+      child: TextButton(
+          onPressed: () {},
           child: TextButton(
-            onPressed: () { skipOnPressed.call(); },
-            child: const Text("Bỏ qua" ,
+            onPressed: () {
+              skipOnPressed.call();
+            },
+            child: const Text(
+              "Bỏ qua",
               style: TextStyle(
                 fontSize: 16,
                 fontFamily: "Lato",
@@ -51,12 +59,11 @@ class OnboardingChildPage extends StatelessWidget {
                 color: Colors.black,
               ),
             ),
-          )
-      ),
+          )),
     );
   }
 
-  Widget _buildOnboardingImage(){
+  Widget _buildOnboardingImage() {
     return Image.asset(
       onBoardingPos.onBoardingPageImage(),
       width: 296,
@@ -65,91 +72,99 @@ class OnboardingChildPage extends StatelessWidget {
     );
   }
 
-  Widget _buildOnboardingPageControl(){
-
+  Widget _buildOnboardingPageControl() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 50),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-        Container(
-          height: 4,
-          width: 26,
-          decoration: BoxDecoration(
-            color: onBoardingPos == OnBoardingPos.page1 ? Colors.white : Colors.white.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(56),
+          Container(
+            height: 4,
+            width: 26,
+            decoration: BoxDecoration(
+              color: onBoardingPos == OnBoardingPos.page1
+                  ? Colors.white
+                  : Colors.white.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(56),
+            ),
           ),
-        ),
-        Container(
-          height: 4,
-          width: 26,
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            color: onBoardingPos == OnBoardingPos.page2 ? Colors.white : Colors.white.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(56),
+          Container(
+            height: 4,
+            width: 26,
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: onBoardingPos == OnBoardingPos.page2
+                  ? Colors.white
+                  : Colors.white.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(56),
+            ),
           ),
-        ),
-        Container(
-          height: 4,
-          width: 26,
-          decoration: BoxDecoration(
-            color: onBoardingPos == OnBoardingPos.page3 ? Colors.white : Colors.white.withOpacity(0.7),
-            borderRadius: BorderRadius.circular(56),
+          Container(
+            height: 4,
+            width: 26,
+            decoration: BoxDecoration(
+              color: onBoardingPos == OnBoardingPos.page3
+                  ? Colors.white
+                  : Colors.white.withOpacity(0.7),
+              borderRadius: BorderRadius.circular(56),
+            ),
           ),
-        ),
-      ],),
+        ],
+      ),
     );
   }
 
-  Widget _buildOnboardingTitleContent(){
+  Widget _buildOnboardingTitleContent() {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
-       child: Column(
-         crossAxisAlignment: CrossAxisAlignment.center,
-         children: [
-           Text(onBoardingPos.onBoardingPageTitle(),
-               style: TextStyle(
-                   color: Colors.black.withOpacity(0.87),
-                 fontFamily: "Lato",
-                 fontSize: 32,
-                 fontWeight: FontWeight.bold,
-               ),
-             textAlign: TextAlign.center,
-           ),
-           const SizedBox(height: 42),
-           Text(onBoardingPos.onBoardingPageContent(),
-               style: TextStyle(
-                 color: Colors.black.withOpacity(0.87),
-                 fontFamily: "Lato",
-                 fontSize: 16,
-               ),
-             textAlign: TextAlign.center,
-           ),
-         ],
-       ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            onBoardingPos.onBoardingPageTitle(),
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.87),
+              fontFamily: "Lato",
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 42),
+          Text(
+            onBoardingPos.onBoardingPageContent(),
+            style: TextStyle(
+              color: Colors.black.withOpacity(0.87),
+              fontFamily: "Lato",
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildOnboardingNextAndPrevButton(BuildContext context){
+  Widget _buildOnboardingNextAndPrevButton(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24).copyWith(top: 250,bottom: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 24),
       child: Row(
         children: [
           TextButton(
-              onPressed: (){
+              onPressed: () {
                 backOnPressed.call();
               },
-              child: Text("Quay lại",
+              child: Text(
+                "Quay lại",
                 style: TextStyle(
-                color: Colors.black.withOpacity(0.44),
-                fontFamily: "Lato",
-                fontSize: 16,
-              ),
-              )
-          ),
+                  color: Colors.black.withOpacity(0.44),
+                  fontFamily: "Lato",
+                  fontSize: 16,
+                ),
+              )),
           const Spacer(),
           ElevatedButton(
-              onPressed: (){
+              onPressed: () {
                 nextOnPressed.call();
                 Navigator.push(
                   context,
@@ -161,19 +176,17 @@ class OnboardingChildPage extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8875FF),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))
-              ),
-              child: Text( onBoardingPos == OnBoardingPos.page3 ? "Bắt đầu" : "Tiếp",
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.44),
+                  backgroundColor: kOrangeColor,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4))),
+              child: Text(
+                onBoardingPos == OnBoardingPos.page3 ? "Bắt đầu" : "Tiếp",
+                style: const TextStyle(
+                  color: Colors.white,
                   fontFamily: "Lato",
                   fontSize: 16,
-
                 ),
-
-              )
-          ),
+              )),
         ],
       ),
     );
