@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:seafood_app/domans/data_source/seafood_api.dart';
 import 'package:seafood_app/domans/repo/cate_repo.dart';
+import 'package:seafood_app/domans/repo/impl/address_personal_repo_impl.dart';
 import 'package:seafood_app/domans/repo/impl/cate_repo_impl.dart';
 import 'package:seafood_app/domans/repo/impl/order_repo_impl.dart';
 import 'package:seafood_app/domans/repo/impl/product_repo_impl.dart';
@@ -51,6 +52,8 @@ class _SeafoodAppState extends State<SeafoodApp> {
   late final CheckoutRepoImpl _checkoutRepo;
   late final OrderRepoImpl _orderRepo;
   late final AuthRepoImpl _authRepo;
+  late final AddressPersonalRepoImpl _addressPersonalRepoImpl;
+
 
   @override
   void initState() {
@@ -58,6 +61,7 @@ class _SeafoodAppState extends State<SeafoodApp> {
     // Initializing
     _db = AppDatabase();
     _cartRepo = CartRepoImpl(_db);
+    _addressPersonalRepoImpl = AddressPersonalRepoImpl();
     _seafoodApi = SeafoodApi();
     _slideRepo = SlideRepoImpl(seafoodApi: _seafoodApi);
     _cateRepo = CateRepoImpl(seafoodApi: _seafoodApi);
@@ -79,6 +83,7 @@ class _SeafoodAppState extends State<SeafoodApp> {
             create: (context) => _checkoutRepo),
         RepositoryProvider<OrderRepoImpl>(create: (context) => _orderRepo),
         RepositoryProvider<AuthRepoImpl>(create: (context) => _authRepo),
+        RepositoryProvider<AddressPersonalRepoImpl>(create: (context) => _addressPersonalRepoImpl),
       ],
       child: const ApplicationRouter(),
     );

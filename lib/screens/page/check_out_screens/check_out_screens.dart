@@ -12,10 +12,12 @@ import 'package:seafood_app/model/payment_model.dart';
 import 'package:seafood_app/model/shipping_model.dart';
 import 'package:seafood_app/screens/widgets/checkout_card.dart';
 
+import '../../../domans/repo/impl/address_personal_repo_impl.dart';
 import '../../../domans/repo/impl/cart_repo_impl.dart';
 import '../../../main.dart';
 import '../../widgets/toast_widget.dart';
 import '../../widgets/vip_button.dart';
+import '../address_screens/address_screens.dart';
 
 
 class CheckoutPage extends StatefulWidget {
@@ -32,24 +34,44 @@ class _CheckoutPageState extends State<CheckoutPage> {
   double finalAmount = 0;
 
   List<Cart> listCart = [];
+  List<AddressPersonal> listAddress = [];
   late final CartRepoImpl cartRepo;
-
+  late final AddressPersonalRepoImpl addressPersonalRepoImpl;
+  late final ShippingModel shippingModel;
+  late final AddressPersonal addressPersonal;
   @override
   void initState() {
     super.initState();
     cartRepo = context.read<CartRepoImpl>();
+    addressPersonalRepoImpl = context.read<AddressPersonalRepoImpl>();
+    shippingModel = ShippingModel();
     loadProduct();
   }
 
   void loadProduct() async {
     listCart = await cartRepo.getCheckedCarts();
+    listAddress = await addressPersonalRepoImpl.fetchListAddressPersonal(1);
 
     if (listCart.isEmpty) {
       showToast(message: 'Không thấy sản phẩm !');
       context.pushReplacement('/cart');
     }
-    totalAmount = await cartRepo.calculateTotalPrice();
-    finalAmount = await cartRepo.calculateTotalPrice();
+    if (listAddress.isEmpty) {
+      showToast(message: 'Không thấy địa chỉ mặc định !');
+      context.pushReplacement('/address');
+    }else{
+      addressPersonal = listAddress.first;
+      shippingModel.shippingName = addressPersonal.shippingName;
+      shippingModel.shippingEmail = addressPersonal.shippingEmail;
+      shippingModel.shippingPhone = 0987654321;
+      shippingModel.shippingAddress = '${addressPersonal.homeNumber}, ${addressPersonal.wardName}, ${addressPersonal.provinceName}, ${addressPersonal.cityName}';
+      shippingModel.shippingNotes = 'Note';
+      shippingModel.shippingSpecialRequirements = 1;
+      shippingModel.shippingReceipt = 0;
+
+      totalAmount = await cartRepo.calculateTotalPrice();
+      finalAmount = await cartRepo.calculateTotalPrice();
+    }
 
     setState(() {});
   }
@@ -213,36 +235,36 @@ class _CheckoutPageState extends State<CheckoutPage> {
               Expanded(
                   child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  RichText(
-                    text: const TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Nguyện ',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black, // Màu chữ cho tên
-                          ),
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${shippingModel.shippingName ?? 'Tên không có sẵn'} ', // Use a fallback value if null
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black, // Màu chữ cho tên
+                              ),
+                            ),
+                            TextSpan(
+                              text: '(${shippingModel.shippingPhone ?? 'Chưa có số điện thoại'})', // Use fallback value for phone if null
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey, // Màu chữ cho số điện thoại
+                              ),
+                            ),
+                          ],
                         ),
-                        TextSpan(
-                          text: '(0123456789)',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey, // Màu chữ cho số điện thoại
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  const Text(
-                    '131, Trân Dư, Phường An Xuân, TP Tam Kỳ, Tỉnh Quảng Nam',
-                    style: TextStyle(fontSize: 14),
-                    overflow: TextOverflow.ellipsis, // Tránh overflow
-                    maxLines: 2, // Hiển thị tối đa 2 dòng
-                  ),
-                ],
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        '${shippingModel.shippingAddress ?? 'Địa chỉ không có sẵn'}', // Handle null address
+                        style: const TextStyle(fontSize: 14),
+                        overflow: TextOverflow.ellipsis, // Tránh overflow
+                        maxLines: 2, // Hiển thị tối đa 2 dòng
+                      ),
+                    ],
               )),
             ],
           ),
@@ -367,14 +389,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
     paymentModel.paymentMethod = 4;
     paymentModel.paymentStatus = 0;
 
-    ShippingModel shippingModel = ShippingModel();
-    shippingModel.shippingName = 'Nhan';
-    shippingModel.shippingEmail = 'nhan@gmail.com';
-    shippingModel.shippingPhone = 123;
-    shippingModel.shippingAddress = 'DN';
-    shippingModel.shippingNotes = 'Note';
-    shippingModel.shippingSpecialRequirements = 1;
-    shippingModel.shippingReceipt = 0;
 
     CouponModel couponModel = CouponModel();
 

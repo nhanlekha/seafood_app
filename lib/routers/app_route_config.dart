@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seafood_app/screens/page/address_screens/add_address_screens.dart';
 import 'package:seafood_app/screens/page/login_screens/login_screens.dart';
 import 'package:seafood_app/screens/page/order_screens/order_detail_screen.dart';
 
@@ -82,6 +83,13 @@ class AppRouter {
             return MaterialPage(
               child: OrderDetailScreen(orderModel: orderModel),
             );
+          },
+        ),
+
+        GoRoute(
+          path: '/address',
+          pageBuilder: (context, state) {
+            return const MaterialPage(child: AddAddressScreens());
           },
         ),
 
