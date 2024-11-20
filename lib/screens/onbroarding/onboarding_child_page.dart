@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:seafood_app/constants.dart';
+import 'package:seafood_app/routers/app_route_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../ultils/ultils/onbroarding_page_pos.dart';
 import '../page/login_screens/login_screens.dart';
@@ -164,16 +167,14 @@ class OnboardingChildPage extends StatelessWidget {
               )),
           const Spacer(),
           ElevatedButton(
-              onPressed: () {
+              onPressed: () async  {
                 nextOnPressed.call();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const LoginScreens();
-                    },
-                  ),
-                );
+                if(onBoardingPos == OnBoardingPos.page3){
+
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('init', 'true');
+                  context.push('/login');
+                }
               },
               style: ElevatedButton.styleFrom(
                   backgroundColor: kOrangeColor,

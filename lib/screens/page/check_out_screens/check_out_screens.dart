@@ -13,6 +13,7 @@ import 'package:seafood_app/model/shipping_model.dart';
 import 'package:seafood_app/screens/widgets/checkout_card.dart';
 
 import '../../../domans/repo/impl/cart_repo_impl.dart';
+import '../../../main.dart';
 import '../../widgets/toast_widget.dart';
 import '../../widgets/vip_button.dart';
 
@@ -393,7 +394,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
     });
 
     showToast(message: 'Đặt đơn hàng thành công !');
-    context.pushReplacement('/');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return const MainApplication();
+        },
+      ),
+    );
   }
 
   String generateOrderCode() {

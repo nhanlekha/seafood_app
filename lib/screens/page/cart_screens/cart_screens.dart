@@ -147,7 +147,7 @@ class _CartPageState extends State<CartPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'Tổng thanh toán: ',
+                          'Tổng: ',
                           style: TextStyle(
                             fontSize: 15,
                           ),

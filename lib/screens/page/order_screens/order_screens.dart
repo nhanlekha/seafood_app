@@ -7,6 +7,7 @@ import 'package:seafood_app/constants.dart';
 import 'package:seafood_app/domans/repo/impl/order_repo_impl.dart';
 import 'package:seafood_app/model/order_model.dart';
 import 'package:seafood_app/screens/widgets/order_card.dart';
+import 'package:seafood_app/ultils/ultils/ultils.dart';
 
 import '../../../bloc/order/order_state.dart';
 import '../../../domans/data_source/seafood_api.dart';
@@ -68,15 +69,15 @@ class OrderPage extends StatelessWidget {
     );
   }
 
+
   Widget buildOrderList_1(BuildContext context) {
     int status = 1;
-    int customerId = 1;
 
-    context.read<OrderCubit>().fetchStatus1(customerId);
+    context.read<OrderCubit>().fetchStatus1();
 
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<OrderCubit>().fetchStatus1(customerId);
+        await context.read<OrderCubit>().fetchStatus1();
       },
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
@@ -112,13 +113,12 @@ class OrderPage extends StatelessWidget {
 
   Widget buildOrderList_2(BuildContext context) {
     int status = 2;
-    int customerId = 1;
 
-    context.read<OrderCubit>().fetchStatus2(customerId);
+    context.read<OrderCubit>().fetchStatus2();
 
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<OrderCubit>().fetchStatus2(customerId);
+        await context.read<OrderCubit>().fetchStatus2();
       },
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
@@ -153,13 +153,12 @@ class OrderPage extends StatelessWidget {
 
   Widget buildOrderList_3(BuildContext context) {
     int status = 3;
-    int customerId = 1;
 
-    context.read<OrderCubit>().fetchStatus3(customerId);
+    context.read<OrderCubit>().fetchStatus3();
 
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<OrderCubit>().fetchStatus3(customerId);
+        await context.read<OrderCubit>().fetchStatus3();
       },
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {
@@ -199,13 +198,12 @@ class OrderPage extends StatelessWidget {
 
   Widget buildOrderList_4(BuildContext context) {
     int status = 4;
-    int customerId = 1;
 
-    context.read<OrderCubit>().fetchStatus4(customerId);
+    context.read<OrderCubit>().fetchStatus4();
 
     return RefreshIndicator(
       onRefresh: () async {
-        await context.read<OrderCubit>().fetchStatus4(customerId);
+        await context.read<OrderCubit>().fetchStatus4();
       },
       child: BlocBuilder<OrderCubit, OrderState>(
         builder: (context, state) {

@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:seafood_app/ultils/ultils/ultils.dart';
 import '../../widgets/vip_button.dart';
 import '../../widgets/toast_widget.dart';
 import 'package:go_router/go_router.dart';
@@ -771,13 +772,21 @@ class _BottomSheetContentState extends State<BottomSheetContent> {
                     onPressed: () async {
                       final cartRepo = context.read<CartRepoImpl>();
 
+                      // String? json = prefs.getString('customer');
+                      // CustomerModel? currentCustomer = CustomerModel();
+                      // currentCustomer.parseCustomerFromJson(json);
+                      // print('CurrentCustomer: $currentCustomer');
+
+
                       if (await cartRepo
                           .isProductInCart(widget.productModel.productId!)) {
                         showToast(message: 'Sản phẩm đã tồn tại !');
                       } else {
+                        int? id = await getCustomerID();
+                        print('id: ${id}');
                         cartRepo.addCart(
                             productId: widget.productModel.productId!,
-                            customerId: 1,
+                            customerId: id!,
                             productName: widget.productModel.productName!,
                             productPrice: widget.productModel.productPrice!,
                             productImage: widget.productModel.productImage!,

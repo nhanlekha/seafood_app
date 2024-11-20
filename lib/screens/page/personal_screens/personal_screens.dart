@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:seafood_app/routers/app_route_config.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../address_screens/address_screens.dart';
 
@@ -84,7 +87,11 @@ class PersonalPage extends StatelessWidget {
               image: "log_out",
               context,
               title: "Đăng xuất",
-              onTap: () {},
+              onTap: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.remove('customer');
+                context.push('/login');
+              },
             ),
             _buildDivider(),
           ],

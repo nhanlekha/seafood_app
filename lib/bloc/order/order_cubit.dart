@@ -8,6 +8,7 @@ import 'package:seafood_app/model/order_model.dart';
 
 import '../../model/data_model.dart';
 import '../../ultils/enums/enum_data.dart';
+import '../../ultils/ultils/ultils.dart';
 
 class OrderCubit extends Cubit<OrderState> {
   OrderRepo orderRepo;
@@ -17,12 +18,13 @@ class OrderCubit extends Cubit<OrderState> {
             dataStatus: DataStatus.initial,
             dataModel: DataModel(message: "initial", code: 404, data: null)));
 
-  Future fetchStatus1(int customerId) async{
+  Future fetchStatus1() async{
+    int? customerId =  await getCustomerID();
     try {
 
       emit(state.copyWith(dataStatus_1: DataModel(message: "loading", code: 404, data: null), dataStatus: DataStatus.success));
 
-      final List<OrderModel> data = await orderRepo.fetchData(customerId, 0);
+      final List<OrderModel> data = await orderRepo.fetchData(customerId!, 0);
       emit(state.copyWith(
           dataStatus: DataStatus.success,
           dataStatus_1: DataModel(message: "success", code: 200, data: data)));
@@ -34,10 +36,11 @@ class OrderCubit extends Cubit<OrderState> {
     }
 
   }
-  Future fetchStatus2(int customerId) async{
+  Future fetchStatus2() async{
+    int? customerId =  await getCustomerID();
     try {
       emit(state.copyWith(dataStatus_2: DataModel(message: "loading", code: 404, data: null), dataStatus: DataStatus.success));
-      final List<OrderModel> data = await orderRepo.fetchData(customerId, 1);
+      final List<OrderModel> data = await orderRepo.fetchData(customerId!, 1);
 
       emit(state.copyWith(
           dataStatus: DataStatus.success,
@@ -50,12 +53,13 @@ class OrderCubit extends Cubit<OrderState> {
     }
 
   }
-  Future fetchStatus3(int customerId) async{
+  Future fetchStatus3() async{
+    int? customerId =  await getCustomerID();
     try {
 
       emit(state.copyWith(dataStatus_3: DataModel(message: "loading", code: 404, data: null), dataStatus: DataStatus.success));
 
-      final List<OrderModel> data = await orderRepo.fetchData(customerId, 4);
+      final List<OrderModel> data = await orderRepo.fetchData(customerId!, 4);
       emit(state.copyWith(
           dataStatus: DataStatus.success,
           dataStatus_3: DataModel(message: "success", code: 200, data: data)));
@@ -67,12 +71,12 @@ class OrderCubit extends Cubit<OrderState> {
     }
 
   }
-  Future fetchStatus4(int customerId) async{
+  Future fetchStatus4() async{
+    int? customerId =  await getCustomerID();
     try {
-
       emit(state.copyWith(dataStatus_4: DataModel(message: "loading", code: 404, data: null), dataStatus: DataStatus.success));
 
-      final List<OrderModel> data = await orderRepo.fetchData(customerId, -1);
+      final List<OrderModel> data = await orderRepo.fetchData(customerId!, -1);
       emit(state.copyWith(
           dataStatus: DataStatus.success,
           dataStatus_4: DataModel(message: "success", code: 200, data: data)));

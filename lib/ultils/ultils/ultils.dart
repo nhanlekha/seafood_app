@@ -1,16 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-FormData convertObjectToFormData(dynamic object) {
-  if (object is Map<String, dynamic>) {
-    return FormData.fromMap(object);
-  } else if (object is List<dynamic>) {
-    final Map<String, dynamic> mappedList = {};
-    for (int i = 0; i < object.length; i++) {
-      mappedList['item[$i]'] = object[i];
-    }
-    return FormData.fromMap(mappedList);
-  } else if (object is dynamic) {
-    return FormData.fromMap(object.toMap());
+import '../../model/customer_model.dart';
+
+Future<int?> getCustomerID() async {
+  final prefs = await SharedPreferences.getInstance();
+  String? json = prefs.getString('customer');
+  if(json != null){
+    CustomerModel? currentCustomer = CustomerModel.parseCustomerFromJson(json);
+    return currentCustomer?.customerId;
   }
-  throw Exception("Unsupported object type for FormData conversion");
+  return null;
 }

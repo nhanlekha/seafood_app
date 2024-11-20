@@ -15,6 +15,7 @@ import 'package:seafood_app/screens/page/login_screens/login_screens.dart';
 import 'package:seafood_app/screens/page/main_screens/main_screens.dart';
 
 import 'domans/database_local/app_database.dart';
+import 'domans/repo/impl/auth_repo_impl.dart';
 import 'domans/repo/impl/cart_repo_impl.dart';
 import 'domans/repo/impl/checkout_repo_impl.dart';
 import 'domans/repo/slide_repo.dart';
@@ -49,6 +50,7 @@ class _SeafoodAppState extends State<SeafoodApp> {
   late final CartRepoImpl _cartRepo;
   late final CheckoutRepoImpl _checkoutRepo;
   late final OrderRepoImpl _orderRepo;
+  late final AuthRepoImpl _authRepo;
 
   @override
   void initState() {
@@ -62,6 +64,7 @@ class _SeafoodAppState extends State<SeafoodApp> {
     _productRepo = ProductRepoImpl(seafoodApi: _seafoodApi);
     _checkoutRepo = CheckoutRepoImpl(seafoodApi: _seafoodApi);
     _orderRepo = OrderRepoImpl(seafoodApi: _seafoodApi);
+    _authRepo = AuthRepoImpl(seafoodApi: _seafoodApi);
   }
 
   @override
@@ -75,6 +78,7 @@ class _SeafoodAppState extends State<SeafoodApp> {
         RepositoryProvider<CheckoutRepoImpl>(
             create: (context) => _checkoutRepo),
         RepositoryProvider<OrderRepoImpl>(create: (context) => _orderRepo),
+        RepositoryProvider<AuthRepoImpl>(create: (context) => _authRepo),
       ],
       child: const ApplicationRouter(),
     );
@@ -112,7 +116,9 @@ class MainApp extends StatelessWidget {
 }
 
 
-class Test extends StatelessWidget {
+class MainApplication extends StatelessWidget {
+  const MainApplication({super.key});
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(

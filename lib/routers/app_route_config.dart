@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:seafood_app/screens/page/login_screens/login_screens.dart';
 import 'package:seafood_app/screens/page/order_screens/order_detail_screen.dart';
 
 import '../main.dart';
@@ -9,6 +10,7 @@ import '../screens/page/cart_screens/cart_screens.dart';
 import '../screens/page/check_out_screens/check_out_screens.dart';
 import '../screens/page/details_product_screens/details_product_screens.dart';
 import '../screens/page/main_screens/main_screens.dart';
+import '../screens/page/signup_screens/signup_screen.dart';
 import 'app_route_constants.dart';
 
 class AppRouter {
@@ -41,14 +43,14 @@ class AppRouter {
           name: RouteConstants.signUpRoute,
           path: '/signup',
           pageBuilder: (context, state) {
-            return MaterialPage(child: Container(color: Colors.green));
+            return const MaterialPage(child: SignUpScreens());
           },
         ),
         GoRoute(
           name: RouteConstants.loginRoute,
           path: '/login',
           pageBuilder: (context, state) {
-            return MaterialPage(child: Container(color: Colors.red));
+            return const MaterialPage(child: LoginScreens());
           },
         ),
         GoRoute(
